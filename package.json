@@ -1,0 +1,19 @@
+{
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "bundle": "npx browserify src_js/front_index.js > static/files/index.js && npx browserify src_js/front_library.js > static/files/library.js",
+    "wav": "node src_js/render_wav.js",
+    "test": "mocha test_js/**.js"
+  },
+  "dependencies": {
+    "async-mutex": "^0.3.2",
+    "browser-run": "^11.0.0",
+    "browserify": "^17.0.0",
+    "identity-img": "^2.0.0",
+    "mocha": "^10.0.0",
+    "node-fetch": "2.x",
+    "string-to-stream": "^3.0.1",
+    "yargs": "^17.4.0"
+  }
+}

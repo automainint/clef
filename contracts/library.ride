@@ -1,0 +1,433 @@
+{-# STDLIB_VERSION 5 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+func to_key(n: Int) = {
+  n.toBytes().toBase58String()
+}
+
+func unique_bytes(i: Invocation) = {
+  i.transactionId + i.callerPublicKey + lastBlock.generationSignature + toBytes(lastBlock.timestamp) + toBytes(lastBlock.height)
+}
+
+func random_uint(bytes: ByteVector, nonce: Int) = {
+  let n = sha256_16Kb(bytes + toBytes(nonce)).toInt()
+  if n < 0 then
+    -n
+  else
+    n
+}
+
+func pick_one(key_0: String, key_1: String, rand_int: Int, bit_power: Int) = {
+  if ((rand_int / bit_power) % 2) == 0 then
+    key_0
+  else
+    key_1
+}
+
+func check_hybrid_payment(i: Invocation, id_0: ByteVector, id_1: ByteVector) = {
+  if i.payments.size() == 2 then
+    i.payments[0].assetId == id_0 && i.payments[0].amount == 1 &&
+    i.payments[1].assetId == id_1 && i.payments[1].amount == 1
+  else if i.payments.size() != 1 then
+    false
+  else {
+    let p = i.payments[0];
+    let p_token = match p.assetId {
+      case id: ByteVector => id.toBase58String()
+      case _              => ""
+    }
+    let token   = getStringValue("price_hybrid_token");
+    let amount  = getIntegerValue("price_hybrid_amount");
+    if p_token != token then
+      false
+    else if amount != p.amount then
+      false
+    else
+      true
+  }
+}
+
+@Callable(i)
+func set_price_hybrid(token: String, amount: Int) = {
+  if this != i.caller then
+    throw("Caller is not dApp owner")
+  else
+    ( [ StringEntry(  "price_hybrid_token",   token),
+        IntegerEntry( "price_hybrid_amount",  amount)
+      ],
+      unit )
+}
+
+@Callable(i)
+func mint_chord(name: String, notes: List[Int]) = {
+  if this != i.caller then
+    throw("Caller is not dApp owner")
+  else if size(notes) != 5 then
+    throw("Wrong notes size")
+  else {
+
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let key = to_key(n)
+
+    ( [ IntegerEntry("count", n + 1),
+
+        StringEntry(  key + "_CL", name),
+        IntegerEntry( key + "_C0", notes[0]),
+        IntegerEntry( key + "_C1", notes[1]),
+        IntegerEntry( key + "_C2", notes[2]),
+        IntegerEntry( key + "_C3", notes[3]),
+        IntegerEntry( key + "_C4", notes[4])
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func mint_melody(name: String, notes: List[Int]) = {
+  if (this != i.caller) then
+    throw("Caller is not dApp owner")
+  else if (size(notes) != 16) then
+    throw("Wrong notes size")
+  else {
+
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let key = to_key(n)
+
+    ( [ IntegerEntry("count", n + 1),
+
+        StringEntry(  key + "_ML",  name),
+        IntegerEntry( key + "_M00", notes[0]),
+        IntegerEntry( key + "_M01", notes[1]),
+        IntegerEntry( key + "_M02", notes[2]),
+        IntegerEntry( key + "_M03", notes[3]),
+        IntegerEntry( key + "_M04", notes[4]),
+        IntegerEntry( key + "_M05", notes[5]),
+        IntegerEntry( key + "_M06", notes[6]),
+        IntegerEntry( key + "_M07", notes[7]),
+        IntegerEntry( key + "_M08", notes[8]),
+        IntegerEntry( key + "_M09", notes[9]),
+        IntegerEntry( key + "_M10", notes[10]),
+        IntegerEntry( key + "_M11", notes[11]),
+        IntegerEntry( key + "_M12", notes[12]),
+        IntegerEntry( key + "_M13", notes[13]),
+        IntegerEntry( key + "_M14", notes[14]),
+        IntegerEntry( key + "_M15", notes[15])
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func mint_rhythm(name: String, scale: Int, notes: List[Int]) = {
+  if (this != i.caller) then
+    throw("Caller is not dApp owner")
+  else if (size(notes) != 16) then
+    throw("Wrong notes size")
+  else {
+
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let key = to_key(n)
+
+    ( [ IntegerEntry("count", n + 1),
+
+        StringEntry(  key + "_RL",  name),
+        IntegerEntry( key + "_RS",  scale),
+        IntegerEntry( key + "_R00", notes[0]),
+        IntegerEntry( key + "_R01", notes[1]),
+        IntegerEntry( key + "_R02", notes[2]),
+        IntegerEntry( key + "_R03", notes[3]),
+        IntegerEntry( key + "_R04", notes[4]),
+        IntegerEntry( key + "_R05", notes[5]),
+        IntegerEntry( key + "_R06", notes[6]),
+        IntegerEntry( key + "_R07", notes[7]),
+        IntegerEntry( key + "_R08", notes[8]),
+        IntegerEntry( key + "_R09", notes[9]),
+        IntegerEntry( key + "_R10", notes[10]),
+        IntegerEntry( key + "_R11", notes[11]),
+        IntegerEntry( key + "_R12", notes[12]),
+        IntegerEntry( key + "_R13", notes[13]),
+        IntegerEntry( key + "_R14", notes[14]),
+        IntegerEntry( key + "_R15", notes[15])
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func mint_song(
+  name:             String,
+  parent_0:         String,
+  parent_1:         String,
+  bpm:              Int,
+  bar_size:         Int,
+  beat_size:        Int,
+  tonality:         Int,
+  chords:           List[String],
+  melody:           String,
+  kick_instrument:  String,
+  snare_instrument: String,
+  hihat_instrument: String,
+  bass_instrument:  String,
+  back_instrument:  String,
+  lead_instrument:  String,
+  kick_rhythms:   List[String],
+  snare_rhythms:  List[String],
+  hihat_rhythms:  List[String],
+  bass_rhythms:   List[String],
+  back_rhythms:   List[String],
+  lead_rhythms:   List[String]
+) = {
+  if (this != i.caller) then
+    throw("Caller is not dApp owner")
+  else if (size(chords) != 8) then
+    throw("Wrong chords size")
+  else if (size(kick_rhythms) != 8) then
+    throw("Wrong kick rhythms size")
+  else if (size(snare_rhythms) != 8) then
+    throw("Wrong snare rhythms size")
+  else if (size(hihat_rhythms) != 8) then
+    throw("Wrong hihat rhythms size")
+  else if (size(bass_rhythms) != 8) then
+    throw("Wrong bass rhythms size")
+  else if (size(back_rhythms) != 8) then
+    throw("Wrong back rhythms size")
+  else if (size(lead_rhythms) != 8) then
+    throw("Wrong lead rhythms size")
+  else {
+
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let issue = Issue(name.take(16), "Clef song.", 1, 0, false)
+
+    let id    = issue.calculateAssetId().toBase58String()
+    let key   = to_key(n)
+
+    ( [ issue,
+        IntegerEntry("count", n + 1),
+        StringEntry(id, key),
+        StringEntry(key, id),
+
+        IntegerEntry( key + "_G",     1),
+        StringEntry(  key + "_SL",    name),
+        StringEntry(  key + "_SP0",   parent_0),
+        StringEntry(  key + "_SP1",   parent_1),
+        IntegerEntry( key + "_SB0",   bpm),
+        IntegerEntry( key + "_SB1",   bar_size),
+        IntegerEntry( key + "_SB2",   beat_size),
+        IntegerEntry( key + "_ST",    tonality),
+        StringEntry(  key + "_SC0",   chords[0]),
+        StringEntry(  key + "_SC1",   chords[1]),
+        StringEntry(  key + "_SC2",   chords[2]),
+        StringEntry(  key + "_SC3",   chords[3]),
+        StringEntry(  key + "_SC4",   chords[4]),
+        StringEntry(  key + "_SC5",   chords[5]),
+        StringEntry(  key + "_SC6",   chords[6]),
+        StringEntry(  key + "_SC7",   chords[7]),
+        StringEntry(  key + "_SM",    melody),
+        StringEntry(  key + "_SI0",   kick_instrument),
+        StringEntry(  key + "_SI1",   snare_instrument),
+        StringEntry(  key + "_SI2",   hihat_instrument),
+        StringEntry(  key + "_SI3",   bass_instrument),
+        StringEntry(  key + "_SI4",   back_instrument),
+        StringEntry(  key + "_SI5",   lead_instrument),
+
+        StringEntry(  key + "_SI00",  kick_rhythms[0]),
+        StringEntry(  key + "_SI01",  kick_rhythms[1]),
+        StringEntry(  key + "_SI02",  kick_rhythms[2]),
+        StringEntry(  key + "_SI03",  kick_rhythms[3]),
+        StringEntry(  key + "_SI04",  kick_rhythms[4]),
+        StringEntry(  key + "_SI05",  kick_rhythms[5]),
+        StringEntry(  key + "_SI06",  kick_rhythms[6]),
+        StringEntry(  key + "_SI07",  kick_rhythms[7]),
+
+        StringEntry(  key + "_SI10",  snare_rhythms[0]),
+        StringEntry(  key + "_SI11",  snare_rhythms[1]),
+        StringEntry(  key + "_SI12",  snare_rhythms[2]),
+        StringEntry(  key + "_SI13",  snare_rhythms[3]),
+        StringEntry(  key + "_SI14",  snare_rhythms[4]),
+        StringEntry(  key + "_SI15",  snare_rhythms[5]),
+        StringEntry(  key + "_SI16",  snare_rhythms[6]),
+        StringEntry(  key + "_SI17",  snare_rhythms[7]),
+
+        StringEntry(  key + "_SI20",  hihat_rhythms[0]),
+        StringEntry(  key + "_SI21",  hihat_rhythms[1]),
+        StringEntry(  key + "_SI22",  hihat_rhythms[2]),
+        StringEntry(  key + "_SI23",  hihat_rhythms[3]),
+        StringEntry(  key + "_SI24",  hihat_rhythms[4]),
+        StringEntry(  key + "_SI25",  hihat_rhythms[5]),
+        StringEntry(  key + "_SI26",  hihat_rhythms[6]),
+        StringEntry(  key + "_SI27",  hihat_rhythms[7]),
+
+        StringEntry(  key + "_SI30",  bass_rhythms[0]),
+        StringEntry(  key + "_SI31",  bass_rhythms[1]),
+        StringEntry(  key + "_SI32",  bass_rhythms[2]),
+        StringEntry(  key + "_SI33",  bass_rhythms[3]),
+        StringEntry(  key + "_SI34",  bass_rhythms[4]),
+        StringEntry(  key + "_SI35",  bass_rhythms[5]),
+        StringEntry(  key + "_SI36",  bass_rhythms[6]),
+        StringEntry(  key + "_SI37",  bass_rhythms[7]),
+
+        StringEntry(  key + "_SI40",  back_rhythms[0]),
+        StringEntry(  key + "_SI41",  back_rhythms[1]),
+        StringEntry(  key + "_SI42",  back_rhythms[2]),
+        StringEntry(  key + "_SI43",  back_rhythms[3]),
+        StringEntry(  key + "_SI44",  back_rhythms[4]),
+        StringEntry(  key + "_SI45",  back_rhythms[5]),
+        StringEntry(  key + "_SI46",  back_rhythms[6]),
+        StringEntry(  key + "_SI47",  back_rhythms[7]),
+
+        StringEntry(  key + "_SI50",  lead_rhythms[0]),
+        StringEntry(  key + "_SI51",  lead_rhythms[1]),
+        StringEntry(  key + "_SI52",  lead_rhythms[2]),
+        StringEntry(  key + "_SI53",  lead_rhythms[3]),
+        StringEntry(  key + "_SI54",  lead_rhythms[4]),
+        StringEntry(  key + "_SI55",  lead_rhythms[5]),
+        StringEntry(  key + "_SI56",  lead_rhythms[6]),
+        StringEntry(  key + "_SI57",  lead_rhythms[7])
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func mint_hybrid(
+  name:   String,
+  song_0: String,
+  song_1: String
+) = {
+  let caller_addr = Address(i.caller.bytes);
+  let song_0_id   = fromBase58String(getStringValue(song_0));
+  let song_1_id   = fromBase58String(getStringValue(song_1));
+
+  if !check_hybrid_payment(i, song_0_id, song_1_id) then
+    throw("Wrong payment")
+  else if i.payments.size() == 1 && assetBalance(caller_addr, song_0_id) < 1 then
+    throw("Caller do not own first song")
+  else if i.payments.size() == 1 && assetBalance(caller_addr, song_1_id) < 1 then
+    throw("Caller do not own second song")
+  else {
+
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let issue   = Issue(name.take(16), "Clef song.", 1, 0, false)
+
+    let id_b    = issue.calculateAssetId()
+    let id      = id_b.toBase58String()
+    let key     = to_key(n)
+
+    let bytes   = unique_bytes(i)
+
+    let rand_0  = random_uint(bytes, 0)
+    let rand_1  = random_uint(bytes, 1)
+
+    ( [ issue,
+        IntegerEntry("count", n + 1),
+        StringEntry(id, key),
+        StringEntry(key, id),
+
+        IntegerEntry(key + "_G",  max([ getIntegerValue(song_0 + "_G"), getIntegerValue(song_1 + "_G") ]) + 1),
+
+        StringEntry(key + "_SL",  name),
+        StringEntry(key + "_SP0", getStringValue(song_0)),
+        StringEntry(key + "_SP1", getStringValue(song_1)),
+
+        IntegerEntry( key + "_SB0",   getIntegerValue(pick_one(song_0, song_1, rand_0, 1) + "_SB0")),
+        IntegerEntry( key + "_SB1",   getIntegerValue(pick_one(song_0, song_1, rand_0, 2) + "_SB1")),
+        IntegerEntry( key + "_SB2",   getIntegerValue(pick_one(song_0, song_1, rand_0, 4) + "_SB2")),
+        IntegerEntry( key + "_ST",    getIntegerValue(pick_one(song_0, song_1, rand_0, 8) + "_ST")),
+
+        StringEntry(  key + "_SC0",   getStringValue( pick_one(song_0, song_1, rand_0, 16) + "_SC0")),
+        StringEntry(  key + "_SC1",   getStringValue( pick_one(song_0, song_1, rand_0, 32) + "_SC1")),
+        StringEntry(  key + "_SC2",   getStringValue( pick_one(song_0, song_1, rand_0, 64) + "_SC2")),
+        StringEntry(  key + "_SC3",   getStringValue( pick_one(song_0, song_1, rand_0, 128) + "_SC3")),
+        StringEntry(  key + "_SC4",   getStringValue( pick_one(song_0, song_1, rand_0, 512) + "_SC4")),
+        StringEntry(  key + "_SC5",   getStringValue( pick_one(song_0, song_1, rand_0, 1024) + "_SC5")),
+        StringEntry(  key + "_SC6",   getStringValue( pick_one(song_0, song_1, rand_0, 2048) + "_SC6")),
+        StringEntry(  key + "_SC7",   getStringValue( pick_one(song_0, song_1, rand_0, 4096) + "_SC7")),
+        StringEntry(  key + "_SM",    getStringValue( pick_one(song_0, song_1, rand_0, 8192) + "_SM")),
+
+        StringEntry(  key + "_SI0",   getStringValue( pick_one(song_0, song_1, rand_0, 16384) + "_SI0")),
+        StringEntry(  key + "_SI1",   getStringValue( pick_one(song_0, song_1, rand_0, 32768) + "_SI1")),
+        StringEntry(  key + "_SI2",   getStringValue( pick_one(song_0, song_1, rand_0, 65536) + "_SI2")),
+        StringEntry(  key + "_SI3",   getStringValue( pick_one(song_0, song_1, rand_0, 131072) + "_SI3")),
+        StringEntry(  key + "_SI4",   getStringValue( pick_one(song_0, song_1, rand_0, 262144) + "_SI4")),
+        StringEntry(  key + "_SI5",   getStringValue( pick_one(song_0, song_1, rand_0, 524288) + "_SI5")),
+
+        StringEntry(  key + "_SI50",  getStringValue( pick_one(song_0, song_1, rand_0, 1048576) + "_SI50")),
+        StringEntry(  key + "_SI51",  getStringValue( pick_one(song_0, song_1, rand_0, 2097152) + "_SI51")),
+        StringEntry(  key + "_SI52",  getStringValue( pick_one(song_0, song_1, rand_0, 4194304) + "_SI52")),
+        StringEntry(  key + "_SI53",  getStringValue( pick_one(song_0, song_1, rand_0, 8388608) + "_SI53")),
+        StringEntry(  key + "_SI54",  getStringValue( pick_one(song_0, song_1, rand_0, 16777216) + "_SI54")),
+        StringEntry(  key + "_SI55",  getStringValue( pick_one(song_0, song_1, rand_0, 33554432) + "_SI55")),
+        StringEntry(  key + "_SI56",  getStringValue( pick_one(song_0, song_1, rand_0, 67108864) + "_SI56")),
+        StringEntry(  key + "_SI57",  getStringValue( pick_one(song_0, song_1, rand_0, 134217728) + "_SI57")),
+
+        StringEntry(  key + "_SI00",  getStringValue( pick_one(song_0, song_1, rand_0, 268435456) + "_SI00")),
+        StringEntry(  key + "_SI01",  getStringValue( pick_one(song_0, song_1, rand_0, 536870912) + "_SI01")),
+        StringEntry(  key + "_SI02",  getStringValue( pick_one(song_0, song_1, rand_0, 1073741824) + "_SI02")),
+        StringEntry(  key + "_SI03",  getStringValue( pick_one(song_0, song_1, rand_0, 2147483648) + "_SI03")),
+        StringEntry(  key + "_SI04",  getStringValue( pick_one(song_0, song_1, rand_0, 4294967296) + "_SI04")),
+        StringEntry(  key + "_SI05",  getStringValue( pick_one(song_0, song_1, rand_0, 8589934592) + "_SI05")),
+        StringEntry(  key + "_SI06",  getStringValue( pick_one(song_0, song_1, rand_1, 1) + "_SI06")),
+        StringEntry(  key + "_SI07",  getStringValue( pick_one(song_0, song_1, rand_1, 2) + "_SI07")),
+
+        StringEntry(  key + "_SI10",  getStringValue( pick_one(song_0, song_1, rand_1, 4) + "_SI10")),
+        StringEntry(  key + "_SI11",  getStringValue( pick_one(song_0, song_1, rand_1, 8) + "_SI11")),
+        StringEntry(  key + "_SI12",  getStringValue( pick_one(song_0, song_1, rand_1, 16) + "_SI12")),
+        StringEntry(  key + "_SI13",  getStringValue( pick_one(song_0, song_1, rand_1, 32) + "_SI13")),
+        StringEntry(  key + "_SI14",  getStringValue( pick_one(song_0, song_1, rand_1, 64) + "_SI14")),
+        StringEntry(  key + "_SI15",  getStringValue( pick_one(song_0, song_1, rand_1, 128) + "_SI15")),
+        StringEntry(  key + "_SI16",  getStringValue( pick_one(song_0, song_1, rand_1, 256) + "_SI16")),
+        StringEntry(  key + "_SI17",  getStringValue( pick_one(song_0, song_1, rand_1, 512) + "_SI17")),
+
+        StringEntry(  key + "_SI20",  getStringValue( pick_one(song_0, song_1, rand_1, 1024) + "_SI20")),
+        StringEntry(  key + "_SI21",  getStringValue( pick_one(song_0, song_1, rand_1, 2048) + "_SI21")),
+        StringEntry(  key + "_SI22",  getStringValue( pick_one(song_0, song_1, rand_1, 4096) + "_SI22")),
+        StringEntry(  key + "_SI23",  getStringValue( pick_one(song_0, song_1, rand_1, 8192) + "_SI23")),
+        StringEntry(  key + "_SI24",  getStringValue( pick_one(song_0, song_1, rand_1, 16384) + "_SI24")),
+        StringEntry(  key + "_SI25",  getStringValue( pick_one(song_0, song_1, rand_1, 32768) + "_SI25")),
+        StringEntry(  key + "_SI26",  getStringValue( pick_one(song_0, song_1, rand_1, 65536) + "_SI26")),
+        StringEntry(  key + "_SI27",  getStringValue( pick_one(song_0, song_1, rand_1, 131072) + "_SI27")),
+
+        StringEntry(  key + "_SI30",  getStringValue( pick_one(song_0, song_1, rand_1, 262144) + "_SI30")),
+        StringEntry(  key + "_SI31",  getStringValue( pick_one(song_0, song_1, rand_1, 524288) + "_SI31")),
+        StringEntry(  key + "_SI32",  getStringValue( pick_one(song_0, song_1, rand_1, 1048576) + "_SI32")),
+        StringEntry(  key + "_SI33",  getStringValue( pick_one(song_0, song_1, rand_1, 2097152) + "_SI33")),
+        StringEntry(  key + "_SI34",  getStringValue( pick_one(song_0, song_1, rand_1, 4194304) + "_SI34")),
+        StringEntry(  key + "_SI35",  getStringValue( pick_one(song_0, song_1, rand_1, 8388608) + "_SI35")),
+        StringEntry(  key + "_SI36",  getStringValue( pick_one(song_0, song_1, rand_1, 16777216) + "_SI36")),
+        StringEntry(  key + "_SI37",  getStringValue( pick_one(song_0, song_1, rand_1, 33554432) + "_SI37")),
+
+        StringEntry(  key + "_SI40",  getStringValue( pick_one(song_0, song_1, rand_1, 67108864) + "_SI40")),
+        StringEntry(  key + "_SI41",  getStringValue( pick_one(song_0, song_1, rand_1, 134217728) + "_SI41")),
+        StringEntry(  key + "_SI42",  getStringValue( pick_one(song_0, song_1, rand_1, 268435456) + "_SI42")),
+        StringEntry(  key + "_SI43",  getStringValue( pick_one(song_0, song_1, rand_1, 536870912) + "_SI43")),
+        StringEntry(  key + "_SI44",  getStringValue( pick_one(song_0, song_1, rand_1, 1073741824) + "_SI44")),
+        StringEntry(  key + "_SI45",  getStringValue( pick_one(song_0, song_1, rand_1, 2147483648) + "_SI45")),
+        StringEntry(  key + "_SI46",  getStringValue( pick_one(song_0, song_1, rand_1, 4294967296) + "_SI46")),
+        StringEntry(  key + "_SI47",  getStringValue( pick_one(song_0, song_1, rand_1, 8589934592) + "_SI47")),
+
+        ScriptTransfer(caller_addr, 1, id_b)
+      ],
+      unit )
+  }
+}
