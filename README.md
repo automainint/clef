@@ -9,6 +9,7 @@
 - JS utilities
   - `/src_js`
   - `/test_js`
+- Samples: `/static/samples`
 
 ##  Dev API
 
