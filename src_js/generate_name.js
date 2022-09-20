@@ -6369,15 +6369,15 @@ const adjectives = [
   "zoological"
 ];
 
-function generate_name() {
+function generate_name(seed) {
   let _upper = (s) => {
     let a = s.substring(0, 1).toUpperCase();
     let b = s.substring(1);
     return `${a}${b}`;
   };
 
-  let noun  = _upper(nouns[Math.floor(Math.random() * nouns.length)]);
-  let adj   = _upper(adjectives[Math.floor(Math.random() * adjectives.length)]);
+  let noun  = _upper(nouns[(seed % 65536) % nouns.length]);
+  let adj   = _upper(adjectives[Math.floor(seed / 65536) % adjectives.length]);
 
   return `${adj} ${noun}`;
 }

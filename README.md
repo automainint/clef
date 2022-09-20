@@ -16,15 +16,20 @@
 ### Back-end interface
 Back-end implementation for testing located in `./src_js/back_fake.js`
 
-Implementation for blockchain interaction located in `./src_js/back_node.js`;
-Blockchain node settings located in `./src_js/env.js`
+Implementation for blockchain interaction located in `./src_js/back_node.js`
 
 ```js
-const { env, types, authenticate } = require('/back_fake.js');
+const { env,
+        types,
+        authenticate,
+        get_resource_by_id,
+        get_resource_by_asset_id } = require('/back_fake.js');
 ```
 
 - `env` - list of environment names.
-  - `env.test` - testing-only environment.
+  - `env.keeper` - use a _Keeper Wallet_ account.
+  - `env.cloud` - use an _Email-based_ Waves.Exchange account.
+  - `env.web` - use a _private key-_ or _seed phrase-based_ Waves.Exchange account.
 
 - `types` - list of resource type names.
   - Available for purchase
@@ -34,12 +39,33 @@ const { env, types, authenticate } = require('/back_fake.js');
   - Other
     - `types.song`
     - `types.hybrid`
-    - `types.tonality`
+    - `types.melody`
+
+- `get_resource_by_id(id)` _async_ - get a resource by id. Returns resource object, or null, if not found.
+  ```js
+  const song_id = '0001';
+
+  const song = await get_resource_by_id(song_id);
+
+  if (song != null) {
+    console.log(JSON.stringify(song, null, '  '));
+  }
+  ```
+
+- `get_resource_by_asset_id(id)` _async_ - get a resource by asset id. Returns resource object, or null, if not found.
+  ```js
+  const asset_id = '3foobarfoobar';
+
+  const song = await get_resource_by_asset_id(asset_id);
+
+  if (song != null) {
+    console.log(JSON.stringify(song, null, '  '));
+  }
+  ```
 
 - `authenticate(options)` _async_ - Authenticate a user. Returns clearance object with following methods.
-  For testing, `options` argument should be `{ env: env.test }`.
   ```js
-  let user = await authenticate({ env: env.test });
+  let user = await authenticate({ env: env.keeper });
   ```
   - Testing-only methods
     - `empty_stock()` _async_ - remove all stock resources.
@@ -55,10 +81,11 @@ const { env, types, authenticate } = require('/back_fake.js');
         label: 'Am',
         notes: [ 0, 0, 0, 3, 7 ] } ]);
       ```
+  - `logout()` _async_ - sign out.
   - `get_balance()` _async_ - returns a number, user balance.
   - `get_resources(options)` _async_ - returns an array of user resources.
     - Each resource contains at least those fields:
-      - `id` - integer number or string, unique resource id.
+      - `id` - string, unique resource id.
       - `type` - string, resource type name. One of `types`.
       - `label` - string, resource label.
     - `options` argument may contain following fields.
@@ -100,17 +127,6 @@ const { env, types, authenticate } = require('/back_fake.js');
     await user.mint_hybrid_and_purge([ songs[0], songs[1] ]);
     ```
 
-  - `get_resource_by_id(id)` _async_ - get a resource by id. Returns resource object, or null, if not found.
-    ```js
-    const song_id = '0001';
-
-    const song = await user.get_resource_by_id(song_id);
-
-    if (song != null) {
-      console.log(JSON.stringify(song, null, '  '));
-    }
-    ```
-
   - `get_wallet_address()` _async_ - get user wallet address. Returns a string.
     To render an avatar, you can use `identity-img` like this:
     ```js
@@ -134,7 +150,7 @@ const { env, types, authenticate } = require('/back_fake.js');
 ```js
 const { env, types, authenticate } = require('/back_fake.js');
 
-authenticate({ env: env.test }).then(user => {
+authenticate({ env: env.keeper }).then(user => {
   /* Print user balance. */
   user.get_balance().then(balance => {
     console.log(`Balance: ${balance}`);
@@ -210,7 +226,7 @@ const { diatonic_minor,
   let songs = await user.get_resources({ filter: types.song });
   let sheet = render_sheet(songs[0]);
   ```
-- `get_song_id(song)` - returns song id: integer number or string.
+- `get_song_id(song)` - returns song id: string.
 - `get_song_label(song)` - returns song label.
 - `get_song_parents(song)` - returns array of song parents' ids.
 - `get_song_bpm(song)` - returns song BPM.
@@ -233,7 +249,7 @@ const { diatonic_minor,
 
 **Example**
 ```js
-const { env, authenticate } = require('/back_fake.js');
+const { get_resource_by_id } = require('/back_fake.js');
 
 const { render_sheet,
         get_song_label,
@@ -247,29 +263,26 @@ const { render_sheet,
         get_song_chord_names,
         get_song_generation,
         get_song_asset_id,
-        get_song_asset_url,
-        can_mint_hybrid } = require('/music.js');
+        get_song_asset_url  } = require('/music.js');
 
-authenticate({ env: env.test }).then(user => {
-  const song_id = '0001';
+const song_id = '0001';
 
-  user.get_resource_by_id(song_id).then(song => {
-    const sheet = render_sheet(song);
+get_resource_by_id(song_id).then(song => {
+  const sheet = render_sheet(song);
 
-    const asset_id  = get_song_asset_id(song);
-    const asset_url = get_song_asset_url(song);
+  const asset_id  = get_song_asset_id(song);
+  const asset_url = get_song_asset_url(song);
 
-    const label       = get_song_label(song);
-    const parents     = get_song_parents(song);
-    const bpm         = get_song_bpm(song);
-    const meter       = get_song_meter(song);
-    const tonality    = get_song_tonality(song);
-    const colors      = get_song_colors(song);
-    const chords      = get_song_chords(song);
-    const generation  = get_song_generation(song);
+  const label       = get_song_label(song);
+  const parents     = get_song_parents(song);
+  const bpm         = get_song_bpm(song);
+  const meter       = get_song_meter(song);
+  const tonality    = get_song_tonality(song);
+  const colors      = get_song_colors(song);
+  const chords      = get_song_chords(song);
+  const generation  = get_song_generation(song);
 
-    const chord_names = get_song_chord_names(song);
-  });
+  const chord_names = get_song_chord_names(song);
 });
 ```
 

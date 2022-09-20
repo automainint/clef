@@ -4,19 +4,13 @@
  */
 
 const env = {
-  test: 'test'
+  keeper: 'keeper',
+  cloud:  'cloud',
+  web:    'web'
 };
 
+const { types }         = require('./types.js');
 const { generate_name } = require('./generate_name.js');
-
-const types = {
-  chord:    'chord',
-  rhythm:   'rhythm',
-  beat:     'beat',
-  song:     'song',
-  hybrid:   'hybrid',
-  tonality: 'tonality'
-};
 
 function _new_stock() {
   return {
@@ -37,7 +31,7 @@ var _next_id = 0;
 
 function _id() {
   _next_id++;
-  return _next_id;
+  return `${_next_id}`;
 }
 
 function _clone(obj) {
@@ -100,12 +94,12 @@ function generate_instruments() {
 
 function generate_tonality() {
   const tons = [
-    { id: 0, type: types.tonality, label: 'G minor', key: -5 },
-    { id: 0, type: types.tonality, label: 'A minor', key: -3 },
-    { id: 0, type: types.tonality, label: 'H minor', key: -1 },
-    { id: 0, type: types.tonality, label: 'C minor', key: 0 },
-    { id: 0, type: types.tonality, label: 'E minor', key: 4 },
-    { id: 0, type: types.tonality, label: 'F minor', key: 5 }
+    { id: '0', type: types.tonality, label: 'G minor', key: -5 },
+    { id: '0', type: types.tonality, label: 'A minor', key: -3 },
+    { id: '0', type: types.tonality, label: 'H minor', key: -1 },
+    { id: '0', type: types.tonality, label: 'C minor', key: 0 },
+    { id: '0', type: types.tonality, label: 'E minor', key: 4 },
+    { id: '0', type: types.tonality, label: 'F minor', key: 5 }
   ];
 
   return tons[Math.floor(Math.random() * tons.length)];
@@ -132,7 +126,7 @@ function generate_pattern(size, unique_count) {
 
 function generate_rhythm() {
   return {
-    id:     0,
+    id:     '0',
     type:   types.rhythm,
     label:  'flat',
     notes:  [ 30, 2 ]
@@ -141,7 +135,7 @@ function generate_rhythm() {
 
 function generate_beat() {
   return {
-    id:     0,
+    id:     '0',
     type:   types.beat,
     label:  'none',
     kick:   [ 0, 32 ],
@@ -226,7 +220,7 @@ function song_blank() {
 
     id: id,
     type: types.song,
-    label: generate_name(),
+    label: generate_name(Math.floor(Math.random() * 65536 * 65536)),
     parents: [],
     generation: 1,
 
@@ -341,7 +335,7 @@ function mint_hybrid_internal(song1, song2) {
 
     id:       id,
     type:     types.song,
-    label:    generate_name(),
+    label:    generate_name(Math.floor(Math.random() * 65536 * 65536)),
     parents:  [ song1.id, song2.id ],
     generation: Math.max(song1.generation, song2.generation) + 1,
 
@@ -377,9 +371,35 @@ function find_account(id) {
   return find_resource(accounts, '', [ id ], () => {});
 }
 
+async function get_resource_by_id(id) {
+  for (const res of stock.resources)
+    if (res.id == id)
+      return JSON.parse(JSON.stringify(res));
+  for (const user of accounts)
+    for (const res of user.resources)
+      if (res.id == id)
+        return JSON.parse(JSON.stringify(res));
+  return null;
+}
+
+async function get_resource_by_asset_id(asset_id) {
+  for (const res of stock.resources)
+    if (res.asset_id == asset_id)
+      return JSON.parse(JSON.stringify(res));
+  for (const user of accounts)
+    for (const res of user.resources)
+      if (res.asset_id == asset_id)
+        return JSON.parse(JSON.stringify(res));
+  return null;
+}
+
 class clearance_handler {
   constructor(id_) {
     this.id = id_;
+  }
+
+  async logout() {
+    this.id = 0;
   }
 
   async empty_stock() {
@@ -608,17 +628,6 @@ class clearance_handler {
     return hybrid.id;
   }
 
-  async get_resource_by_id(id) {
-    for (const res of stock.resources)
-      if (res.id == id)
-        return JSON.parse(JSON.stringify(res));
-    for (const user of accounts)
-      for (const res of user.resources)
-        if (res.id == id)
-          return JSON.parse(JSON.stringify(res));
-    return null;
-  }
-
   async get_wallet_address() {
     return 'f00ba7f00ba7f00ba7f00ba7';
   }
@@ -644,7 +653,9 @@ function new_account() {
 }
 
 async function authenticate(options) {
-  if (options.env != env.test)
+  if (options.env != env.keeper &&
+      options.env != env.cloud &&
+      options.env != env.web)
     throw new Error('Invalid environment');
 
   const account = new_account();
@@ -653,7 +664,9 @@ async function authenticate(options) {
 }
 
 module.exports = {
-  env:          env,
-  types:        types,
-  authenticate: authenticate
+  env:                      env,
+  types:                    types,
+  authenticate:             authenticate,
+  get_resource_by_id:       get_resource_by_id,
+  get_resource_by_asset_id: get_resource_by_asset_id
 };

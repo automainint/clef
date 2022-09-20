@@ -5,7 +5,7 @@ const {
   pitch_to_midi
 } = require('./music.js');
 
-const { types } = require('./back_fake.js');
+const { types } = require('./types.js');
 
 function _triad(base) {
   const key = diatonic_minor(0);

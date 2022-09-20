@@ -106,7 +106,7 @@ describe('library', async function () {
     const script = compile(file('library.ride'));
     const ssTx = setScript(
       { script: script,
-        fee:    2700000 },
+        fee:    3800000 },
       accounts.library);
     await broadcast(ssTx);
     await waitForTx(ssTx.id)
@@ -132,7 +132,7 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Chord fee:     ${iTxMint.fee}`);
+    console.log(`    * Chord fee:             ${iTxMint.fee}`);
 
     await broadcast(iTxMint);
     await waitForTx(iTxMint.id);
@@ -176,7 +176,7 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
   });
 
   it('mint melody', async function () {
@@ -210,7 +210,7 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Melody fee:    ${iTxMint.fee}`);
+    console.log(`    * Melody fee:            ${iTxMint.fee}`);
 
     await broadcast(iTxMint);
     await waitForTx(iTxMint.id);
@@ -287,7 +287,7 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
   });
 
   it('mint rhythm', async function () {
@@ -322,7 +322,7 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Rhythm fee:    ${iTxMint.fee}`);
+    console.log(`    * Rhythm fee:            ${iTxMint.fee}`);
 
     await broadcast(iTxMint);
     await waitForTx(iTxMint.id);
@@ -402,7 +402,7 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
   });
 
   it('mint song', async function () {
@@ -410,7 +410,7 @@ describe('library', async function () {
 
     const iTxMint = tx_mint_song(library, accounts.library, 123, 4, 8, 7, '');
 
-    console.log(`    * Song fee:      ${iTxMint.fee}`);
+    console.log(`    * Song fee:              ${iTxMint.fee}`);
 
     await broadcast(iTxMint);
     await waitForTx(iTxMint.id);
@@ -424,6 +424,7 @@ describe('library', async function () {
     const id                = await accountDataByKey(`${n}`,      library);
     const gen               = await accountDataByKey(`${n}_G`,    library);
     const name              = await accountDataByKey(`${n}_SL`,   library);
+    const name_seed         = await accountDataByKey(`${n}_SN`,   library);
     const parent_0          = await accountDataByKey(`${n}_SP0`,  library);
     const parent_1          = await accountDataByKey(`${n}_SP1`,  library);
     const bpm               = await accountDataByKey(`${n}_SB0`,  library);
@@ -498,6 +499,7 @@ describe('library', async function () {
     expect(id.value).to.equal(assetId);
     expect(gen.value).to.equal(1);
     expect(name.value).to.equal('some song long name');
+    expect(name_seed.value).to.equal(0);
     expect(parent_0.value).to.equal('0000');
     expect(parent_1.value).to.equal('0001');
     expect(bpm.value).to.equal(123);
@@ -575,7 +577,7 @@ describe('library', async function () {
 
     const iTxMint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
 
-    expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
   });
 
   it('set hybrid price', async function () {
@@ -592,7 +594,7 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Set price fee: ${iTxSetPrice.fee}`);
+    console.log(`    * Set price fee:         ${iTxSetPrice.fee}`);
 
     await broadcast(iTxSetPrice);
     await waitForTx(iTxSetPrice.id);
@@ -618,7 +620,7 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    expect(broadcast(iTxSetPrice)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(iTxSetPrice)).to.be.rejectedWith('Caller is not dApp owner');
   });
 
   it('mint hybrid', async function () {
@@ -668,12 +670,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid long name' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -682,17 +683,18 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid fee:    ${iTxMintHybrid.fee}`);
+    console.log(`    * Hybrid fee:            ${tx_mint_hybrid.fee}`);
 
-    await broadcast(iTxMintHybrid);
-    await waitForTx(iTxMintHybrid.id);
-    const hybrid = (await stateChanges(iTxMintHybrid.id)).issues[0].assetId;
+    await broadcast(tx_mint_hybrid);
+    await waitForTx(tx_mint_hybrid.id);
+    const hybrid = (await stateChanges(tx_mint_hybrid.id)).issues[0].assetId;
 
     const n = (await accountDataByKey(hybrid, library)).value;
 
     const id                = await accountDataByKey(`${n}`,      library);
     const gen               = await accountDataByKey(`${n}_G`,    library);
     const name              = await accountDataByKey(`${n}_SL`,   library);
+    const name_seed         = await accountDataByKey(`${n}_SN`,   library);
     const parent_0          = await accountDataByKey(`${n}_SP0`,  library);
     const parent_1          = await accountDataByKey(`${n}_SP1`,  library);
     const bpm               = await accountDataByKey(`${n}_SB0`,  library);
@@ -766,9 +768,10 @@ describe('library', async function () {
 
     expect(id.value).to.be.equal(hybrid);
     expect(gen.value).to.be.equal(2);
-    expect(name.value).to.be.equal('some hybrid long name');
-    expect(parent_0.value).to.equal(song_0);
-    expect(parent_1.value).to.equal(song_1);
+    expect(name.value).to.be.equal('');
+    expect(name_seed.type).to.be.equal('integer');
+    expect(parent_0.value).to.equal(n_0);
+    expect(parent_1.value).to.equal(n_1);
     expect(balance).to.equal(1);
 
     const _fix = (s) => {
@@ -892,12 +895,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -906,7 +908,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    expect(broadcast(iTxMintHybrid)).to.be.rejectedWith('Caller do not own first song');
+    await expect(broadcast(tx_mint_hybrid)).to.be.rejectedWith('Caller do not own first song');
   });
 
   it('can not mint hybrid if do not own second song', async function () {
@@ -949,12 +951,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -963,7 +964,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    expect(broadcast(iTxMintHybrid)).to.be.rejectedWith('Caller do not own second song');
+    await expect(broadcast(tx_mint_hybrid)).to.be.rejectedWith('Caller do not own second song');
   });
 
   it('can not mint hybrid if payment amount is wrong', async function () {
@@ -1012,12 +1013,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -1026,7 +1026,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    expect(broadcast(iTxMintHybrid)).to.be.rejectedWith('Wrong payment');
+    await expect(broadcast(tx_mint_hybrid)).to.be.rejectedWith('Wrong payment');
   });
 
   it('can not mint hybrid if payment token is wrong', async function () {
@@ -1075,12 +1075,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -1089,7 +1088,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    expect(broadcast(iTxMintHybrid)).to.be.rejectedWith('Wrong payment');
+    await expect(broadcast(tx_mint_hybrid)).to.be.rejectedWith('Wrong payment');
   });
 
   it('can not mint hybrid if payment size is wrong', async function () {
@@ -1138,12 +1137,11 @@ describe('library', async function () {
     const n_0 = (await accountDataByKey(song_0, library)).value;
     const n_1 = (await accountDataByKey(song_1, library)).value;
 
-    const iTxMintHybrid = invokeScript(
+    const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -1155,7 +1153,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    expect(broadcast(iTxMintHybrid)).to.be.rejectedWith('Wrong payment');
+    await expect(broadcast(tx_mint_hybrid)).to.be.rejectedWith('Wrong payment');
   });
 
   it('pay for hybrid with usdn', async function () {
@@ -1229,7 +1227,6 @@ describe('library', async function () {
         call: {
           function: 'mint_hybrid',
           args: [
-            { type: 'string', value: 'some hybrid long name' },
             { type: 'string', value: n_0 },
             { type: 'string', value: n_1 }
           ]
@@ -1238,7 +1235,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid fee:    ${tx_mint_hybrid.fee}`);
+    console.log(`    * Hybrid fee:            ${tx_mint_hybrid.fee}`);
 
     await broadcast(tx_mint_hybrid);
     await waitForTx(tx_mint_hybrid.id);
@@ -1255,22 +1252,9 @@ describe('library', async function () {
     expect(usdn_balance_1).to.equal(usdn_balance - price);
   });
 
-  it('pay for hybrid with songs', async function () {
+  it('mint hybrid and burn', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
-
-    const tx_set_price = invokeScript(
-      { dApp: library,
-        call: {
-          function: 'set_price_hybrid',
-          args: [
-            { type: 'string',   value: '' },
-            { type: 'integer',  value: 1000 }
-          ]
-        } },
-      accounts.library);
-    await broadcast(tx_set_price);
-    await waitForTx(tx_set_price.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1297,18 +1281,11 @@ describe('library', async function () {
     expect(await assetBalance(song_0, foo)).to.equal(1);
     expect(await assetBalance(song_1, foo)).to.equal(1);
 
-    const n_0 = (await accountDataByKey(song_0, library)).value;
-    const n_1 = (await accountDataByKey(song_1, library)).value;
-
     const tx_mint_hybrid = invokeScript(
       { dApp: library,
         call: {
-          function: 'mint_hybrid',
-          args: [
-            { type: 'string', value: 'some hybrid long name' },
-            { type: 'string', value: n_0 },
-            { type: 'string', value: n_1 }
-          ]
+          function: 'mint_hybrid_and_burn',
+          args: [ ]
         },
         payment: [
           { assetId: song_0, amount: 1 },
@@ -1317,7 +1294,7 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid fee:    ${tx_mint_hybrid.fee}`);
+    console.log(`    * Hybrid with burn fee:  ${tx_mint_hybrid.fee}`);
 
     await broadcast(tx_mint_hybrid);
     await waitForTx(tx_mint_hybrid.id);

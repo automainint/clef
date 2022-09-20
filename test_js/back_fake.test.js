@@ -1,7 +1,9 @@
 const {
   env,
   types,
-  authenticate
+  authenticate,
+  get_resource_by_id,
+  get_resource_by_asset_id
 } = require('../src_js/back_fake.js');
 
 const {
@@ -40,22 +42,52 @@ describe('back fake', async function () {
   var user;
 
   beforeEach('authenticate and reset', async function () {
-    user = await authenticate({ env: env.test });
+    user = await authenticate({ env: env.keeper });
     await user.empty_stock();
     await user.mint_resources(_resources());
   });
 
+  it('can not authenticate with invalid environment', async function () {
+    let ok = false;
+
+    try {
+      await authenticate({ env: 'invalid env' });
+    } catch (e) {
+      ok = true;
+    }
+
+    assert.ok(ok);
+  });
+
+  it('can authenticate with cloud or web environment', async function () {
+    await authenticate({ env: env.web });
+    await authenticate({ env: env.cloud });
+  });
+
   it('balance is zero initially', async function () {
     assert.equal(await user.get_balance(), 0);
+
+    await user.logout();
   });
 
   it('no resources initially', async function () {
     assert.equal((await user.get_resources()).length, 0);
+
+    await user.logout();
   });
 
   it('balance will increase by request', async function () {
     await user.add_balance(10);
     assert.ok(await user.get_balance() === 10);
+
+    await user.logout();
+  });
+
+  it('can not get balance after logout', async function () {
+    await user.add_balance(10);
+    await user.logout();
+
+    assert.ok(await user.get_balance() === undefined);
   });
 
   it('can get prices', async function () {
@@ -63,11 +95,15 @@ describe('back fake', async function () {
     assert.ok(await user.get_price(types.rhythm) > 0);
     assert.ok(await user.get_price(types.beat) > 0);
     assert.ok(await user.get_price(types.hybrid) > 0);
+
+    await user.logout();
   });
 
   it('can not buy chord with zero balance', async function () {
     await user.buy(types.chord);
     assert.equal((await user.get_resources({ filter: types.chord })).length, 0);
+
+    await user.logout();
   });
 
   it('can buy chord with positive balance', async function () {
@@ -77,6 +113,8 @@ describe('back fake', async function () {
     let res = await user.get_resources({ filter: types.chord });
     assert.equal(res.length, 1);
     assert.equal(res[0].type, types.chord);
+
+    await user.logout();
   });
 
   it('balance will decrease after spent on chord', async function () {
@@ -85,6 +123,8 @@ describe('back fake', async function () {
     const balance = await user.get_balance();
     await user.buy(types.chord);
     assert.equal(await user.get_balance(), balance - price);
+
+    await user.logout();
   });
 
   it('resource ids should be unique', async function () {
@@ -100,6 +140,8 @@ describe('back fake', async function () {
     for (let i = 1; i < res.length; i++)
       for (let j = 0; j < i; j++)
         assert.notEqual(res[i].id, res[j].id);
+
+    await user.logout();
   });
 
   it('can get resources by pages 1', async function () {
@@ -127,6 +169,8 @@ describe('back fake', async function () {
 
     v     = await user.get_resources({ filter: types.chord, size: 2, after: last });
     assert.equal(v.length, 0);
+
+    await user.logout();
   });
 
   it('can get resources by pages 2', async function () {
@@ -156,11 +200,15 @@ describe('back fake', async function () {
 
     v     = await user.get_resources({ filter: types.rhythm, size: 2, after: last });
     assert.equal(v.length, 0);
+
+    await user.logout();
   });
 
   it('can not buy rhythm with zero balance', async function () {
     await user.buy(types.rhythm);
     assert.equal((await user.get_resources({ filter: types.rhythm })).length, 0);
+
+    await user.logout();
   });
 
   it('can buy rhythm with positive balance', async function () {
@@ -170,6 +218,8 @@ describe('back fake', async function () {
     let res = await user.get_resources({ filter: types.rhythm });
     assert.equal(res.length, 1);
     assert.equal(res[0].type, types.rhythm);
+
+    await user.logout();
   });
 
   it('balance will decrease after spent on rhythm', async function () {
@@ -178,11 +228,15 @@ describe('back fake', async function () {
     const balance = await user.get_balance();
     await user.buy(types.rhythm);
     assert.equal(await user.get_balance(), balance - price);
+
+    await user.logout();
   });
 
   it('can not buy beat with zero balance', async function () {
     await user.buy(types.beat);
     assert.equal((await user.get_resources({ filter: types.beat })).length, 0);
+
+    await user.logout();
   });
 
   it('can buy beat with positive balance', async function () {
@@ -192,6 +246,8 @@ describe('back fake', async function () {
     let res = await user.get_resources({ filter: types.beat });
     assert.equal(res.length, 1);
     assert.equal(res[0].type, types.beat);
+
+    await user.logout();
   });
 
   it('balance will decrease after spent on beat', async function () {
@@ -200,6 +256,8 @@ describe('back fake', async function () {
     const balance = await user.get_balance();
     await user.buy(types.beat);
     assert.equal(await user.get_balance(), balance - price);
+
+    await user.logout();
   });
 
 
@@ -217,6 +275,8 @@ describe('back fake', async function () {
     assert.equal((await user.get_resources({ filter: types.song })).length, 0);
     assert.equal((await user.get_resources({ filter: types.chord })).length, 1);
     assert.equal((await user.get_resources({ filter: [ types.chord, types.beat ]})).length, 2);
+
+    await user.logout();
   });
 
   it('can not mint song with zero resources and balance', async function () {
@@ -230,6 +290,8 @@ describe('back fake', async function () {
 
     assert.equal((await user.get_resources({ filter: types.song })).length, 0);
     assert.ok(ok);
+
+    await user.logout();
   });
 
   it('can not mint song with zero resources', async function () {
@@ -245,6 +307,8 @@ describe('back fake', async function () {
 
     assert.equal((await user.get_resources({ filter: types.song })).length, 0);
     assert.ok(ok);
+
+    await user.logout();
   });
 
   it('can mint song with 2 chords', async function () {
@@ -260,6 +324,8 @@ describe('back fake', async function () {
     await user.mint_song(await user.get_resources());
 
     assert.equal((await user.get_resources({ filter: types.song })).length, 1);
+
+    await user.logout();
   });
 
   it('can not mint song with more than 4 resources', async function () {
@@ -285,6 +351,8 @@ describe('back fake', async function () {
 
     assert.equal((await user.get_resources({ filter: types.song })).length, 0);
     assert.ok(ok);
+
+    await user.logout();
   });
 
   it('can mint song with 2 chords and 2 rhythms', async function () {
@@ -301,6 +369,8 @@ describe('back fake', async function () {
     const resources = await user.get_resources();
     await user.mint_song(resources);
     assert.equal((await user.get_resources({ filter: types.song })).length, 1);
+
+    await user.logout();
   });
 
   it('can mint song with 2 chords and 1 beat', async function () {
@@ -316,6 +386,8 @@ describe('back fake', async function () {
     const resources = await user.get_resources();
     await user.mint_song(resources);
     assert.equal((await user.get_resources({ filter: types.song })).length, 1);
+
+    await user.logout();
   });
 
   it('resources will be spent when song is minted', async function () {
@@ -334,6 +406,8 @@ describe('back fake', async function () {
     await user.mint_song(resources);
     resources = await user.get_resources({ filter: [ types.chord, types.rhythm, types.beat ] });
     assert.equal(resources.length, 0);
+
+    await user.logout();
   });
 
   it('minted song will contain spent resources', async function () {
@@ -377,6 +451,8 @@ describe('back fake', async function () {
 
       assert.ok(found);
     }
+
+    await user.logout();
   });
 
   it('minted song should not have parents', async function () {
@@ -397,6 +473,8 @@ describe('back fake', async function () {
     const song = (await user.get_resources({ filter: types.song }))[0];
 
     assert.equal(song.parents.length, 0);
+
+    await user.logout();
   });
 
   it('minted song should have a label and a type', async function () {
@@ -418,6 +496,8 @@ describe('back fake', async function () {
 
     assert.equal(song.type, types.song);
     assert.equal((typeof song.label), 'string');
+
+    await user.logout();
   });
 
   it('can not mint hybrid without songs', async function () {
@@ -430,6 +510,8 @@ describe('back fake', async function () {
 
     assert.equal((await user.get_resources({ filter: types.song })).length, 0);
     assert.ok(ok);
+
+    await user.logout();
   });
 
   it('can mint hybrid with 2 songs', async function () {
@@ -457,6 +539,8 @@ describe('back fake', async function () {
     songs = await user.get_resources({ filter: types.song });
 
     assert.equal(songs.length, 3);
+
+    await user.logout();
   });
 
   it('can mint hybrid and burn 2 songs', async function () {
@@ -483,6 +567,8 @@ describe('back fake', async function () {
     songs = await user.get_resources({ filter: types.song });
 
     assert.equal(songs.length, 1);
+
+    await user.logout();
   });
 
   it('mint and burn songs order', async function () {
@@ -515,6 +601,8 @@ describe('back fake', async function () {
     assert.equal(songs.length, 3);
     assert.ok(songs[0].id > songs[1].id);
     assert.ok(songs[1].id > songs[2].id);
+
+    await user.logout();
   });
 
   it('minted song checks', async function () {
@@ -555,6 +643,8 @@ describe('back fake', async function () {
     assert.ok(song.rhythm.bass[0].notes.length > 0);
     assert.ok(song.rhythm.back[0].notes.length > 0);
     assert.ok(song.rhythm.lead[0].notes.length > 0);
+
+    await user.logout();
   });
 
   it('minted custom song checks', async function () {
@@ -602,6 +692,8 @@ describe('back fake', async function () {
     assert.ok(song.rhythm.bass[0].notes.length > 0);
     assert.ok(song.rhythm.back[0].notes.length > 0);
     assert.ok(song.rhythm.lead[0].notes.length > 0);
+
+    await user.logout();
   });
 
   it('hybrid checks', async function () {
@@ -655,6 +747,8 @@ describe('back fake', async function () {
     assert.ok(songs[0].rhythm.bass[0].notes.length > 0);
     assert.ok(songs[0].rhythm.back[0].notes.length > 0);
     assert.ok(songs[0].rhythm.lead[0].notes.length > 0);
+
+    await user.logout();
   });
 
   it('can render minted song', async function () {
@@ -683,6 +777,8 @@ describe('back fake', async function () {
     assert.ok(sheet.bass.length > 0);
     assert.ok(sheet.back.length > 0);
     assert.ok(sheet.lead.length > 0);
+
+    await user.logout();
   });
 
   it('can render hybrid', async function () {
@@ -721,6 +817,8 @@ describe('back fake', async function () {
     assert.ok(sheet.bass.length > 0);
     assert.ok(sheet.back.length > 0);
     assert.ok(sheet.lead.length > 0);
+
+    await user.logout();
   });
 
   it('can get resource by id', async function () {
@@ -746,11 +844,35 @@ describe('back fake', async function () {
     const songs       = await user.get_resources({ filter: types.song });
     const hybrid_song = songs[2];
 
-    const parent_0 = await user.get_resource_by_id(hybrid_song.parents[0]);
-    const parent_1 = await user.get_resource_by_id(hybrid_song.parents[1]);
+    const parent_0 = await get_resource_by_id(hybrid_song.parents[0]);
+    const parent_1 = await get_resource_by_id(hybrid_song.parents[1]);
 
     assert.equal(parent_0.id, hybrid_song.parents[0]);
     assert.equal(parent_1.id, hybrid_song.parents[1]);
+
+    await user.logout();
+  });
+
+  it('can get resource by asset id', async function () {
+    const price =
+      (await user.get_price(types.song)) * 2 +
+      (await user.get_price(types.chord)) * 4 +
+      (await user.get_price(types.hybrid));
+
+    await user.add_balance(price);
+    
+    await user.buy(types.chord);
+    await user.buy(types.chord);
+
+    await user.mint_song(await user.get_resources({ filter: types.chord }));
+
+    const song_0 = (await user.get_resources({ filter: types.song}))[0];
+    const song_1 = await get_resource_by_asset_id(song_0.asset_id);
+
+    assert.equal(song_0.id, song_1.id);
+    assert.equal(song_0.asset_id, song_1.asset_id);
+
+    await user.logout();
   });
 
   it('music util compatibility checks', async function () {
@@ -803,15 +925,21 @@ describe('back fake', async function () {
     assert.equal(typeof get_song_asset_id(song), 'string');
 
     const url = new URL(get_song_asset_url(song));
+
+    await user.logout();
   });
 
   it('get wallet address', async function () {
     let address = await user.get_wallet_address();
     assert.equal(typeof address, 'string');
+
+    await user.logout();
   });
 
   it('get explorer url', async function () {
     let url_obj = new URL(await user.get_explorer_url());
+
+    await user.logout();
   });
 
   it('mint hybrid balance check', async function () {
@@ -822,5 +950,7 @@ describe('back fake', async function () {
 
     await user.add_balance(1);
     assert.ok(await user.can_mint_hybrid());
+
+    await user.logout();
   });
 });
