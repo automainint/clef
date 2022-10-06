@@ -1,0 +1,22 @@
+{-# STDLIB_VERSION 6 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+@Callable(i)
+func createNFT(nftName: String, nftDesc: String, image: String, collectionName: String) = {
+  let issue     = Issue(nftName, nftDesc, 1, 0, false, unit, 0)
+  let asset_id  = issue.calculateAssetId()
+
+  ( [ issue,
+      ScriptTransfer(i.caller, 1, asset_id) ],
+    asset_id.toBase58String() )
+}
+
+@Callable(i)
+func burnNFT() = {
+  let asset_id  = i.payments[0].value().assetId.value()
+  let asset     = assetInfo(asset_id).value()
+
+  ( [ Burn(asset_id, 1) ],
+    unit )
+}

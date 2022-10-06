@@ -99,27 +99,42 @@ describe('library', async function () {
   };
 
   before(async function () {
+    const compile_and_broadcast = async (seed, source) => {
+      const script = compile(source);
+      const tx = setScript(
+        { script: script,
+          fee:    3800000 },
+        seed);
+      await broadcast(tx);
+      await waitForTx(tx.id)
+    };
+
     await setupAccounts(
       { library:  10 * wvs,
+        market:   10 * wvs,
         foo:      10 * wvs,
         bar:      10 * wvs });
-    const script = compile(file('library.ride'));
-    const ssTx = setScript(
-      { script: script,
-        fee:    3800000 },
-      accounts.library);
-    await broadcast(ssTx);
-    await waitForTx(ssTx.id)
+
+    await compile_and_broadcast(
+      accounts.market,
+      file('market_dummy.ride'));
+
+    await compile_and_broadcast(
+      accounts.library,
+      file('library.ride').replace(
+        '3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By',
+        address(accounts.market)));
   });
 
   it('mint chord', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_chord',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some chord' },
             { type: 'list', value: [
               { type: 'integer', value: 0 },
@@ -132,12 +147,10 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Chord fee:             ${iTxMint.fee}`);
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
 
-    await broadcast(iTxMint);
-    await waitForTx(iTxMint.id);
-
-    const changes = await stateChanges(iTxMint.id);
+    const changes = await stateChanges(tx_mint.id);
 
     const n = changes.data[1].key.split('_')[0];
 
@@ -156,14 +169,15 @@ describe('library', async function () {
     expect(notes_4.value).to.equal(7);
   });
 
-  it('can not mint chord if not owner', async function () {
+  it('can not mint chord if not in whitelist', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_chord',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some chord' },
             { type: 'list', value: [
               { type: 'integer', value: 0 },
@@ -176,17 +190,18 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(tx_mint)).to.be.rejectedWith('Caller not in whitelist');
   });
 
   it('mint melody', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_melody',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some melody' },
             { type: 'list', value: [
               { type: 'integer', value: 2 },
@@ -210,12 +225,10 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Melody fee:            ${iTxMint.fee}`);
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
 
-    await broadcast(iTxMint);
-    await waitForTx(iTxMint.id);
-
-    const changes = await stateChanges(iTxMint.id);
+    const changes = await stateChanges(tx_mint.id);
 
     const n = changes.data[1].key.split('_')[0];
 
@@ -256,14 +269,15 @@ describe('library', async function () {
     expect(notes_15.value).to.equal(-3);
   });
 
-  it('can not mint melody if not owner', async function () {
+  it('can not mint melody if not in whitelist', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_melody',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some melody' },
             { type: 'list', value: [
               { type: 'integer', value: 2 },
@@ -287,17 +301,18 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(tx_mint)).to.be.rejectedWith('Caller not in whitelist');
   });
 
   it('mint rhythm', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_rhythm',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some rhythm' },
             { type: 'integer', value: 42 },
             { type: 'list', value: [
@@ -322,12 +337,10 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Rhythm fee:            ${iTxMint.fee}`);
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
 
-    await broadcast(iTxMint);
-    await waitForTx(iTxMint.id);
-
-    const changes = await stateChanges(iTxMint.id);
+    const changes = await stateChanges(tx_mint.id);
 
     const n = changes.data[1].key.split('_')[0];
 
@@ -370,14 +383,15 @@ describe('library', async function () {
     expect(notes_15.value).to.equal(16);
   });
 
-  it('can not mint rhythm if not owner', async function () {
+  it('can not mint rhythm if not in whitelist', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = invokeScript(
+    const tx_mint = invokeScript(
       { dApp: library,
         call: {
           function: 'mint_rhythm',
           args:     [
+            { type: 'integer', value: 0 },
             { type: 'string', value: 'some rhythm' },
             { type: 'integer', value: 42 },
             { type: 'list', value: [
@@ -402,22 +416,20 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(tx_mint)).to.be.rejectedWith('Caller not in whitelist');
   });
 
   it('mint song', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = tx_mint_song(library, accounts.library, 123, 4, 8, 7, '');
+    const tx_mint = tx_mint_song(library, accounts.library, 123, 4, 8, 7, '');
 
-    console.log(`    * Song fee:              ${iTxMint.fee}`);
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
 
-    await broadcast(iTxMint);
-    await waitForTx(iTxMint.id);
+    const changes = await stateChanges(tx_mint.id);
 
-    const changes = await stateChanges(iTxMint.id);
-
-    const assetId = changes.issues[0].assetId;
+    const assetId = changes.invokes[0].stateChanges.issues[0].assetId;
 
     const n = (await accountDataByKey(`${assetId}`, library)).value;
 
@@ -572,18 +584,18 @@ describe('library', async function () {
     expect(balance).to.equal(1);
   });
 
-  it('can not mint song if not owner', async function () {
+  it('can not mint song if not in whitelist', async function () {
     const library = address(accounts.library);
 
-    const iTxMint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
+    const tx_mint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
 
-    await expect(broadcast(iTxMint)).to.be.rejectedWith('Caller is not dApp owner');
+    await expect(broadcast(tx_mint)).to.be.rejectedWith('Caller not in whitelist');
   });
 
   it('set hybrid price', async function () {
     const library = address(accounts.library);
 
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -594,10 +606,8 @@ describe('library', async function () {
         } },
       accounts.library);
 
-    console.log(`    * Set price fee:         ${iTxSetPrice.fee}`);
-
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
     const price_token   = await accountDataByKey(`price_hybrid_token`,  library);
     const price_amount  = await accountDataByKey(`price_hybrid_amount`, library);
@@ -606,10 +616,24 @@ describe('library', async function () {
     expect(price_amount.value).to.equal(42);
   });
 
-  it('can not set hybrid price if not owner', async function () {
+  it('whitelist', async function () {
     const library = address(accounts.library);
+    const foo     = address(accounts.foo);
 
-    const iTxSetPrice = invokeScript(
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -620,7 +644,100 @@ describe('library', async function () {
         } },
       accounts.foo);
 
-    await expect(broadcast(iTxSetPrice)).to.be.rejectedWith('Caller is not dApp owner');
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
+
+    const price_token   = await accountDataByKey(`price_hybrid_token`,  library);
+    const price_amount  = await accountDataByKey(`price_hybrid_amount`, library);
+
+    expect(price_token.value).to.equal('foo');
+    expect(price_amount.value).to.equal(42);
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+  });
+
+  it('can not edit whitelist if not owner', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.foo);
+
+    await expect(broadcast(tx_whitelist_add)).to.be.rejectedWith('Caller is not dApp owner');
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.foo);
+
+    await expect(broadcast(tx_whitelist_remove)).to.be.rejectedWith('Caller is not dApp owner');
+  });
+
+  it('can not set hybrid price if not in whitelist', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+
+    const tx_set_price = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_price_hybrid',
+          args: [
+            { type: 'string',   value: 'foo' },
+            { type: 'integer',  value: 42 }
+          ]
+        } },
+      accounts.foo);
+
+    await expect(broadcast(tx_set_price)).to.be.rejectedWith('Caller not in whitelist');
   });
 
   it('mint hybrid', async function () {
@@ -629,7 +746,7 @@ describe('library', async function () {
     
     const price = 1000000;
 
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -639,18 +756,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const iTxSend_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -683,11 +800,10 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid fee:            ${tx_mint_hybrid.fee}`);
-
     await broadcast(tx_mint_hybrid);
     await waitForTx(tx_mint_hybrid.id);
-    const hybrid = (await stateChanges(tx_mint_hybrid.id)).issues[0].assetId;
+
+    const hybrid = (await stateChanges(tx_mint_hybrid.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const n = (await accountDataByKey(hybrid, library)).value;
 
@@ -866,7 +982,7 @@ describe('library', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
     
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -876,18 +992,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     expect(await assetBalance(song_0, foo)).to.equal(0);
     expect(await assetBalance(song_1, foo)).to.equal(0);
@@ -916,7 +1032,7 @@ describe('library', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
     
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -926,18 +1042,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const iTxSend_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -972,7 +1088,7 @@ describe('library', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
     
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -982,18 +1098,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const iTxSend_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -1034,7 +1150,7 @@ describe('library', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
     
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -1044,18 +1160,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const iTxSend_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -1096,7 +1212,7 @@ describe('library', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
     
-    const iTxSetPrice = invokeScript(
+    const tx_set_price = invokeScript(
       { dApp: library,
         call: {
           function: 'set_price_hybrid',
@@ -1106,18 +1222,18 @@ describe('library', async function () {
           ]
         } },
       accounts.library);
-    await broadcast(iTxSetPrice);
-    await waitForTx(iTxSetPrice.id);
+    await broadcast(tx_set_price);
+    await waitForTx(tx_set_price.id);
 
-    const iTxMint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
-    await broadcast(iTxMint_0);
-    await waitForTx(iTxMint_0.id);
-    const song_0 = (await stateChanges(iTxMint_0.id)).issues[0].assetId;
+    const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
+    await broadcast(tx_mint_0);
+    await waitForTx(tx_mint_0.id);
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
-    const iTxMint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
-    await broadcast(iTxMint_1);
-    await waitForTx(iTxMint_1.id);
-    const song_1 = (await stateChanges(iTxMint_1.id)).issues[0].assetId;
+    const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
+    await broadcast(tx_mint_1);
+    await waitForTx(tx_mint_1.id);
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const iTxSend_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -1197,12 +1313,12 @@ describe('library', async function () {
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
     await waitForTx(tx_mint_0.id);
-    const song_0 = (await stateChanges(tx_mint_0.id)).issues[0].assetId;
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
     await broadcast(tx_mint_1);
     await waitForTx(tx_mint_1.id);
-    const song_1 = (await stateChanges(tx_mint_1.id)).issues[0].assetId;
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const tx_send_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -1235,11 +1351,9 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid fee:            ${tx_mint_hybrid.fee}`);
-
     await broadcast(tx_mint_hybrid);
     await waitForTx(tx_mint_hybrid.id);
-    const hybrid = (await stateChanges(tx_mint_hybrid.id)).issues[0].assetId;
+    const hybrid = (await stateChanges(tx_mint_hybrid.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const n = (await accountDataByKey(hybrid, library)).value;
 
@@ -1259,12 +1373,12 @@ describe('library', async function () {
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
     await waitForTx(tx_mint_0.id);
-    const song_0 = (await stateChanges(tx_mint_0.id)).issues[0].assetId;
+    const song_0 = (await stateChanges(tx_mint_0.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const tx_mint_1 = tx_mint_song(library, accounts.library, 180, 6, 8, 7, '_bar');
     await broadcast(tx_mint_1);
     await waitForTx(tx_mint_1.id);
-    const song_1 = (await stateChanges(tx_mint_1.id)).issues[0].assetId;
+    const song_1 = (await stateChanges(tx_mint_1.id)).invokes[0].stateChanges.issues[0].assetId;
 
     const tx_send_0 = transfer(
       { assetId: song_0, amount: 1, recipient: foo },
@@ -1294,11 +1408,9 @@ describe('library', async function () {
       },
       accounts.foo);
 
-    console.log(`    * Hybrid with burn fee:  ${tx_mint_hybrid.fee}`);
-
     await broadcast(tx_mint_hybrid);
     await waitForTx(tx_mint_hybrid.id);
-    const hybrid = (await stateChanges(tx_mint_hybrid.id)).issues[0].assetId;
+    const hybrid = (await stateChanges(tx_mint_hybrid.id)).invokes[2].stateChanges.issues[0].assetId;
 
     const n = (await accountDataByKey(hybrid, library)).value;
 

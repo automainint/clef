@@ -1,6 +1,9 @@
-{-# STDLIB_VERSION 5 #-}
+{-# STDLIB_VERSION 6 #-}
 {-# CONTENT_TYPE DAPP #-}
 {-# SCRIPT_TYPE ACCOUNT #-}
+
+let nft_creation_address  = Address(base58'3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By')
+let nft_image_link        = "https://image.link"
 
 func to_key(n: Int) = {
   n.toBytes().toBase58String()
@@ -51,10 +54,16 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
     case _      => 0
   }
 
-  let issue   = Issue("Clef " + n.toString(), "Clef song.", 1, 0, false)
+  let name_short  = ("Clef " + n.toString()).take(16)
+  let description = "Clef song"
+  let collection  = ""
 
-  let id_b    = issue.calculateAssetId()
-  let id      = id_b.toBase58String()
+  strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, nft_image_link, collection], [])) {
+    case x: String  => x
+    case _          => throw("NFT creation failed")
+  }
+
+  let id_b    = id.fromBase58String()
   let key     = to_key(n)
 
   let bytes   = unique_bytes(i)
@@ -62,8 +71,7 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
   let rand_0  = random_uint(bytes, 0)
   let rand_1  = random_uint(bytes, 1)
 
-  [ issue,
-    IntegerEntry("count", n + 1),
+  [ IntegerEntry("count", n + 1),
     StringEntry(id, key),
     StringEntry(key, id),
 
@@ -155,10 +163,35 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
   ]
 }
 
+func check_whitelist(caller: Address) = {
+  this == caller || match getBoolean("W_" + caller.bytes.toBase58String()) {
+    case x: Boolean => x
+    case _          => false
+  }
+}
+
 @Callable(i)
-func set_price_hybrid(token: String, amount: Int) = {
+func whitelist_add(user: String) = {
   if this != i.caller then
     throw("Caller is not dApp owner")
+  else
+    ( [ BooleanEntry("W_" + user, true) ],
+      unit )
+}
+
+@Callable(i)
+func whitelist_remove(user: String) = {
+  if this != i.caller then
+    throw("Caller is not dApp owner")
+  else
+    ( [ DeleteEntry("W_" + user) ],
+      unit )
+}
+
+@Callable(i)
+func set_price_hybrid(token: String, amount: Int) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
   else
     ( [ StringEntry(  "price_hybrid_token",   token),
         IntegerEntry( "price_hybrid_amount",  amount)
@@ -167,9 +200,9 @@ func set_price_hybrid(token: String, amount: Int) = {
 }
 
 @Callable(i)
-func mint_chord(name: String, notes: List[Int]) = {
-  if this != i.caller then
-    throw("Caller is not dApp owner")
+func mint_chord(index: Int, name: String, notes: List[Int]) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
   else if size(notes) != 5 then
     throw("Wrong notes size")
   else {
@@ -179,9 +212,9 @@ func mint_chord(name: String, notes: List[Int]) = {
       case _      => 0
     }
 
-    let key = to_key(n)
+    let key = to_key(index)
 
-    ( [ IntegerEntry("count", n + 1),
+    ( [ IntegerEntry("count", max([ index, n ]) + 1),
 
         StringEntry(  key + "_CL", name),
         IntegerEntry( key + "_C0", notes[0]),
@@ -195,9 +228,9 @@ func mint_chord(name: String, notes: List[Int]) = {
 }
 
 @Callable(i)
-func mint_melody(name: String, notes: List[Int]) = {
-  if (this != i.caller) then
-    throw("Caller is not dApp owner")
+func mint_melody(index: Int, name: String, notes: List[Int]) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
   else if (size(notes) != 16) then
     throw("Wrong notes size")
   else {
@@ -207,9 +240,9 @@ func mint_melody(name: String, notes: List[Int]) = {
       case _      => 0
     }
 
-    let key = to_key(n)
+    let key = to_key(index)
 
-    ( [ IntegerEntry("count", n + 1),
+    ( [ IntegerEntry("count", max([ index, n ]) + 1),
 
         StringEntry(  key + "_ML",  name),
         IntegerEntry( key + "_M00", notes[0]),
@@ -234,9 +267,9 @@ func mint_melody(name: String, notes: List[Int]) = {
 }
 
 @Callable(i)
-func mint_rhythm(name: String, scale: Int, notes: List[Int]) = {
-  if (this != i.caller) then
-    throw("Caller is not dApp owner")
+func mint_rhythm(index: Int, name: String, scale: Int, notes: List[Int]) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
   else if (size(notes) != 16) then
     throw("Wrong notes size")
   else {
@@ -246,9 +279,9 @@ func mint_rhythm(name: String, scale: Int, notes: List[Int]) = {
       case _      => 0
     }
 
-    let key = to_key(n)
+    let key = to_key(index)
 
-    ( [ IntegerEntry("count", n + 1),
+    ( [ IntegerEntry("count", max([ index, n ]) + 1),
 
         StringEntry(  key + "_RL",  name),
         IntegerEntry( key + "_RS",  scale),
@@ -297,8 +330,8 @@ func mint_song(
   back_rhythms:   List[String],
   lead_rhythms:   List[String]
 ) = {
-  if (this != i.caller) then
-    throw("Caller is not dApp owner")
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
   else if (size(chords) != 8) then
     throw("Wrong chords size")
   else if (size(kick_rhythms) != 8) then
@@ -320,13 +353,18 @@ func mint_song(
       case _      => 0
     }
 
-    let issue = Issue(name.take(16), "Clef song.", 1, 0, false)
+    let name_short  = name.take(16)
+    let description = "Clef song"
+    let collection  = ""
 
-    let id    = issue.calculateAssetId().toBase58String()
-    let key   = to_key(n)
+    strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, nft_image_link, collection], [])) {
+      case x: String  => x
+      case _          => throw("NFT creation failed")
+    }
 
-    ( [ issue,
-        IntegerEntry("count", n + 1),
+    let key = to_key(n)
+
+    ( [ IntegerEntry("count", n + 1),
         StringEntry(id, key),
         StringEntry(key, id),
 
@@ -460,10 +498,10 @@ func mint_hybrid_and_burn() = {
       let song_0  = getStringValue(toBase58String(song_0_id));
       let song_1  = getStringValue(toBase58String(song_1_id));
 
-      ( make_hybrid_tx(i, song_0, song_1) ++ [
-          Burn(song_0_id, 1),
-          Burn(song_1_id, 1)
-        ],
+      strict burn0 = invoke(nft_creation_address, "burnNFT", [], [ i.payments[0] ])
+      strict burn1 = invoke(nft_creation_address, "burnNFT", [], [ i.payments[1] ])
+
+      ( make_hybrid_tx(i, song_0, song_1),
         unit )
     }
   }
