@@ -636,7 +636,7 @@ describe('back fake', async function () {
     assert.equal((typeof song.instruments.back), 'string');
     assert.equal((typeof song.instruments.lead), 'string');
     assert.ok(song.chords.length > 0);
-    assert.ok(song.melody.length >= 0);
+    assert.ok(song.arpeggio.length >= 0);
     assert.ok(song.rhythm.kick[0].notes.length > 0);
     assert.ok(song.rhythm.snare[0].notes.length > 0);
     assert.ok(song.rhythm.hihat[0].notes.length > 0);
@@ -685,7 +685,7 @@ describe('back fake', async function () {
     assert.equal((typeof song.instruments.back), 'string');
     assert.equal((typeof song.instruments.lead), 'string');
     assert.ok(song.chords.length > 0);
-    assert.ok(song.melody.length >= 0);
+    assert.ok(song.arpeggio.length >= 0);
     assert.ok(song.rhythm.kick[0].notes.length > 0);
     assert.ok(song.rhythm.snare[0].notes.length > 0);
     assert.ok(song.rhythm.hihat[0].notes.length > 0);
@@ -740,7 +740,7 @@ describe('back fake', async function () {
     assert.equal((typeof songs[0].instruments.back), 'string');
     assert.equal((typeof songs[0].instruments.lead), 'string');
     assert.ok(songs[0].chords.length > 0);
-    assert.ok(songs[0].melody.length >= 0);
+    assert.ok(songs[0].arpeggio.length >= 0);
     assert.ok(songs[0].rhythm.kick[0].notes.length > 0);
     assert.ok(songs[0].rhythm.snare[0].notes.length > 0);
     assert.ok(songs[0].rhythm.hihat[0].notes.length > 0);

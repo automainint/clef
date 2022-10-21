@@ -6,11 +6,11 @@
       "API_BASE": "http://localhost:6869/",
       "CHAIN_ID": "R",
       "SEED": "waves private node seed with waves tokens",
-      "timeout": 600000
+      "timeout": 6000000
     }
   },
   "defaultEnv": "custom",
   "mocha": {
-    "timeout": 600000
+    "timeout": 6000000
   }
 }

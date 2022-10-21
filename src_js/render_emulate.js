@@ -20,7 +20,7 @@ const { new_resources } = require('./resources.js');
 
 const { in_generation } = require('in');
 
-const Tone = require('./Tone.js');
+const Tone = require('tone');
 
 async function fetch_recent_song(user) {
   const songs = await user.get_resources({ filter: types.song });

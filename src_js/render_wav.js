@@ -8,7 +8,7 @@ const str         = require('string-to-stream');
 const { writeFileSync } = require('fs');
 
 const generation  = yargs.argv.generation || 2;
-const name        = yargs.argv.name|| 'sample';
+const name        = yargs.argv.name || 'sample';
 
 function write_data(json) {
   const data  = JSON.parse(json);
@@ -25,12 +25,12 @@ function write_data(json) {
 
 let json = '';
 
-browserify('./src-js/render_emulate.js')
+browserify('./src_js/render_emulate.js')
   .exclude('in')
   .require(str(`module.exports = { in_generation: ${generation} };`), { file: 'in.js', expose: 'in' })
   .bundle()
   .pipe(browser({
-    static: './static/files'
+    static: './static'
   }))
   .on('data', (data) => {
     json += data;

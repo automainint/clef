@@ -127,18 +127,11 @@ const wvs = 10 ** 8;
   const chord_Esus4  = '1111111F';
   const chord_Gsus4  = '1111111G';
   const chord_Asus4  = '1111111H';
-  const chord_C7     = '1111111J';
-  const chord_Dm7    = '1111111K';
-  const chord_Em7    = '1111111L';
-  const chord_E7     = '1111111M';
-  const chord_F7     = '1111111N';
-  const chord_G7     = '1111111P';
-  const chord_Am7    = '1111111Q';
 
-  const melody_triple_repeats  = '1111111R';
-  const melody_go_up           = '1111111S';
-  const melody_go_down         = '1111111T';
-  const melody_alterations     = '1111111U';
+  const arpeggio_0  = '1111111R';
+  const arpeggio_1  = '1111111S';
+  const arpeggio_2  = '1111111T';
+  const arpeggio_3  = '1111111U';
 
   const rhythm_silent                = '11111115Q';
   const rhythm_fast                  = '1111111V';
@@ -177,9 +170,9 @@ const wvs = 10 ** 8;
 
   //for (let i = 0; i < 10; i++) {
     await Promise.all([
-      make_song('Major Silence', 125, -4,
+      make_song('Bearish Silence', 125, -4,
         [ chord_C, chord_C, chord_G, chord_G, chord_F, chord_F, chord_G, chord_G ],
-        melody_go_up,
+        arpeggio_0,
         rhythm_silent,
         rhythm_silent,
         rhythm_silent,
@@ -189,7 +182,7 @@ const wvs = 10 ** 8;
       ),
       make_song('Minor Silence', 140, -3,
         [ chord_Am, chord_Am, chord_Dm, chord_Dm, chord_Em, chord_Em, chord_Dm, chord_Dm ],
-        melody_go_down,
+        arpeggio_1,
         rhythm_silent,
         rhythm_silent,
         rhythm_silent,
@@ -197,9 +190,9 @@ const wvs = 10 ** 8;
         rhythm_silent,
         rhythm_silent
       ),
-      make_song('Ionian', 115, -2,
+      make_song('Puzzle Me', 115, -2,
         [ chord_C, chord_C, chord_Am, chord_Am, chord_C, chord_C, chord_G, chord_G ],
-        melody_go_up,
+        arpeggio_2,
         rhythm_slow,
         rhythm_middle,
         rhythm_off_beat,
@@ -207,9 +200,9 @@ const wvs = 10 ** 8;
         rhythm_slow,
         rhythm_2nd_half_fast
       ),
-      make_song('Dorian', 120, -1,
+      make_song('Swop Talk', 120, -1,
         [ chord_Dm, chord_Dm, chord_F, chord_F, chord_Dm, chord_Dm, chord_C, chord_C ],
-        melody_triple_repeats,
+        arpeggio_3,
         rhythm_slow,
         rhythm_sync_middle,
         rhythm_off_beat,
@@ -217,9 +210,9 @@ const wvs = 10 ** 8;
         rhythm_slow,
         rhythm_2nd_half_steady
       ),
-      make_song('Phrygian', 175, 0,
+      make_song('Made In WX', 175, 0,
         [ chord_Em, chord_Em, chord_C, chord_C, chord_Em, chord_Em, chord_Am, chord_Am ],
-        melody_triple_repeats,
+        arpeggio_0,
         rhythm_sync_two,
         rhythm_middle,
         rhythm_off_beat,
@@ -227,9 +220,9 @@ const wvs = 10 ** 8;
         rhythm_1st_half_slow,
         rhythm_steady
       ),
-      make_song('Lydian', 130, 1,
+      make_song('Blame It On Your Vires', 130, 1,
         [ chord_F, chord_F, chord_Dm, chord_Dm, chord_F, chord_F, chord_G, chord_G ],
-        melody_go_down,
+        arpeggio_1,
         rhythm_slow,
         rhythm_middle,
         rhythm_steady,
@@ -237,9 +230,9 @@ const wvs = 10 ** 8;
         rhythm_long_sync_two,
         rhythm_fast
       ),
-      make_song('Mixolydian', 180, 2,
+      make_song('Pluto Style', 180, 2,
         [ chord_G, chord_G, chord_Em, chord_Em, chord_G, chord_G, chord_Dm, chord_Dm ],
-        melody_triple_repeats,
+        arpeggio_2,
         rhythm_sync_lead,
         rhythm_long_sync_middle,
         rhythm_off_beat,
@@ -247,9 +240,9 @@ const wvs = 10 ** 8;
         rhythm_1st_half,
         rhythm_sync_lead
       ),
-      make_song('Aeolian', 140, 3,
+      make_song('Hodling Onto You', 140, 3,
         [ chord_Am, chord_Am, chord_G, chord_G, chord_Am, chord_Am, chord_Em, chord_Em ],
-        melody_triple_repeats,
+        arpeggio_3,
         rhythm_slower,
         rhythm_long_middle,
         rhythm_long_off_beat,
@@ -257,9 +250,9 @@ const wvs = 10 ** 8;
         rhythm_slow,
         rhythm_steady
       ),
-      make_song('Cosmic Ionian', 115, 4,
+      make_song('Stranding USDN', 115, 4,
         [ chord_Csus2, chord_Csus2, chord_Asus2, chord_Asus2, chord_Csus2, chord_Csus2, chord_Gsus2, chord_Gsus2 ],
-        melody_alterations,
+        arpeggio_0,
         rhythm_slow,
         rhythm_middle,
         rhythm_off_beat,
@@ -267,9 +260,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_long_2nd_half_slow
       ),
-      make_song('Cosmic Dorian', 120, 3,
+      make_song('Funny AMA', 120, 3,
         [ chord_Dsus2, chord_Dsus2, chord_Fsus2, chord_Fsus2, chord_Dsus2, chord_Dsus2, chord_Csus2, chord_Csus2 ],
-        melody_alterations,
+        arpeggio_1,
         rhythm_slow,
         rhythm_sync_middle,
         rhythm_off_beat,
@@ -277,9 +270,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_long_2nd_half_fast
       ),
-      make_song('Cosmic Lydian', 130, 1,
+      make_song('Bullish Puzzle', 130, 1,
         [ chord_Fsus2, chord_Fsus2, chord_Dsus2, chord_Dsus2, chord_Fsus2, chord_Fsus2, chord_Gsus2, chord_Gsus2 ],
-        melody_alterations,
+        arpeggio_2,
         rhythm_slow,
         rhythm_middle,
         rhythm_off_beat,
@@ -287,9 +280,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_long_2nd_half_steady
       ),
-      make_song('Cosmic Mixolydian', 135, 0,
+      make_song('Moon Node', 135, 0,
         [ chord_Gsus2, chord_Gsus2, chord_Esus4, chord_Esus4, chord_Gsus2, chord_Gsus2, chord_Dsus2, chord_Dsus2 ],
-        melody_alterations,
+        arpeggio_3,
         rhythm_sync_two,
         rhythm_sync_middle,
         rhythm_off_beat,
@@ -297,9 +290,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_long_2nd_half_fast
       ),
-      make_song('Cosmic Aeolian', 140, -1,
+      make_song('Buy The Dip', 140, -1,
         [ chord_Asus2, chord_Asus2, chord_Gsus2, chord_Gsus2, chord_Asus2, chord_Asus2, chord_Esus4, chord_Esus4 ],
-        melody_alterations,
+        arpeggio_0,
         rhythm_slower,
         rhythm_long_middle,
         rhythm_long_off_beat,
@@ -307,9 +300,9 @@ const wvs = 10 ** 8;
         rhythm_long_2nd_half,
         rhythm_long_2nd_half
       ),
-      make_song('Dreamy Ionian', 115, -2,
+      make_song('Tsunami Love', 115, -2,
         [ chord_Csus4, chord_Csus4, chord_Asus4, chord_Asus4, chord_Csus4, chord_Csus4, chord_Gsus4, chord_Gsus4 ],
-        melody_go_up,
+        arpeggio_1,
         rhythm_slowest,
         rhythm_long_middle,
         rhythm_steady,
@@ -317,9 +310,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_long_sync_lead
       ),
-      make_song('Dreamy Dorian', 120, -3,
+      make_song('SURF Gazing', 120, -3,
         [ chord_Dsus4, chord_Dsus4, chord_Fsus2, chord_Fsus2, chord_Dsus4, chord_Dsus4, chord_Csus4, chord_Csus4 ],
-        melody_go_up,
+        arpeggio_2,
         rhythm_slowest,
         rhythm_long_middle,
         rhythm_long_off_beat,
@@ -327,9 +320,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_steady
       ),
-      make_song('Dreamy Phrygian', 125, -2,
+      make_song('Lambo Jam', 125, -2,
         [ chord_Esus4, chord_Esus4, chord_Csus4, chord_Csus4, chord_Esus4, chord_Esus4, chord_Asus4, chord_Asus4 ],
-        melody_go_up,
+        arpeggio_3,
         rhythm_slowest,
         rhythm_long_middle,
         rhythm_off_beat,
@@ -337,9 +330,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_steady
       ),
-      make_song('Dreamy Mixolydian', 135, 0,
+      make_song('Clef In The Sky', 135, 0,
         [ chord_Gsus4, chord_Gsus4, chord_Esus4, chord_Esus4, chord_Gsus4, chord_Gsus4, chord_Dsus4, chord_Dsus4 ],
-        melody_go_up,
+        arpeggio_0,
         rhythm_slowest,
         rhythm_long_middle,
         rhythm_long_sync_two,
@@ -347,9 +340,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_steady
       ),
-      make_song('Dreamy Aeolian', 140, 1,
+      make_song('DYOR Luxe', 140, 1,
         [ chord_Asus4, chord_Asus4, chord_Gsus4, chord_Gsus4, chord_Asus4, chord_Asus4, chord_Esus4, chord_Esus4 ],
-        melody_go_up,
+        arpeggio_1,
         rhythm_long_sync_lead,
         rhythm_long_middle,
         rhythm_off_beat,
@@ -357,9 +350,9 @@ const wvs = 10 ** 8;
         rhythm_long_1st_half,
         rhythm_steady
       ),
-      make_song('Ionian Transition', 120, 2,
+      make_song('On-chain Romance', 120, 2,
         [ chord_C, chord_C, chord_C, chord_E, chord_C, chord_C, chord_C, chord_E ],
-        melody_go_down,
+        arpeggio_2,
         rhythm_slower,
         rhythm_long_sync_middle,
         rhythm_fast,

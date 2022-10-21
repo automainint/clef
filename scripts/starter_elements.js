@@ -40,13 +40,13 @@ const wvs = 10 ** 8;
       return changes.data[1].key.split('_')[0];
     };
 
-    const mint_melody = async (index, label, notes) => {
+    const mint_arpeggio = async (index, label, notes) => {
       expand_(notes);
 
       const tx = invokeScript(
         { dApp: DAPP,
           call: {
-            function: 'mint_melody',
+            function: 'mint_arpeggio',
             args:     [
               { type: 'integer', value: index },
               { type: 'string', value: label },
@@ -167,14 +167,7 @@ const wvs = 10 ** 8;
         mint_chord(13, 'Dsus4', [  2, 14,  2,  9, 19 ]),
         mint_chord(14, 'Esus4', [  4, 16,  4, 11, 21 ]),
         mint_chord(15, 'Gsus4', [ -5,  7, -5,  2, 12 ]),
-        mint_chord(16, 'Asus4', [ -3,  9, -3,  4, 14 ]),
-        mint_chord(17, 'C7',    [  0, 12,  0,  4, 11 ]),
-        mint_chord(18, 'Dm7',   [  2, 14,  2,  5, 12 ]),
-        mint_chord(19, 'Em7',   [  4, 16,  4,  7, 14 ]),
-        mint_chord(20, 'E7',    [  4, 16,  4,  8, 14 ]),
-        mint_chord(21, 'F7',    [  5, 17,  5,  9, 16 ]),
-        mint_chord(22, 'G7',    [ -5,  7, -5, -1,  5 ]),
-        mint_chord(23, 'Am7',   [ -3,  9, -3,  0,  7 ])
+        mint_chord(16, 'Asus4', [ -3,  9, -3,  4, 14 ])
       ]);
 
     console.log(`    const chord_C      = '${chord_C}';`);
@@ -194,30 +187,24 @@ const wvs = 10 ** 8;
     console.log(`    const chord_Esus4  = '${chord_Esus4}';`);
     console.log(`    const chord_Gsus4  = '${chord_Gsus4}';`);
     console.log(`    const chord_Asus4  = '${chord_Asus4}';`);
-    console.log(`    const chord_C7     = '${chord_C7}';`);
-    console.log(`    const chord_Dm7    = '${chord_Dm7}';`);
-    console.log(`    const chord_Em7    = '${chord_Em7}';`);
-    console.log(`    const chord_E7     = '${chord_E7}';`);
-    console.log(`    const chord_F7     = '${chord_F7}';`);
-    console.log(`    const chord_G7     = '${chord_G7}';`);
-    console.log(`    const chord_Am7    = '${chord_Am7}';`);
 
     console.log('');
     console.log('    ` Mint melodies');
 
-    const [ melody_triple_repeats,
-            melody_go_up,
-            melody_go_down,
-            melody_alterations ] = await Promise.all(
-      [ mint_melody(24, 'Triple Repeats', [ 0, 0, 2, 2, 2, 3, 3, 3, 0 ]),
-        mint_melody(25, 'Go Up',          [ 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3 ]),
-        mint_melody(26, 'Go Down',        [ -2, -1, -3, -2, -1, -3, -2, -1, -3, -2, -1, -3, -2, -1 ]),
-        mint_melody(27, 'Alterations',    [ -2, 3, -1, 2, -3, 1, -2, 3, -1, 2, -3 ]) ]);
+    const [ arpeggio_0,
+            arpeggio_1,
+            arpeggio_2,
+            arpeggio_3 ] = await Promise.all(
+      [ mint_arpeggio(24, 'Arpeggio', [ 2, -10, -16, 20, -5, 7, 13, 14, -1, 14, 4, 19, 0, -6, -12, 0 ]),
+        mint_arpeggio(25, 'Arpeggio', [ 13, 14, 20, -10, 7, 4, 16, 9, 10, -12, -7, -13, 12, 14, 4, 17 ]),
+        mint_arpeggio(26, 'Arpeggio', [ 8, 4, 15, 8, 19, 16, 6, 5, 3, 4, 6, 8, 20, 9, 12, 20 ]),
+        mint_arpeggio(27, 'Arpeggio', [ -6, -2, -1, -7, -20, -6, -12, -4, -9, -3, -20, -12, -17, -16, -20, -1 ])
+      ]);
 
-    console.log(`    const melody_triple_repeats  = '${melody_triple_repeats}';`);
-    console.log(`    const melody_go_up           = '${melody_go_up}';`);
-    console.log(`    const melody_go_down         = '${melody_go_down}';`);
-    console.log(`    const melody_alterations     = '${melody_alterations}';`);
+    console.log(`    const arpeggio_0 = '${arpeggio_0}';`);
+    console.log(`    const arpeggio_1 = '${arpeggio_1}';`);
+    console.log(`    const arpeggio_2 = '${arpeggio_2}';`);
+    console.log(`    const arpeggio_3 = '${arpeggio_3}';`);
 
     console.log('');
     console.log('    ` Mint rhythms');

@@ -77,7 +77,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -117,7 +117,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [ { notes: [ 0 ] } ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [ { notes: [ 2, 30 ] } ],
         snare:  [],
@@ -162,7 +162,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [ { notes: [ 0 ] } ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [ { notes: [ 2, 30 ] } ],
@@ -208,7 +208,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [ { notes: [ 0 ] } ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -253,7 +253,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [ { notes: [ 0 ] } ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [ { notes: [ 2, 4, 4, 22 ] } ],
@@ -303,7 +303,7 @@ describe('music', () => {
         lead:   'lead-alpha'
       },
       chords: [ { notes: [ 0 ] } ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [ { notes: [ 2, 2, 0, 2, 4, 22 ] } ],
@@ -356,7 +356,7 @@ describe('music', () => {
         { notes: [ 0 ] },
         { notes: [ 0 ] }
       ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [ { notes: [ 2, 16, 4, 10 ] } ],
@@ -397,7 +397,7 @@ describe('music', () => {
       chords: [
         { notes: [ 0 ] }
       ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [ { notes: [ 2, 6 ] } ],
@@ -439,7 +439,7 @@ describe('music', () => {
       chords: [
         { notes: [ 0, 0, 0, 2, 4 ] }
       ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -492,7 +492,7 @@ describe('music', () => {
       chords: [
         { notes: [ -7, 0, 0, 2, 4 ] }
       ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -535,7 +535,7 @@ describe('music', () => {
       chords: [
         { notes: [ 0, 2, 0, 2, 4 ] }
       ],
-      melody: [],
+      arpeggio: [],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -562,7 +562,7 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render melody', () => {
+  it('render arpeggio', () => {
     const sheet = render_sheet({
       bpm:        135,
       bar_size:   16,
@@ -579,7 +579,7 @@ describe('music', () => {
       chords: [
         { notes: [ 0, 0, 2, 4 ] }
       ],
-      melody: [ 0, 1 ],
+      arpeggio: [ 0, 1 ],
       rhythm: {
         kick:   [],
         snare:  [],
@@ -603,7 +603,7 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render melody negative', () => {
+  it('render arpeggio negative', () => {
     const sheet = render_sheet({
       bpm:        135,
       bar_size:   16,
@@ -620,7 +620,7 @@ describe('music', () => {
       chords: [
         { notes: [ 0, 0, 2, 4 ] }
       ],
-      melody: [ -1, -2 ],
+      arpeggio: [ -1, -2 ],
       rhythm: {
         kick:   [],
         snare:  [],

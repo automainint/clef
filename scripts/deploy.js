@@ -1,6 +1,8 @@
-const DAPP          = address(env.SEED);
-const USDN_QUANTITY = 100000000000;
-const HYBRID_PRICE  = 10000000;
+const DAPP              = address(env.SEED);
+const USDN_QUANTITY     = 100000000000;
+const HYBRID_PRICE      = 10000000;
+const HYBRID_PRICE_INC  = 1000000;
+const MARKET_IMAGE_URL  = 'https://clef.one/sign.svg';
 
 const wvs = 10 ** 8;
 
@@ -40,6 +42,8 @@ const wvs = 10 ** 8;
         file('library.ride'));
     }
 
+    /*  USDN asset ID
+     */
     let usdn = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
 
     if (env.CHAIN_ID === 'R' || env.CHAIN_ID === 'T') {
@@ -69,12 +73,26 @@ const wvs = 10 ** 8;
           function: 'set_price_hybrid',
           args: [
             { type: 'string',   value: usdn },
-            { type: 'integer',  value: HYBRID_PRICE }
+            { type: 'integer',  value: HYBRID_PRICE },
+            { type: 'integer',  value: HYBRID_PRICE_INC }
           ]
         } },
       env.SEED);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    console.log('    ` Set market image');
+    const tx_set_image = invokeScript(
+      { dApp: DAPP,
+        call: {
+          function: 'set_market_image',
+          args: [
+            { type: 'string', value: MARKET_IMAGE_URL }
+          ]
+        } },
+      env.SEED);
+    await broadcast(tx_set_image);
+    await waitForTx(tx_set_image.id);
   } catch (error) {
     console.error(error);
   }

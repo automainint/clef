@@ -3,7 +3,7 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let nft_creation_address  = Address(base58'3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By')
-let nft_image_link        = "https://image.link"
+let price_increase_period = 10
 
 func to_key(n: Int) = {
   n.toBytes().toBase58String()
@@ -28,23 +28,19 @@ func pick_one(key_0: String, key_1: String, rand_int: Int, bit_power: Int) = {
     key_1
 }
 
-func check_hybrid_payment(i: Invocation) = {
+func hybrid_calculate_change(i: Invocation, token: String, amount: Int) = {
   if i.payments.size() != 1 then
-    false
+    -1
   else {
     let p = i.payments[0];
     let p_token = match p.assetId {
       case id: ByteVector => id.toBase58String()
       case _              => ""
     }
-    let token   = getStringValue("price_hybrid_token");
-    let amount  = getIntegerValue("price_hybrid_amount");
     if p_token != token then
-      false
-    else if amount != p.amount then
-      false
+      -1
     else
-      true
+      p.amount - amount
   }
 }
 
@@ -58,7 +54,7 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
   let description = "Clef song"
   let collection  = ""
 
-  strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, nft_image_link, collection], [])) {
+  strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, getStringValue("market_image_link"), collection], [])) {
     case x: String  => x
     case _          => throw("NFT creation failed")
   }
@@ -96,7 +92,7 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
     StringEntry(  key + "_SC5",   getStringValue( pick_one(song_0, song_1, rand_0, 1024) + "_SC5")),
     StringEntry(  key + "_SC6",   getStringValue( pick_one(song_0, song_1, rand_0, 2048) + "_SC6")),
     StringEntry(  key + "_SC7",   getStringValue( pick_one(song_0, song_1, rand_0, 4096) + "_SC7")),
-    StringEntry(  key + "_SM",    getStringValue( pick_one(song_0, song_1, rand_0, 8192) + "_SM")),
+    StringEntry(  key + "_SA",    getStringValue( pick_one(song_0, song_1, rand_0, 8192) + "_SA")),
 
     StringEntry(  key + "_SI0",   getStringValue( pick_one(song_0, song_1, rand_0, 16384) + "_SI0")),
     StringEntry(  key + "_SI1",   getStringValue( pick_one(song_0, song_1, rand_0, 32768) + "_SI1")),
@@ -189,12 +185,23 @@ func whitelist_remove(user: String) = {
 }
 
 @Callable(i)
-func set_price_hybrid(token: String, amount: Int) = {
+func set_market_image(url: String) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
   else
-    ( [ StringEntry(  "price_hybrid_token",   token),
-        IntegerEntry( "price_hybrid_amount",  amount)
+    ( [ StringEntry("market_image_link", url)
+      ],
+      unit )
+}
+
+@Callable(i)
+func set_price_hybrid(token: String, amount: Int, increment: Int) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else
+    ( [ StringEntry(  "price_hybrid_token",     token),
+        IntegerEntry( "price_hybrid_amount",    amount),
+        IntegerEntry( "price_hybrid_increment", increment)
       ],
       unit )
 }
@@ -228,7 +235,7 @@ func mint_chord(index: Int, name: String, notes: List[Int]) = {
 }
 
 @Callable(i)
-func mint_melody(index: Int, name: String, notes: List[Int]) = {
+func mint_arpeggio(index: Int, name: String, notes: List[Int]) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
   else if (size(notes) != 16) then
@@ -244,23 +251,23 @@ func mint_melody(index: Int, name: String, notes: List[Int]) = {
 
     ( [ IntegerEntry("count", max([ index, n ]) + 1),
 
-        StringEntry(  key + "_ML",  name),
-        IntegerEntry( key + "_M00", notes[0]),
-        IntegerEntry( key + "_M01", notes[1]),
-        IntegerEntry( key + "_M02", notes[2]),
-        IntegerEntry( key + "_M03", notes[3]),
-        IntegerEntry( key + "_M04", notes[4]),
-        IntegerEntry( key + "_M05", notes[5]),
-        IntegerEntry( key + "_M06", notes[6]),
-        IntegerEntry( key + "_M07", notes[7]),
-        IntegerEntry( key + "_M08", notes[8]),
-        IntegerEntry( key + "_M09", notes[9]),
-        IntegerEntry( key + "_M10", notes[10]),
-        IntegerEntry( key + "_M11", notes[11]),
-        IntegerEntry( key + "_M12", notes[12]),
-        IntegerEntry( key + "_M13", notes[13]),
-        IntegerEntry( key + "_M14", notes[14]),
-        IntegerEntry( key + "_M15", notes[15])
+        StringEntry(  key + "_AL",  name),
+        IntegerEntry( key + "_A00", notes[0]),
+        IntegerEntry( key + "_A01", notes[1]),
+        IntegerEntry( key + "_A02", notes[2]),
+        IntegerEntry( key + "_A03", notes[3]),
+        IntegerEntry( key + "_A04", notes[4]),
+        IntegerEntry( key + "_A05", notes[5]),
+        IntegerEntry( key + "_A06", notes[6]),
+        IntegerEntry( key + "_A07", notes[7]),
+        IntegerEntry( key + "_A08", notes[8]),
+        IntegerEntry( key + "_A09", notes[9]),
+        IntegerEntry( key + "_A10", notes[10]),
+        IntegerEntry( key + "_A11", notes[11]),
+        IntegerEntry( key + "_A12", notes[12]),
+        IntegerEntry( key + "_A13", notes[13]),
+        IntegerEntry( key + "_A14", notes[14]),
+        IntegerEntry( key + "_A15", notes[15])
       ],
       unit )
   }
@@ -316,7 +323,7 @@ func mint_song(
   beat_size:        Int,
   tonality:         Int,
   chords:           List[String],
-  melody:           String,
+  arpeggio:           String,
   kick_instrument:  String,
   snare_instrument: String,
   hihat_instrument: String,
@@ -357,7 +364,7 @@ func mint_song(
     let description = "Clef song"
     let collection  = ""
 
-    strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, nft_image_link, collection], [])) {
+    strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, getStringValue("market_image_link"), collection], [])) {
       case x: String  => x
       case _          => throw("NFT creation failed")
     }
@@ -385,7 +392,7 @@ func mint_song(
         StringEntry(  key + "_SC5",   chords[5]),
         StringEntry(  key + "_SC6",   chords[6]),
         StringEntry(  key + "_SC7",   chords[7]),
-        StringEntry(  key + "_SM",    melody),
+        StringEntry(  key + "_SA",    arpeggio),
         StringEntry(  key + "_SI0",   kick_instrument),
         StringEntry(  key + "_SI1",   snare_instrument),
         StringEntry(  key + "_SI2",   hihat_instrument),
@@ -456,11 +463,14 @@ func mint_hybrid(
   song_0: String,
   song_1: String
 ) = {
-  let caller_addr = Address(i.caller.bytes);
-  let song_0_id   = fromBase58String(getStringValue(song_0));
-  let song_1_id   = fromBase58String(getStringValue(song_1));
+  let caller_addr   = Address(i.caller.bytes);
+  let song_0_id     = getStringValue(song_0).fromBase58String();
+  let song_1_id     = getStringValue(song_1).fromBase58String();
+  let price_amount  = getIntegerValue("price_hybrid_amount");
+  let price_token   = getStringValue("price_hybrid_token");
+  let price_change  = hybrid_calculate_change(i, price_token, price_amount);
 
-  if !check_hybrid_payment(i) then
+  if price_change < 0 then
     throw("Wrong payment")
   else if song_0_id == song_1_id then
     throw("Songs should be different")
@@ -469,8 +479,35 @@ func mint_hybrid(
   else if assetBalance(caller_addr, song_1_id) < 1 then
     throw("Caller do not own second song")
   else {
-    ( make_hybrid_tx(i, song_0, song_1),
-      unit )
+    let mint_count = match getInteger("mint_count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let price_count_inc = IntegerEntry("mint_count", mint_count + 1)
+
+    let price_increase =
+      if (mint_count % (price_increase_period)) == (price_increase_period - 1) then
+        [ price_count_inc,
+          IntegerEntry(
+            "price_hybrid_amount",
+            price_amount + getIntegerValue("price_hybrid_increment")
+          ) ]
+      else
+        [ price_count_inc ]
+
+    if price_change > 0 then
+      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase ++ [
+          ScriptTransfer(
+            Address(i.caller.bytes),
+            price_change,
+            if price_token == "" then unit else price_token.fromBase58String()
+          )
+        ],
+        unit )
+    else
+      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase,
+        unit )
   }
 }
 

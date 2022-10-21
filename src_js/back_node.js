@@ -12,13 +12,17 @@ const { ProviderKeeper }  = require('@waves/provider-keeper');
 const { ProviderCloud }   = require('@waves.exchange/provider-cloud');
 const { ProviderWeb }     = require('@waves.exchange/provider-web');
 
-const lock            = new Mutex();
-const note_skip       = 65535;
-const update_timeout  = 5000;
+const LOCK            = new Mutex();
+const NOTE_SKIP       = 65535;
+const UPDATE_TIMEOUT  = 5000;
 
-const token_waves             = 'WAVES';
-const key_price_hybrid_token  = 'price_hybrid_token';
-const key_price_hybrid_amount = 'price_hybrid_amount';
+const TOKEN_WAVES             = 'WAVES';
+const KEY_PRICE_HYBRID_TOKEN  = 'price_hybrid_token';
+const KEY_PRICE_HYBRID_AMOUNT = 'price_hybrid_amount';
+
+const HYBRID_FEE_ASSET_ID     = TOKEN_WAVES;
+const HYBRID_FEE              = 500000;
+const HYBRID_PRICE_EXTRA      = 2;
 
 const keys_chord = [
   '_CL',
@@ -29,24 +33,24 @@ const keys_chord = [
   '_C4'
 ];
 
-const keys_melody = [
-  '_ML',
-  '_M00',
-  '_M01',
-  '_M02',
-  '_M03',
-  '_M04',
-  '_M05',
-  '_M06',
-  '_M07',
-  '_M08',
-  '_M09',
-  '_M10',
-  '_M11',
-  '_M12',
-  '_M13',
-  '_M14',
-  '_M15'
+const keys_arpeggio = [
+  '_AL',
+  '_A00',
+  '_A01',
+  '_A02',
+  '_A03',
+  '_A04',
+  '_A05',
+  '_A06',
+  '_A07',
+  '_A08',
+  '_A09',
+  '_A10',
+  '_A11',
+  '_A12',
+  '_A13',
+  '_A14',
+  '_A15'
 ];
 
 const keys_rhythm = [
@@ -88,7 +92,7 @@ const keys_song = [
   '_SC5',
   '_SC6',
   '_SC7',
-  '_SM',
+  '_SA',
   '_SI0',
   '_SI00',
   '_SI01',
@@ -275,7 +279,7 @@ async function get_chord_explicit(n) {
     for (const x of data) {
       if (x.key === n + keys_chord[1 + i]) {
         const note = x.value;
-        if (note === note_skip)
+        if (note === NOTE_SKIP)
           i = 5;
         else
           chord.notes.push(note);
@@ -289,36 +293,36 @@ async function get_chord_explicit(n) {
   return chord;
 }
 
-async function get_melody_explicit(n) {
+async function get_arpeggio_explicit(n) {
   if (n in cache)
     return cache[n];
 
-  let melody = [];
+  let arpeggio = [];
 
-  const label = await get_value_by_key(n, keys_melody[0]);
+  const label = await get_value_by_key(n, keys_arpeggio[0]);
 
   if (label === null) {
-    cache[n] = melody;
-    return melody;
+    cache[n] = arpeggio;
+    return arpeggio;
   }
 
-  const data = await get_data_by_keys(n, keys_melody, 1);
+  const data = await get_data_by_keys(n, keys_arpeggio, 1);
 
   for (let i = 0; i < 16; i++) {
     for (const x of data) {
-      if (x.key === n + keys_melody[1 + i]) {
+      if (x.key === n + keys_arpeggio[1 + i]) {
         const note = x.value;
-        if (note === note_skip)
+        if (note === NOTE_SKIP)
           i = 16;
         else
-          melody.push(note);
+          arpeggio.push(note);
         break;
       }
     }
   }
 
-  cache[n] = melody;
-  return melody;
+  cache[n] = arpeggio;
+  return arpeggio;
 }
 
 async function get_rhythm_explicit(n) {
@@ -359,7 +363,7 @@ async function get_rhythm_explicit(n) {
     for (const x of data) {
       if (x.key === n + keys_rhythm[2 + i]) {
         const duration = x.value;
-        if (duration === note_skip)
+        if (duration === NOTE_SKIP)
           i = 16;
         else
           rhythm.notes.push(duration / scale);
@@ -400,7 +404,7 @@ function chords_blank() {
     null, null, null, null ];
 }
 
-function melody_blank() {
+function arpeggio_blank() {
   return [];
 }
 
@@ -423,8 +427,8 @@ function song_blank() {
       back:   '',
       lead:   ''
     },
-    chords: chords_blank(),
-    melody: melody_blank(),
+    chords:   chords_blank(),
+    arpeggio: arpeggio_blank(),
     rhythm: {
       kick:   rhythms_blank(),
       snare:  rhythms_blank(),
@@ -447,7 +451,7 @@ async function get_song_by_id(n) {
       return cache[n];
     }
 
-    release = await lock.acquire();
+    release = await LOCK.acquire();
 
     if (!(n in cache_promise))
       cache_promise[n] = (async () => {
@@ -484,7 +488,7 @@ async function get_song_by_id(n) {
         const key_chords_5          = '' + n + keys_song[k++];
         const key_chords_6          = '' + n + keys_song[k++];
         const key_chords_7          = '' + n + keys_song[k++];
-        const key_melody            = '' + n + keys_song[k++];
+        const key_arpeggio          = '' + n + keys_song[k++];
         const key_kick_instrument   = '' + n + keys_song[k++];
         const key_kick_rhythm_0     = '' + n + keys_song[k++];
         const key_kick_rhythm_1     = '' + n + keys_song[k++];
@@ -593,8 +597,8 @@ async function get_song_by_id(n) {
           else if (x.key === key_chords_7)
             song.chords[7] = await get_chord_explicit(x.value);
 
-          else if (x.key === key_melody)
-            song.melody = await get_melody_explicit(x.value);
+          else if (x.key === key_arpeggio)
+            song.arpeggio = await get_arpeggio_explicit(x.value);
 
           else if (x.key === key_kick_rhythm_0)
             song.rhythm.kick[0] = await get_rhythm_explicit(x.value);
@@ -757,7 +761,7 @@ class clearance_handler {
   async mint_resources(resources) { }
 
   async get_price_hybrid() {
-    const data = await fetch_get(`/addresses/data/${contract_id}/${key_price_hybrid_amount}`);
+    const data = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
     if (data === null)
       return 0;
@@ -766,19 +770,19 @@ class clearance_handler {
   }
 
   async update() {
-    const release = await lock.acquire();
+    const release = await LOCK.acquire();
 
     try {
       const last_update = Date.now();
 
-      if (this.ready && last_update - this.last_update < update_timeout) {
+      if (this.ready && last_update - this.last_update < UPDATE_TIMEOUT) {
         debug_log('* UPDATE CACHED');
       } else {
         if (!this.ready) {
-          const price_token = await fetch_get(`/addresses/data/${contract_id}/${key_price_hybrid_token}`);
+          const price_token = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_TOKEN}`);
 
           if (price_token === null || price_token.value === '') {
-            this.price_token  = token_waves;
+            this.price_token  = TOKEN_WAVES;
             this.price_scale  = 10 ** 8;
           } else {
             const details     = await fetch_get(`/assets/details/${price_token.value}`);
@@ -786,7 +790,7 @@ class clearance_handler {
             this.price_scale  = 10 ** details.decimals;
           }
 
-          const price_amount = await fetch_get(`/addresses/data/${contract_id}/${key_price_hybrid_amount}`);
+          const price_amount = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
           if (price_amount === null) {
             this.price_hybrid = 0;
@@ -797,7 +801,7 @@ class clearance_handler {
 
         let balance;
 
-        if (this.price_token === token_waves) {
+        if (this.price_token === TOKEN_WAVES) {
           balance = await fetch_get(`/addresses/balance/${this.address}`);
         } else {
           balance = await fetch_get(`/assets/balance/${this.address}/${this.price_token}`);
@@ -937,7 +941,9 @@ class clearance_handler {
 
     const info = await tx_info_wait(tx.id);
 
-    /*  Must update.
+    /*  @automainint
+     *
+     *  Must update to fetch new asset.
      */
     this.ready = false;
 
@@ -971,10 +977,14 @@ class clearance_handler {
       },
       payment: [
         { assetId:  this.price_token,
-          amount:   this.price_hybrid }
+          /*  @automainint
+           *
+           *  Extra price will be returned if not needed.
+           */
+          amount:   this.price_hybrid + HYBRID_PRICE_EXTRA * this.price_scale }
       ],
-      //feeAssetId: 'WAVES',
-      //fee: 500000,
+      feeAssetId: HYBRID_FEE_ASSET_ID,
+      fee:        HYBRID_FEE
     });
   }
 
@@ -996,8 +1006,8 @@ class clearance_handler {
         { assetId: songs[0].asset_id, amount: 1 },
         { assetId: songs[1].asset_id, amount: 1 }
       ],
-      //feeAssetId: 'WAVES',
-      //fee: 500000,
+      feeAssetId: HYBRID_FEE_ASSET_ID,
+      fee:        HYBRID_FEE
     });
   }
 
@@ -1019,7 +1029,9 @@ class clearance_handler {
     await signer.logout();
   }
 
-  /*  FIXME
+  /*  @automainint
+   *
+   *  FIXME
    *  Remove this method.
    *  Use global function in frontend.
    */
@@ -1029,6 +1041,12 @@ class clearance_handler {
 };
 
 async function adjust_node_url() {
+  /*  @automainint
+   *
+   *  Adjust `node_url` according to user's current
+   *  KeeperWallet extension settings.
+   */
+
   if (!('KeeperWallet' in window) && document.readyState != 'complete') {
     /*  Make sure the page is loaded.
       */
@@ -1126,7 +1144,7 @@ async function authenticate(options) {
 module.exports = {
   env:                      env,
   types:                    types,
-  note_skip:                note_skip,
+  NOTE_SKIP:                NOTE_SKIP,
   authenticate:             authenticate,
   get_resource_by_id:       get_resource_by_id,
   get_resource_by_asset_id: get_resource_by_asset_id

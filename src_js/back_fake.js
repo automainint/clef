@@ -144,7 +144,7 @@ function generate_beat() {
   };
 }
 
-function generate_melody() {
+function generate_arpeggio() {
   const size = Math.floor(Math.random() * 16);
   let v = [];
   for (let i = 0; i < size; i++)
@@ -354,7 +354,7 @@ function mint_hybrid_internal(song1, song2) {
     },
 
     chords:     shaffle_elements(song1.chords, song2.chords),
-    melody:     pick_random(song1.melody, song2.melody),
+    arpeggio:   pick_random(song1.arpeggio, song2.arpeggio),
 
     rhythm: {
       kick:   shaffle_elements(song1.rhythm.kick, song2.rhythm.kick),
@@ -549,7 +549,7 @@ class clearance_handler {
     if (song.rhythm.lead.length === 0)
       song.rhythm.lead = multiply_rhythm(generate_rhythm(), generate_pattern_size());
 
-    song.melody = generate_melody();
+    song.arpeggio = generate_arpeggio();
 
     account.resources.push(song);
 

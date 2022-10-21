@@ -39,11 +39,11 @@ const { env,
   - Other
     - `types.song`
     - `types.hybrid`
-    - `types.melody`
+    - `types.arpeggio`
 
 - `get_resource_by_id(id)` _async_ - get a resource by id. Returns resource object, or null, if not found.
   ```js
-  const song_id = '0001';
+  const song_id = '1111111A';
 
   const song = await get_resource_by_id(song_id);
 
@@ -265,7 +265,7 @@ const { render_sheet,
         get_song_asset_id,
         get_song_asset_url  } = require('/music.js');
 
-const song_id = '0001';
+const song_id = '1111111A';
 
 get_resource_by_id(song_id).then(song => {
   const sheet = render_sheet(song);
@@ -380,7 +380,7 @@ song {
   }
 
   chords:     chord[];
-  melody:     integer[];
+  arpeggio:   integer[];
 
   rhythm {
     kick:     rhythm[];

@@ -231,10 +231,10 @@ function render_sheet(song) {
       if (chord.notes.length < 2)
         return;
       let note;
-      if (index === 0 || chord.notes.length === 2 || song.melody.length === 0)
+      if (index === 0 || chord.notes.length === 2 || song.arpeggio.length === 0)
         note = song.tonality.key + chord.notes[1];
       else {
-        const m0  = song.melody[(index - 1) % song.melody.length];
+        const m0  = song.arpeggio[(index - 1) % song.arpeggio.length];
         const m   = m0 < 0 ? (-m0 - 1) : m0;
         const n   = 2 + (m % (chord.notes.length - 2));
         note = song.tonality.key + chord.notes[n];
