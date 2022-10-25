@@ -2,6 +2,16 @@
   "ride_directory": "contracts",
   "test_directory": "test_ride",
   "envs": {
+    "mainnet": {
+      "API_BASE": "https://nodes.wavesnodes.com/",
+      "CHAIN_ID": "W",
+      "timeout": 6000000
+    },
+    "testnet": {
+      "API_BASE": "https://nodes-testnet.wavesnodes.com/",
+      "CHAIN_ID": "T",
+      "timeout": 6000000
+    },
     "custom": {
       "API_BASE": "http://localhost:6869/",
       "CHAIN_ID": "R",

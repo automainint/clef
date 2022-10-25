@@ -221,7 +221,7 @@ func mint_chord(index: Int, name: String, notes: List[Int]) = {
 
     let key = to_key(index)
 
-    ( [ IntegerEntry("count", max([ index, n ]) + 1),
+    ( [ IntegerEntry("count", max([ index + 1, n ])),
 
         StringEntry(  key + "_CL", name),
         IntegerEntry( key + "_C0", notes[0]),
@@ -249,7 +249,7 @@ func mint_arpeggio(index: Int, name: String, notes: List[Int]) = {
 
     let key = to_key(index)
 
-    ( [ IntegerEntry("count", max([ index, n ]) + 1),
+    ( [ IntegerEntry("count", max([ index + 1, n ])),
 
         StringEntry(  key + "_AL",  name),
         IntegerEntry( key + "_A00", notes[0]),
@@ -288,7 +288,7 @@ func mint_rhythm(index: Int, name: String, scale: Int, notes: List[Int]) = {
 
     let key = to_key(index)
 
-    ( [ IntegerEntry("count", max([ index, n ]) + 1),
+    ( [ IntegerEntry("count", max([ index + 1, n ])),
 
         StringEntry(  key + "_RL",  name),
         IntegerEntry( key + "_RS",  scale),
