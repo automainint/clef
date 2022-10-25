@@ -691,6 +691,55 @@ describe('library', async function () {
     await broadcast(tx_whitelist_remove);
     await waitForTx(tx_whitelist_remove.id);
   });
+  
+  it('mint song by other account', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_mint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
+
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
+
+    const changes = await stateChanges(tx_mint.id);
+
+    const assetId = changes.invokes[0].stateChanges.issues[0].assetId;
+
+    const n = (await accountDataByKey(`${assetId}`, library)).value;
+
+    const id            = await accountDataByKey(`${n}`, library);
+    const asset_balance = await assetBalance(assetId, foo);
+
+    expect(id.value).to.equal(assetId);
+    expect(asset_balance).to.equal(1);
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+  });
+
 
   it('can not edit whitelist if not owner', async function () {
     const library = address(accounts.library);
