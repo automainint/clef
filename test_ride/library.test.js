@@ -1,6 +1,6 @@
 const wvs = 10 ** 8;
 
-describe('library', async function () {
+describe('Library', async function () {
   this.timeout(300000);
 
   const tx_mint_song = function (app, account, bpm, bar_size, beat_size, tonality, nonce) {
@@ -106,7 +106,7 @@ describe('library', async function () {
           fee:    3800000 },
         seed);
       await broadcast(tx);
-      await waitForTx(tx.id)
+      await waitForTx(tx.id);
     };
 
     await setupAccounts(
@@ -1899,5 +1899,197 @@ describe('library', async function () {
 
     expect(price_token.value).to.equal('');
     expect(price_amount.value).to.equal(price + price_increment.value);
+  });
+
+  it('mint song and burn internally', async function () {
+    const library = address(accounts.library);
+
+    const tx_mint = tx_mint_song(library, accounts.library, 123, 4, 8, 7, '');
+
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
+
+    const changes   = await stateChanges(tx_mint.id);
+    const asset_id  = changes.invokes[0].stateChanges.issues[0].assetId;
+
+    const tx_burn = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'burn_internal',
+          args: [
+            { type: 'string', value: asset_id }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_burn);
+    await waitForTx(tx_burn.id);
+
+    const asset_balance = await assetBalance(asset_id, library);
+    expect(asset_balance).to.equal(0);
+  });
+
+  it('mint song and burn externally', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_mint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
+
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
+
+    const changes   = await stateChanges(tx_mint.id);
+    const asset_id  = changes.invokes[0].stateChanges.issues[0].assetId;
+
+    const tx_burn = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'burn',
+          args: [ ]
+        },
+        payment: [ { assetId: asset_id, amount: 1 } ]
+      },
+      accounts.foo);
+
+    await broadcast(tx_burn);
+    await waitForTx(tx_burn.id);
+
+    const asset_balance = await assetBalance(asset_id, library);
+    expect(asset_balance).to.equal(0);
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+  });
+
+  it('can not burn internally if not in whitelist', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_mint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
+
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
+
+    const changes   = await stateChanges(tx_mint.id);
+    const asset_id  = changes.invokes[0].stateChanges.issues[0].assetId;
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+
+    const tx_send = transfer(
+      { assetId: asset_id, amount: 1, recipient: library },
+      accounts.foo);
+
+    await broadcast(tx_send);
+    await waitForTx(tx_send.id);
+
+    const tx_burn = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'burn_internal',
+          args: [
+            { type: 'string', value: asset_id }
+          ]
+        } },
+      accounts.foo);
+
+    await expect(broadcast(tx_burn)).to.be.rejectedWith('Caller not in whitelist');
+  });
+
+  it('can not burn externally if not in whitelist', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_mint = tx_mint_song(library, accounts.foo, 123, 4, 8, 7, '');
+
+    await broadcast(tx_mint);
+    await waitForTx(tx_mint.id);
+
+    const changes   = await stateChanges(tx_mint.id);
+    const asset_id  = changes.invokes[0].stateChanges.issues[0].assetId;
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+
+    const tx_burn = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'burn',
+          args: [ ]
+        },
+        payment: [ { assetId: asset_id, amount: 1 } ]
+      },
+      accounts.foo);
+
+    await expect(broadcast(tx_burn)).to.be.rejectedWith('Caller not in whitelist');
   });
 });

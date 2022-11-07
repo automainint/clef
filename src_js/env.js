@@ -1,41 +1,44 @@
 /* eslint-disable */
 
-const provider_options = {
+const network_options = {
   /*  Mainnet options
    */
   'W': {
-    contract_id:  '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe',
-    network:      'mainnet',
-    node_url:     'https://nodes.wavesnodes.com/'
+    id_library:     '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe',
+    id_claim_pool:  '3PPhk52YuwKTFT2U865di1Pepj4bFHxubFY',
+    network:        'mainnet',
+    node_url:       'https://nodes.wavesnodes.com/'
   },
   /*  Testnet options
    */
   'T': {
-    contract_id:  '3N4XDqsd3iMrXb6kS7R7Wwd4azMsqUXMvfe',
-    network:      'testnet',
-    node_url:     'https://nodes-testnet.wavesnodes.com/'
+    id_library:     '3N4XDqsd3iMrXb6kS7R7Wwd4azMsqUXMvfe',
+    id_claim_pool:  '3Mxdqvpx6gFBJRrjq1wHMWvJKLF7vPgfuYp',
+    network:        'testnet',
+    node_url:       'https://nodes-testnet.wavesnodes.com/'
   },
   /*  Custom network options
    */
   'R': {
-    contract_id:  '3M9xPiK77q2kjzct3TZsfAnfqJPovrXAdKV',
-    network:      'custom',
-    node_url:     'http://localhost:6869/'
+    id_library:     '3M9xPiK77q2kjzct3TZsfAnfqJPovrXAdKV',
+    id_claim_pool:  '3Mxdqvpx6gFBJRrjq1wHMWvJKLF7vPgfuYp',
+    network:        'custom',
+    node_url:       'http://localhost:6869/'
   }
 };
 
 module.exports = {
   env: {
     keeper: {
-      ...provider_options,
+      ...network_options,
       provider: 'keeper'
     },
     cloud: {
-      ...provider_options,
+      ...network_options,
       provider: 'cloud'
     },
     web: {
-      ...provider_options,
+      ...network_options,
       provider: 'web'
     }
   }

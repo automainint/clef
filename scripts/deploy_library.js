@@ -21,6 +21,7 @@ const wvs = 10 ** 8;
     if (env.CHAIN_ID === 'R' || env.CHAIN_ID === 'T') {
       /*  Create dummy market contract for testing.
        */
+      console.log(`Master address: ${DAPP}`);
       await setupAccounts({ market: 1 * wvs });
 
       console.log('    ` Set dummy market script');
@@ -50,7 +51,7 @@ const wvs = 10 ** 8;
       /*  Use fake USDN token for testing.
        */
 
-      console.log('    ` Issue fake USDN');
+      /*console.log('    ` Issue fake USDN');
       const tx_usdn = issue(
         { name:         'FUSD',
           description:  'Fake USDN token for testing purposes',
@@ -63,10 +64,10 @@ const wvs = 10 ** 8;
 
       usdn = (await transactionById(tx_usdn.id)).assetId;
 
-      console.log(`    * Fake USDN asset id: ${usdn}`);
+      console.log(`    * Fake USDN asset id: ${usdn}`);*/
     }
 
-    console.log('    ` Set price hybrid');
+    /*console.log('    ` Set price hybrid');
     const tx_set_price = invokeScript(
       { dApp: DAPP,
         call: {
@@ -79,9 +80,9 @@ const wvs = 10 ** 8;
         } },
       env.SEED);
     await broadcast(tx_set_price);
-    await waitForTx(tx_set_price.id);
+    await waitForTx(tx_set_price.id);*/
 
-    console.log('    ` Set market image');
+    /*console.log('    ` Set market image');
     const tx_set_image = invokeScript(
       { dApp: DAPP,
         call: {
@@ -92,7 +93,7 @@ const wvs = 10 ** 8;
         } },
       env.SEED);
     await broadcast(tx_set_image);
-    await waitForTx(tx_set_image.id);
+    await waitForTx(tx_set_image.id);*/
   } catch (error) {
     console.error(error);
   }

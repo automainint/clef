@@ -395,7 +395,8 @@ async function get_resource_by_asset_id(asset_id) {
 
 class clearance_handler {
   constructor(id_) {
-    this.id = id_;
+    this.id             = id_;
+    this.allowed_claims = 1;
   }
 
   async logout() {
@@ -641,6 +642,41 @@ class clearance_handler {
     let price   = await this.get_price(types.hybrid);
 
     return balance >= price;
+  }
+
+  async get_airdrop_info(airdrop_name) {
+    if (airdrop_name === 'test')
+      return {
+        airdrop_exists:     true,
+        user_in_whitelist:  true,
+        allowed_claims:     this.allowed_claims,
+        songs_total:        get_total_quantity(stock.resources, types.song)
+      };
+    else
+      return {
+        airdrop_exists:     false,
+        user_in_whitelist:  false,
+        allowed_claims:     0,
+        songs_total:        0
+      };
+  }
+
+  async airdrop_claim(airdrop_name) {
+    if (airdrop_name !== 'test')
+      return;
+    if (this.allowed_claims <= 0)
+      return;
+
+    let account = find_account(this.id);
+    if (!account)
+      return;
+
+    const resource = get_resource_internal(stock.resources, types.song);
+    if (!resource)
+      return;
+
+    account.resources.push(resource);
+    this.allowed_claims--;
   }
 };
 

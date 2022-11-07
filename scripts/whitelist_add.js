@@ -1,8 +1,5 @@
-const DAPP          = address(env.SEED);
-const USDN_QUANTITY = 100000000000;
-const HYBRID_PRICE  = 1000;
-
-const wvs = 10 ** 8;
+const DAPP  = address(env.SEED);
+const wvs   = 10 ** 8;
 
 (async () => {
   try {

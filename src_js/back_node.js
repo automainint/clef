@@ -24,6 +24,10 @@ const HYBRID_FEE_ASSET_ID     = TOKEN_WAVES;
 const HYBRID_FEE              = 500000;
 const HYBRID_PRICE_EXTRA      = 2;
 
+const CLAIM_FEE_ASSET_ID      = TOKEN_WAVES;
+const CLAIM_FEE               = 500000;
+const CLAIM_LIMIT             = 20;
+
 const keys_chord = [
   '_CL',
   '_C0',
@@ -149,9 +153,10 @@ const keys_song = [
   '_SI57'
 ];
 
-let contract_id = env.keeper['T'].contract_id;
-let network     = env.keeper['T'].network;
-let node_url    = env.keeper['T'].node_url;
+let id_library    = env.keeper['W'].id_library;
+let id_claim_pool = env.keeper['W'].id_claim_pool;
+let network       = env.keeper['W'].network;
+let node_url      = env.keeper['W'].node_url;
 
 let cache         = {};
 let cache_promise = {};
@@ -226,8 +231,8 @@ function tx_info_wait(id) {
     attempt();
   });
 }
-  
-async function get_value_by_key(id, key) {
+
+async function get_value_by_key(contract_id, id, key) {
   try {
     const data = await fetch_get(`/addresses/data/${contract_id}/${id}${key}`);
 
@@ -241,7 +246,7 @@ async function get_value_by_key(id, key) {
   }
 }
 
-async function get_data_by_keys(id, keys, first) {
+async function get_data_by_keys(contract_id, id, keys, first) {
   const request = `/addresses/data/${contract_id}`;
   const body    = { keys: [ ] };
 
@@ -264,7 +269,7 @@ async function get_chord_explicit(n) {
     notes:  []
   };
 
-  const label = await get_value_by_key(n, keys_chord[0]);
+  const label = await get_value_by_key(id_library, n, keys_chord[0]);
 
   if (label === null) {
     cache[n] = chord;
@@ -273,7 +278,7 @@ async function get_chord_explicit(n) {
 
   chord.label = label;
 
-  const data = await get_data_by_keys(n, keys_chord, 1);
+  const data = await get_data_by_keys(id_library, n, keys_chord, 1);
 
   for (let i = 0; i < 5; i++) {
     for (const x of data) {
@@ -299,14 +304,14 @@ async function get_arpeggio_explicit(n) {
 
   let arpeggio = [];
 
-  const label = await get_value_by_key(n, keys_arpeggio[0]);
+  const label = await get_value_by_key(id_library, n, keys_arpeggio[0]);
 
   if (label === null) {
     cache[n] = arpeggio;
     return arpeggio;
   }
 
-  const data = await get_data_by_keys(n, keys_arpeggio, 1);
+  const data = await get_data_by_keys(id_library, n, keys_arpeggio, 1);
 
   for (let i = 0; i < 16; i++) {
     for (const x of data) {
@@ -336,7 +341,7 @@ async function get_rhythm_explicit(n) {
     notes:  []
   };
 
-  const label = await get_value_by_key(n, keys_rhythm[0]);
+  const label = await get_value_by_key(id_library, n, keys_rhythm[0]);
 
   if (label === null) {
     cache[n] = rhythm;
@@ -345,7 +350,7 @@ async function get_rhythm_explicit(n) {
 
   rhythm.label = label;
 
-  const data = await get_data_by_keys(n, keys_rhythm, 1);
+  const data = await get_data_by_keys(id_library, n, keys_rhythm, 1);
 
   let scale = null;
 
@@ -455,21 +460,21 @@ async function get_song_by_id(n) {
 
     if (!(n in cache_promise))
       cache_promise[n] = (async () => {
-        const asset_id = await get_value_by_key(n, '');
+        const asset_id = await get_value_by_key(id_library, n, '');
 
         if (asset_id === null) {
           delete cache_promise[n];
           return;
         }
 
-        const label = await get_value_by_key(n, keys_song[0]);
+        const label = await get_value_by_key(id_library, n, keys_song[0]);
 
         if (label === null) {
           delete cache_promise[n];
           return;
         }
 
-        const data = await get_data_by_keys(n, keys_song, 1);
+        const data = await get_data_by_keys(id_library, n, keys_song, 1);
 
         let k = 1;
         const key_name_seed         = '' + n + keys_song[k++];
@@ -727,7 +732,7 @@ async function get_song_by_id(n) {
 
 async function get_song_by_asset_id(token_id) {
   try {
-    const n = await get_value_by_key(token_id, '');
+    const n = await get_value_by_key(id_library, token_id, '');
 
     return await get_song_by_id(n);
 
@@ -761,7 +766,7 @@ class clearance_handler {
   async mint_resources(resources) { }
 
   async get_price_hybrid() {
-    const data = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_AMOUNT}`);
+    const data = await fetch_get(`/addresses/data/${id_library}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
     if (data === null)
       return 0;
@@ -779,7 +784,7 @@ class clearance_handler {
         debug_log('* UPDATE CACHED');
       } else {
         if (!this.ready) {
-          const price_token = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_TOKEN}`);
+          const price_token = await fetch_get(`/addresses/data/${id_library}/${KEY_PRICE_HYBRID_TOKEN}`);
 
           if (price_token === null || price_token.value === '') {
             this.price_token  = TOKEN_WAVES;
@@ -790,7 +795,7 @@ class clearance_handler {
             this.price_scale  = 10 ** details.decimals;
           }
 
-          const price_amount = await fetch_get(`/addresses/data/${contract_id}/${KEY_PRICE_HYBRID_AMOUNT}`);
+          const price_amount = await fetch_get(`/addresses/data/${id_library}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
           if (price_amount === null) {
             this.price_hybrid = 0;
@@ -895,7 +900,7 @@ class clearance_handler {
     let i = 0;
 
     if (after) {
-      const after_asset_id = await get_value_by_key(after, '');
+      const after_asset_id = await get_value_by_key(id_library, after, '');
 
       for (; i < this.nfts.length; i++) {
         if (this.nfts[i] === after_asset_id) {
@@ -967,7 +972,7 @@ class clearance_handler {
     await this.update();
 
     return await this.mint_hybrid_internal({
-      dApp: contract_id,
+      dApp: id_library,
       call: {
         function: 'mint_hybrid',
         args: [
@@ -997,7 +1002,7 @@ class clearance_handler {
       throw new Error("Wrong resources");
 
     return await this.mint_hybrid_internal({
-      dApp: contract_id,
+      dApp: id_library,
       call: {
         function: 'mint_hybrid_and_burn',
         args: [ ],
@@ -1026,7 +1031,9 @@ class clearance_handler {
   }
 
   async logout() {
-    await signer.logout();
+    if (this.signer) {
+      await this.signer.logout();
+    }
   }
 
   /*  @automainint
@@ -1037,6 +1044,96 @@ class clearance_handler {
    */
   async get_resource_by_id(id) {
     return await get_resource_by_id(id);
+  }
+
+  async get_airdrop_info(airdrop_name) {
+    const get_value = async (key) => {
+      const response = await fetch_get(`/addresses/data/${id_claim_pool}/${airdrop_name}_${key}`)
+      if (response)
+        return response.value;
+      return -1;
+    };
+
+    const begin   = await get_value(`begin`);
+    const end     = await get_value(`end`);
+
+    if (begin === -1 && end === -1)
+      return {
+        airdrop_exists:     false,
+        user_in_whitelist:  false,
+        allowed_claims:     0,
+        songs_total:        0
+      };
+
+    const allowed = await get_value(`A_${this.address}`);
+
+    if (allowed === -1)
+      return {
+        airdrop_exists:     true,
+        user_in_whitelist:  false,
+        allowed_claims:     0,
+        songs_total:        end - begin
+      };
+
+    return {
+      airdrop_exists:     true,
+      user_in_whitelist:  true,
+      allowed_claims:     end - begin,
+      songs_total:        0
+    };
+  }
+
+  async airdrop_claim(airdrop_name) {
+    if (!this.signer)
+      throw new Error('No signer');
+
+    const get_value = async (key) => {
+      const response = await fetch_get(`/addresses/data/${id_claim_pool}/${airdrop_name}_${key}`)
+      if (response)
+        return response.value;
+      return 0;
+    };
+
+    const begin   = await get_value(`begin`);
+    const end     = await get_value(`end`);
+    const allowed = await get_value(`A_${this.address}`);
+
+    let amount = allowed;
+    if (amount > CLAIM_LIMIT)
+      amount = CLAIM_LIMIT;
+    if (amount > end - begin)
+      amount = end - begin;
+    if (amount === 0)
+      return;
+
+    let tx;
+
+    try {
+      [ tx ] = await this.signer
+        .invoke({
+          dApp: id_claim_pool,
+          call: {
+            function: 'claim',
+            args: [
+              { type: 'string',   value: airdrop_name },
+              { type: 'integer',  value: amount }
+            ],
+          },
+          feeAssetId: CLAIM_FEE_ASSET_ID,
+          fee:        CLAIM_FEE
+        })
+        .broadcast();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+
+    const info = await tx_info_wait(tx.id);
+
+    /*  @automainint
+     *
+     *  Must update to fetch new asset.
+     */
+    this.ready = false;
   }
 };
 
@@ -1114,13 +1211,15 @@ async function authenticate(options) {
       throw new Error('Invalid chain ID');
     }
 
-    contract_id  = options.env[chain_id].contract_id;
-    node_url     = options.env[chain_id].node_url;
-    network      = options.env[chain_id].network;
+    id_library    = options.env[chain_id].id_library;
+    id_claim_pool = options.env[chain_id].id_claim_pool;
+    node_url      = options.env[chain_id].node_url;
+    network       = options.env[chain_id].network;
 
-    debug_log(`Contract ID: ${contract_id}`);
-    debug_log(`Node URL:    ${node_url}`);
-    debug_log(`Network:     ${network}`);
+    debug_log(`Contract Library:    ${id_library}`);
+    debug_log(`Contract Claim Pool: ${id_claim_pool}`);
+    debug_log(`Node URL:            ${node_url}`);
+    debug_log(`Network:             ${network}`);
 
     let user = new clearance_handler(); 
 

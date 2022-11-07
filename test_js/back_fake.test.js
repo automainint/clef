@@ -953,4 +953,15 @@ describe('back fake', async function () {
 
     await user.logout();
   });
+
+  it('get airdrop info and claim', async function () {
+    let info = await user.get_airdrop_info('test');
+
+    assert.equal((typeof info.airdrop_exists),    'boolean');
+    assert.equal((typeof info.user_in_whitelist), 'boolean');
+    assert.equal((typeof info.allowed_claims),    'number');
+    assert.equal((typeof info.songs_total),       'number');
+
+    await user.airdrop_claim('test');
+  });
 });

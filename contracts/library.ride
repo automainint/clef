@@ -5,6 +5,12 @@
 let nft_creation_address  = Address(base58'3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By')
 let price_increase_period = 10
 
+let mint_collection     = "Clef genesis songs"
+let mint_description    = "Genesis Clef song. This melody is crafted to become your electronic jam. Use it on clef.one 💚🤍"
+
+let hybrid_collection   = "Clef mixes"
+let hybrid_description  = "Clef mix. This melody was created by an algorithm. Enjoy this jam or use it on clef.one"
+
 func to_key(n: Int) = {
   n.toBytes().toBase58String()
 }
@@ -51,8 +57,8 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
   }
 
   let name_short  = ("Clef " + n.toString()).take(16)
-  let description = "Clef song"
-  let collection  = ""
+  let description = hybrid_description
+  let collection  = hybrid_collection
 
   strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, getStringValue("market_image_link"), collection], [])) {
     case x: String  => x
@@ -314,6 +320,30 @@ func mint_rhythm(index: Int, name: String, scale: Int, notes: List[Int]) = {
 }
 
 @Callable(i)
+func burn_internal(asset_id: String) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else {
+    strict burn0 = invoke(
+      nft_creation_address, "burnNFT", [],
+      [ AttachedPayment(asset_id.fromBase58String(), 1) ])
+
+    ( [], unit )
+  }
+}
+
+@Callable(i)
+func burn() = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else {
+    strict burn0 = invoke(nft_creation_address, "burnNFT", [], [ i.payments[0] ])
+
+    ( [], unit )
+  }
+}
+
+@Callable(i)
 func mint_song(
   name:             String,
   parent_0:         String,
@@ -361,8 +391,8 @@ func mint_song(
     }
 
     let name_short  = name.take(16)
-    let description = "Clef song"
-    let collection  = ""
+    let description = mint_description
+    let collection  = mint_collection
 
     strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, getStringValue("market_image_link"), collection], [])) {
       case x: String  => x

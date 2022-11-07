@@ -1,7 +1,9 @@
 # clef
 
 ##  Content
-
+- Smart contracts documentation
+  - [Library](docs/Contract%20Library.md)
+  - [Claim Pool](docs/Contract%20Claim%20Pool.md)
 - Ride smart contracts
   - `/contracts`
   - `/scripts`
@@ -145,6 +147,25 @@ const { env,
 
   - `can_mint_hybrid()` _async_ - returns `true` if the user has enough balance to mint a hybrid; or `false` otherwise.
     Will check for both transaction `fee` and `payment`.
+
+  - `get_airdrop_info(name)` _async_ - returns an object with fields `airdrop_exists`, `user_in_whitelist`, `allowed_claims` and `songs_total`.
+    - `name` argument is a string, airdrop name.
+    - `airdrop_exists` is `true` if specified airdrop exists; `false` otherwise.
+    - `user_in_whitelist` is `true` if user whitelisted for specified airdrop; `false` otherwise.
+    - `allowed_claims` is a number of songs user can claim from specified airdrop.
+    - `songs_total` is a total number of songs left in specified airdrop.
+    ```js
+    let airdrop = 'test';
+    let info = await user.get_airdrop_info(airdrop);
+    console.log(`Allowed claims: ${info.allowed_claims}; songs total: ${info.songs_total}`);
+    ```
+
+  - `airdrop_claim(name)` _async_ - claim songs from an airdrop.
+    - `name` argument is a string, airdrop name.
+    ```js
+    let airdrop = 'test';
+    await user.airdrop_claim(airdrop);
+    ```
 
 **Example**
 ```js
