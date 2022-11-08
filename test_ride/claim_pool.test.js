@@ -54,12 +54,14 @@ describe('Claim Pool', async function () {
     const tx_put = invokeScript(
       { dApp: pool,
         call: {
-          function: 'put_asset',
+          function: 'put_assets',
           args: [
             { type: 'string', value: 'testairdropname' }
           ]
         },
-        payment: [ { assetId: tx_issue.id, amount: 1 } ]
+        payment: [
+          { assetId: tx_issue.id, amount: 1 }
+        ]
       },
       accounts.foo);
 
@@ -72,8 +74,10 @@ describe('Claim Pool', async function () {
           function: 'allow',
           args: [
             { type: 'string',   value: 'testairdropname' },
-            { type: 'string',   value: bar },
-            { type: 'integer',  value: 1 }
+            { type: 'integer',  value: 1 },
+            { type: 'list', value: [
+              { type: 'string',   value: bar }
+            ] }
           ]
         } },
       accounts.foo);

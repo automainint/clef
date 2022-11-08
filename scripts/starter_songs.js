@@ -200,7 +200,7 @@ const wvs = 10 ** 8;
           rhythm_silent,
           rhythm_silent,
           rhythm_silent
-        );*/
+        );
       await make_song('Puzzle Me', 115, -2,
           [ chord_C, chord_C, chord_Am, chord_Am, chord_C, chord_C, chord_G, chord_G ],
           arpeggio_2,
@@ -211,7 +211,7 @@ const wvs = 10 ** 8;
           rhythm_slow,
           rhythm_2nd_half_fast
         );
-      /*await make_song('Swop Talk', 120, -1,
+      await make_song('Swop Talk', 120, -1,
           [ chord_Dm, chord_Dm, chord_F, chord_F, chord_Dm, chord_Dm, chord_C, chord_C ],
           arpeggio_3,
           rhythm_slow,
@@ -220,7 +220,7 @@ const wvs = 10 ** 8;
           rhythm_sync_lead,
           rhythm_slow,
           rhythm_2nd_half_steady
-        );*/
+        );
       await make_song('Made In WX', 175, 0,
           [ chord_Em, chord_Em, chord_C, chord_C, chord_Em, chord_Em, chord_Am, chord_Am ],
           arpeggio_0,
@@ -231,7 +231,7 @@ const wvs = 10 ** 8;
           rhythm_1st_half_slow,
           rhythm_steady
         );
-      /*await make_song('Blame It On Your Vires', 130, 1,
+      await make_song('Blame It On Your Vires', 130, 1,
           [ chord_F, chord_F, chord_Dm, chord_Dm, chord_F, chord_F, chord_G, chord_G ],
           arpeggio_1,
           rhythm_slow,
@@ -290,7 +290,7 @@ const wvs = 10 ** 8;
           rhythm_long_1st_half_slow,
           rhythm_long_1st_half,
           rhythm_long_2nd_half_steady
-        );*/
+        );
       await make_song('Moon Node', 135, 0,
           [ chord_Gsus2, chord_Gsus2, chord_Esus4, chord_Esus4, chord_Gsus2, chord_Gsus2, chord_Dsus2, chord_Dsus2 ],
           arpeggio_3,
@@ -301,7 +301,7 @@ const wvs = 10 ** 8;
           rhythm_long_1st_half,
           rhythm_long_2nd_half_fast
         );
-      /*await make_song('Buy The Dip', 140, -1,
+      await make_song('Buy The Dip', 140, -1,
           [ chord_Asus2, chord_Asus2, chord_Gsus2, chord_Gsus2, chord_Asus2, chord_Asus2, chord_Esus4, chord_Esus4 ],
           arpeggio_0,
           rhythm_slower,
@@ -340,7 +340,7 @@ const wvs = 10 ** 8;
           rhythm_sync_lead,
           rhythm_long_1st_half,
           rhythm_steady
-        );*/
+        );
       await make_song('Clef In The Sky', 135, 0,
           [ chord_Gsus4, chord_Gsus4, chord_Esus4, chord_Esus4, chord_Gsus4, chord_Gsus4, chord_Dsus4, chord_Dsus4 ],
           arpeggio_0,
@@ -351,7 +351,7 @@ const wvs = 10 ** 8;
           rhythm_long_1st_half,
           rhythm_steady
         );
-      /*await make_song('DYOR Luxe', 140, 1,
+      await make_song('DYOR Luxe', 140, 1,
           [ chord_Asus4, chord_Asus4, chord_Gsus4, chord_Gsus4, chord_Asus4, chord_Asus4, chord_Esus4, chord_Esus4 ],
           arpeggio_1,
           rhythm_long_sync_lead,
@@ -360,7 +360,7 @@ const wvs = 10 ** 8;
           rhythm_sync_lead,
           rhythm_long_1st_half,
           rhythm_steady
-        );*/
+        );
       await make_song('On-chain Romance', 120, 2,
           [ chord_C, chord_C, chord_C, chord_E, chord_C, chord_C, chord_C, chord_E ],
           arpeggio_2,
@@ -370,7 +370,7 @@ const wvs = 10 ** 8;
           rhythm_sync_lead,
           rhythm_slow,
           rhythm_steady
-        );
+        );*/
 
       console.log(`      ${i+1} of ${count}`);
     }

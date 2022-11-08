@@ -2,6 +2,8 @@
 {-# CONTENT_TYPE DAPP #-}
 {-# SCRIPT_TYPE ACCOUNT #-}
 
+let indices_20 = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ]
+
 func check_whitelist(caller: Address) = {
   this == caller || match getBoolean("W_" + caller.bytes.toBase58String()) {
     case x: Boolean => x
@@ -9,14 +11,58 @@ func check_whitelist(caller: Address) = {
   }
 }
 
-func claim_fold(
+func fold_put_assets(accum: (List[IntegerEntry|StringEntry], String, List[AttachedPayment]), index: Int) = {
+  let (list, airdrop, payments) = accum
+
+  if index >= size(payments) then
+    accum
+  else if payments[index].amount != 1 then
+    throw("Wrong payment " + (index + 1).toString() + " amount")
+  else {
+    let key = airdrop + "_end"
+
+    let end = match getInteger(key) {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let id = payments[index].assetId.value().toBase58String()
+
+    ( list ++ [
+        IntegerEntry(key, end + 1),
+        StringEntry(airdrop + "_X_" + end.toBytes().toBase58String(), id)
+      ],
+      airdrop,
+      payments )
+  }
+}
+
+func fold_allow(accum: (List[IntegerEntry], String, Int, List[String]), index: Int) = {
+  let (list, airdrop, amount, accounts) = accum
+
+  if index >= size(accounts) then
+    accum
+  else {
+    let key = airdrop + "_A_" + accounts[index]
+
+    let allowed = match getInteger(key) {
+      case j: Int => j
+      case _      => 0
+    }
+
+    ( list :+ IntegerEntry(key, allowed + amount),
+      airdrop, amount, accounts )
+  }
+}
+
+func fold_claim(
   accum: (List[DeleteEntry|ScriptTransfer], Int, String, Address),
   index: Int
 ) = {
   let (list, amount, airdrop, claimer) = accum
 
   if amount <= 0 then
-    (list, 0, airdrop, claimer)
+    accum
   else {
     let asset_key = airdrop + "_X_" + index.toBytes().toBase58String()
     let asset_id  = getStringValue(asset_key).fromBase58String()
@@ -51,45 +97,35 @@ func whitelist_remove(user: String) = {
 }
 
 @Callable(i)
-func put_asset(airdrop: String) = {
+func put_assets(airdrop: String) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
-  else if i.payments.size() != 1 then
-    throw("Wrong payment size")
-  else if i.payments[0].amount != 1 then
-    throw("Wrong payment amount")
+  else if i.payments.size() == 0 then
+    throw("No payment")
+  else if i.payments.size() > 20 then
+    throw("To many assets")
   else {
-    let key = airdrop + "_end"
+    let (list, airdrop_, payments_) = FOLD<20>(indices_20, ([], airdrop, i.payments), fold_put_assets)
 
-    let end = match getInteger(key) {
-      case j: Int => j
-      case _      => 0
-    }
-
-    let id = i.payments[0].assetId.value().toBase58String()
-
-    ( [ IntegerEntry(key, end + 1),
-        StringEntry(airdrop + "_X_" + end.toBytes().toBase58String(), id)
-      ],
+    ( list,
       unit )
   }
 }
 
 @Callable(i)
-func allow(airdrop: String, account: String, amount: Int) = {
+func allow(airdrop: String, amount: Int, accounts: List[String]) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
-  else if amount <= 0 then
+  else if amount == 0 then
     throw("Wrong amount")
+  else if size(accounts) == 0 then
+    throw("No accounts")
+  else if size(accounts) > 20 then
+    throw("Too many accounts")
   else {
-    let key = airdrop + "_A_" + account
+    let (list, airdrop_, amount_, accounts_) = FOLD<20>(indices_20, ([], airdrop, amount, accounts), fold_allow)
 
-    let allowed = match getInteger(key) {
-      case j: Int => j
-      case _      => 0
-    }
-
-    ( [ IntegerEntry(key, allowed + amount) ],
+    ( list,
       unit )
   }
 }
@@ -146,7 +182,7 @@ func claim(airdrop: String, amount: Int) = {
       let (list, amount_, airdrop_, claimer_) = FOLD<20>(
         indices,
         ( [], amount, airdrop, Address(i.caller.bytes) ),
-        claim_fold
+        fold_claim
       )
 
       ( [ IntegerEntry(k_allowed, allowed - amount),

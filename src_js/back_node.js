@@ -1054,8 +1054,8 @@ class clearance_handler {
       return -1;
     };
 
-    const begin   = await get_value(`begin`);
-    const end     = await get_value(`end`);
+    let begin = await get_value(`begin`);
+    let end   = await get_value(`end`);
 
     if (begin === -1 && end === -1)
       return {
@@ -1064,6 +1064,9 @@ class clearance_handler {
         allowed_claims:     0,
         songs_total:        0
       };
+
+    if (begin === -1) begin = 0;
+    if (end   === -1) end   = 0;
 
     const allowed = await get_value(`A_${this.address}`);
 
@@ -1078,8 +1081,8 @@ class clearance_handler {
     return {
       airdrop_exists:     true,
       user_in_whitelist:  true,
-      allowed_claims:     end - begin,
-      songs_total:        0
+      allowed_claims:     allowed,
+      songs_total:        end - begin
     };
   }
 
