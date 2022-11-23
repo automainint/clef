@@ -13,6 +13,72 @@
   - `/test_js`
 - Samples: `/static/samples`
 
+##  SDK
+SDK source code located in `./src_js/sdk.js`. You can use this SDK for integration with Clef.
+
+### Dependencies
+- [Tone.js](https://github.com/Tonejs/Tone.js) for audio rendering.
+
+### API
+```js
+const {
+  COLORS,
+  get_song_name_by_asset_id,
+  get_song_colors_by_asset_id,
+  set_volume,
+  play_song_by_asset_id,
+  stop
+} = require('sdk.js');
+```
+- `COLORS` - array of color values which can be returned by `get_song_colors_by_asset_id`.
+  - `COLORS.major`, `COLORS.minor`, `COLORS.neutral`, `COLORS.weird`
+- `get_song_name_by_asset_id(asset_id, options)` _async_ - returns string, song name.
+  - `asset_id` argument - string, NFT asset ID.
+  - `options` _optional_ argument - network settings.
+  ```js
+  const asset_id = 'CSB5QjKAYeY5BCK4EyLC66fKn5QWX73HAXhn4pNb9HD';
+  const name = await get_song_name_by_asset_id(asset_id);
+  console.log(`Song ${asset_id} name: ${name}`);
+  ``` 
+- `get_song_colors_by_asset_id(asset_id, options)` _async_ - returns array of song colors.
+  - `asset_id` argument - string, NFT asset ID.
+  - `options` _optional_ argument - network settings.
+- `set_volume(volume)` _async_ - set audio playback volume.
+  - `volume` argument - number, volume value from `0` to `1`.
+  ```js
+  await set_volume(0.7);
+  ```
+- `play_song_by_asset_id(Tone, asset_id, ready, options)` _async_ - play song.
+  - `Tone` argument - Tone.js interface.
+  - `asset_id` argument - string, NFT asset ID.
+  - `ready` argument - _async_ function, called when song is ready to play.
+  - `options` _optional_ argument - network settings.
+  ```js
+  const Tone = require('tone');
+  const asset_id = 'CSB5QjKAYeY5BCK4EyLC66fKn5QWX73HAXhn4pNb9HD';
+  console.log('Preparing song audio...');
+  await play_song_by_asset_id(Tone, asset_id, async () => {
+    console.log('Playing...');
+  });
+  console.log('Playback stopped.');
+  ```
+- `stop(Tone)` _async_ - stop audio playback.
+  - `Tone` argument - Tone.js interface.
+  ```js
+  const Tone = require('tone');
+  await stop(Tone);
+  ```
+
+Default network settings:
+```js
+const options = {
+  fetch:    window.fetch,                         // fetch function
+  clef_url: 'https://clef.one/',                  // for audio samples
+  node_url: 'https://nodes.wavesnodes.com/',      // waves blockchain node
+  library:  '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe' // clef library contract address
+};
+```
+
 ##  Dev API
 
 ### Back-end interface
@@ -25,7 +91,7 @@ const { env,
         types,
         authenticate,
         get_resource_by_id,
-        get_resource_by_asset_id } = require('/back_fake.js');
+        get_resource_by_asset_id } = require('back_fake.js');
 ```
 
 - `env` - list of environment names.
@@ -160,16 +226,16 @@ const { env,
     console.log(`Allowed claims: ${info.allowed_claims}; songs total: ${info.songs_total}`);
     ```
 
-  - `airdrop_claim(name)` _async_ - claim songs from an airdrop.
+  - `airdrop_claim(name)` _async_ - claim songs from an airdrop. Returns an array with claimed songs ids.
     - `name` argument is a string, airdrop name.
     ```js
     let airdrop = 'test';
-    await user.airdrop_claim(airdrop);
+    let ids = await user.airdrop_claim(airdrop);
     ```
 
 **Example**
 ```js
-const { env, types, authenticate } = require('/back_fake.js');
+const { env, types, authenticate } = require('back_fake.js');
 
 authenticate({ env: env.keeper }).then(user => {
   /* Print user balance. */
@@ -212,7 +278,7 @@ const { diatonic_minor,
         get_song_generation,
         get_song_asset_id,
         get_song_asset_url,
-        can_mint_hybrid } = require('/music.js');
+        can_mint_hybrid } = require('music.js');
 ```
 
 - `diatonic_minor(key_note)` - returns an array of integer numbers representing diatonic minor scale.
@@ -263,14 +329,14 @@ const { diatonic_minor,
 - `get_song_chord_names(song)` - returns song chord names: array of strings.
 - `get_song_generation(song)` - returns song generation: integer number.
 - `get_song_asset_id(song)` - returns song NFT asset id: string.
-- `get_song_asset_url(song)` - return song NFT asset url: string.
+- `get_song_asset_url(song)` - returns song NFT asset url: string.
 - `can_mint_hybrid(song)` - returns true if a hybrid can be minted from specified song; false otherwise.
 
 *NOTE: Resource id and resource asset id are different. Asset id is a hash-identifier of NFT in blockchain.*
 
 **Example**
 ```js
-const { get_resource_by_id } = require('/back_fake.js');
+const { get_resource_by_id } = require('back_fake.js');
 
 const { render_sheet,
         get_song_label,
@@ -284,7 +350,7 @@ const { render_sheet,
         get_song_chord_names,
         get_song_generation,
         get_song_asset_id,
-        get_song_asset_url  } = require('/music.js');
+        get_song_asset_url  } = require('music.js');
 
 const song_id = '1111111A';
 
@@ -317,9 +383,9 @@ const { render_audio,
         render_song,
         play_song,
         stop,
-        set_volume } = require('/audio.js');
+        set_volume } = require('audio.js');
 
-const Tone = require('/Tone.js');
+const Tone = require('tone');
 ```
 
 - `render_audio(Tone, sheet, log)` _async_ - render sheet to a buffer.
@@ -414,17 +480,9 @@ song {
 }
 ```
 
-## Render `.wav`
-- Install dependencies (`browser-run` and `browserify`)
-```shell
-npm install
-```
+## Authors
+- [Ekaterina Ivashneva](https://github.com/ekaterinaivashneva)
+- [Mitya Selivanov](https://github.com/automainint)
+- [Ilia Gromov](https://github.com/ipgromov)
+- [Igor Smolkov](https://github.com/metanonum)
 
-- Run `wav` script
-  - `generation` argument is a number specifying song generation.
-  - `name` argument is a string specifying file names to create.
-```shell
-npm run wav -- --generation=2 --name=sample
-```
-
-- `sample.json` and `sample.wav` will be created from random song of 2nd generation.

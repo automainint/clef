@@ -1,0 +1,19 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  padding: 64px 16px 16px;
+}
+
+.logo {
+  display: inline-block;
+  fill: $color-main-additional;
+  transition: fill ease-out 0.2s;
+
+  &:hover {
+    fill: $color-secondary-additional;
+  }
+}
+
+.navLinks {
+  margin-top: 32px;
+}

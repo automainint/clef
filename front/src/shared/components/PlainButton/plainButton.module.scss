@@ -1,0 +1,139 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes rotate {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.root {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 4px 24px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.big {
+  min-height: 40px;
+  font-size: 16px;
+}
+
+.small {
+  min-height: 32px;
+  font-size: 14px;
+}
+
+.borderedLight {
+  color: $color-main-invert;
+  background-color: transparent;
+  border: 1px solid $color-border-button;
+  transition: border-color ease-out 0.2s;
+
+  &:hover {
+    border-color: $color-main-invert;
+  }
+}
+
+.borderedDark {
+  color: $color-button;
+  background-color: transparent;
+  border: 1px solid $color-border-button;
+  transition: border-color ease-out 0.2s;
+
+  &:hover {
+    border-color: $color-button;
+  }
+}
+
+.filledLight {
+  color: $color-button;
+  background-color: $color-bg;
+  mix-blend-mode: lighten;
+  transition: opacity ease-out 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+}
+
+.filledDark {
+  color: $color-main-invert;
+  background-color: $color-bg-invert;
+  mix-blend-mode: darken;
+  transition: opacity ease-out 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+}
+
+.filledDarkGradient {
+  padding: 4px 15px;
+  justify-content: space-between;
+  color: $color-main-invert;
+  background: $gradient;
+  mix-blend-mode: darken;
+  transition: opacity ease-out 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+}
+
+.alongEdges {
+  padding: 4px 15px;
+  justify-content: space-between;
+}
+
+.loading {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: auto;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $color-main-middle;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 24px;
+    background: no-repeat center url('images/preloader.svg');
+    animation: rotate 1s linear infinite;
+  }
+}

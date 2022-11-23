@@ -1,0 +1,56 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid $color-border-separator;
+}
+
+.title {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20.1315px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-button;
+}
+
+.controls {
+  display: flex;
+  margin-top: 12px;
+  border-radius: 12px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.volumeBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 32px;
+}
+
+.range {
+  position: absolute;
+  bottom: 0;
+  width: 135px;
+  transform: translateX(-35%) rotate(-90deg) translateX(44%);
+  cursor: pointer;
+}
+
+.volumeLabel {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  text-align: right;
+  color: $color-button;
+}

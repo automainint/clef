@@ -1,0 +1,55 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes fade {
+  to {
+    background-color: rgb(0 0 0 / 20%);
+  }
+}
+
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 100%;
+  background-color: rgb(0 0 0 / 0%);
+  animation: fade ease-out 0.2s forwards;
+  z-index: 200;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: max-content;
+  min-height: 100%;
+  margin: auto;
+}
+
+.modal {
+  position: relative;
+  width: max-content;
+  margin: 75px;
+  background-color: $color-bg;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.cross {
+  position: absolute;
+  top: 29px;
+  right: 34px;
+  width: 12px;
+  height: 12px;
+  background: no-repeat center url('./images/cross.svg');
+  border: 0;
+  transition: transform ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}

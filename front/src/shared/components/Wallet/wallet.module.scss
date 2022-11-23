@@ -1,0 +1,122 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  max-width: 256px;
+  padding: 16px;
+  border: 1px solid $color-border-wallet;
+  border-radius: 20px;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.ava {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: $color-main;
+  overflow: hidden;
+}
+
+.address {
+  flex-grow: 1;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-wallet;
+}
+
+.settings {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  > :only-child {
+    transition: transform ease-out 0.2s;
+  }
+
+  &:hover > :only-child {
+    transform: rotate(-90deg);
+  }
+}
+
+.menu {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  right: 0;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid $color-border-wallet;
+  border-radius: 8px;
+  background-color: $color-bg;
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  text-align: left;
+  color: $color-wallet;
+  border: 0;
+  background: none;
+  transition: color ease-out 0.2s;
+  cursor: pointer;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:hover {
+    color: $color-main;
+  }
+}
+
+.menuItemWithSeparator {
+  margin-top: 10.5px;
+  padding-top: 7.5px;
+  border-top: 1px solid $color-border-wallet;
+}
+
+.currencies {
+  display: flex;
+  gap: 28px;
+  margin-top: 10px;
+}
+
+.label {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: $color-label;
+}
+
+.value {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-wallet;
+}

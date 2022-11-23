@@ -1,0 +1,39 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 21px;
+  width: 100%;
+}
+
+.disc {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125px;
+  height: 125px;
+  border: 1px solid $color-border-disc;
+  border-radius: 50%;
+  background: radial-gradient(transparent 6px, $color-border-disc 7px, $color-bg 8px);
+}
+
+.discFilled {
+  width: 129px;
+  height: 129px;
+  border-color: $color-bg;
+  background: radial-gradient(transparent 8px, $color-bg 9px);
+}
+
+.discBurn {
+  &::after {
+    content: '';
+    position: absolute;
+    width: 182px;
+    height: 1px;
+    background-color: $color-border-disc;
+    transform: rotate(-45deg);
+  }
+}

@@ -1,0 +1,70 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  margin: 0;
+  padding: 0;
+
+  &:nth-child(2) a:hover::after {
+    background-color: $color-blue;
+  }
+
+  &:nth-child(4) a:hover::after {
+    background-color: $color-green;
+  }
+}
+
+.link {
+  position: relative;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.05em;
+  color: $color-secondary-additional;
+  text-decoration: none;
+  transition: color ease-out 0.2s;
+
+  &:hover {
+    color: $color-main-additional;
+  }
+}
+
+.linkCurrent {
+  color: $color-main-additional;
+  font-weight: 600;
+
+  &:hover::after {
+    display: none;
+  }
+}
+
+.linkSoon:hover {
+  color: $color-secondary-additional;
+
+  &::after {
+    content: 'Soon';
+    position: absolute;
+    top: calc(-4px);
+    left: calc(100% - 12px);
+    padding: 2px 8px;
+    font-family: $font-main;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    display: flex;
+    align-items: flex-end;
+    color: $color-main-invert;
+    background-color: $color-pink;
+    border-radius: 2px;
+    transform: rotate(15deg);
+    z-index: 1;
+  }
+}

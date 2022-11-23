@@ -1,0 +1,18 @@
+@keyframes rotate {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.root {
+  display: inline-block;
+}
+
+.imageWrapper {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  animation: rotate 1s linear infinite;
+}

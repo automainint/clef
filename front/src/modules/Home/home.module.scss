@@ -1,0 +1,56 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: grid;
+  grid-template-columns: 600px 300px;
+}
+
+.content {
+  padding: 50px 0;
+}
+
+.title {
+  max-width: 326px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 75.488px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.cards {
+  margin-top: 25px;
+}
+
+.card {
+  margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.sideBar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 205px 36px 28px 28px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.subtitle {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.button {
+  margin-top: 8px;
+}

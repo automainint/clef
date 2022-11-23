@@ -1,0 +1,54 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  min-height: 140px;
+  background: $color-bg-card;
+  border-radius: 90px;
+}
+
+.melody {
+  flex-grow: 1;
+  display: flex;
+  padding: 0 16px;
+}
+
+.disc {
+  align-self: center;
+  width: 92px;
+  height: 92px;
+}
+
+.innerControls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px 18px;
+}
+
+.title {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-card;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 42px 93px;
+  gap: 8px;
+  max-height: 42px;
+}
+
+.button {
+  min-width: 42px;
+  height: 42px;
+}
+
+.outerControls {
+  align-self: center;
+  padding: 0 28px;
+}

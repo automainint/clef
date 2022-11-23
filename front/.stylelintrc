@@ -1,0 +1,31 @@
+{
+  "plugins": [
+    "stylelint-prettier"
+  ],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines",
+    "stylelint-prettier/recommended"
+  ],
+  "rules": {
+    "order/order": [
+      "custom-properties",
+      "declarations"
+    ],
+    "order/properties-order": [
+      "width",
+      "height"
+    ],
+    "order/properties-alphabetical-order": null,
+    "scss/at-mixin-pattern": null,
+    "scss/dollar-variable-pattern": null,
+    "scss/at-import-partial-extension-blacklist": null,
+    "function-parentheses-space-inside": null,
+    "max-nesting-depth": null,
+    "selector-max-compound-selectors": null,
+    "selector-class-pattern": null,
+    "no-descending-specificity": null,
+    "selector-max-id": 1,
+    "selector-id-pattern": null
+  }
+}

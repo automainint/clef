@@ -1,0 +1,44 @@
+@import 'shared/scss/variables.scss';
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 2px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-button-back;
+  stroke: $color-button-back;
+  border: 0;
+  background-color: $color-bg;
+  transition: color ease-out 0.2s, stroke ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-button-text;
+    stroke: $color-button-text;
+  }
+}
+
+.title {
+  margin-top: 2px;
+  padding: 0 18px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29.4109px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.discsChains {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}

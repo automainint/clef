@@ -1,0 +1,185 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  max-width: 600px;
+  background-color: $color-bg;
+}
+
+.message {
+  display: flex;
+  padding: 24px;
+  background: $color-bg-card;
+}
+
+.messageIcon {
+  padding: 2px 1px;
+  width: 30px;
+  height: 30px;
+}
+
+.messageText {
+  margin-left: 20px;
+}
+
+.messageTitle {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.messageDesc {
+  margin-top: 6px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.05em;
+  color: $color-desc-additional;
+}
+
+.header {
+  display: flex;
+  gap: 18px;
+  min-height: 166px;
+  padding: 26px 30px 28px;
+  background: $color-bg-card;
+}
+
+.disc {
+  width: 112px;
+  height: 112px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-height: 112px;
+}
+
+.desc {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.05em;
+  color: $color-details-additional;
+}
+
+.title {
+  flex-grow: 1;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 30px;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.button {
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.buttonSizeMiddle {
+  width: 51px;
+}
+
+.passport {
+  padding: 20px 30px 32px;
+}
+
+.details {
+  display: flex;
+  gap: 28px;
+}
+
+.detailsItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.detailsValue {
+  margin-top: 8px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.05em;
+  color: $color-main-middle;
+}
+
+.subtitle {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.05em;
+  color: $color-details-additional;
+}
+
+.idSection {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px 0;
+  border-top: 1px solid $color-border-separator;
+  border-bottom: 1px solid $color-border-separator;
+}
+
+.idLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  color: $color-main-middle;
+  stroke: $color-main-middle;
+  transition: color ease-out 0.2s, stroke ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-main;
+    stroke: $color-main;
+  }
+}
+
+.chordsSection {
+  margin-top: 12px;
+}
+
+.chords {
+  margin-top: 20px;
+}
+
+.instrumentsSection {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid $color-border-separator;
+}
+
+.instruments {
+  margin-top: 20px;
+}

@@ -955,6 +955,10 @@ describe('back fake', async function () {
   });
 
   it('get airdrop info and claim', async function () {
+    await user.mint_resources([
+      { quantity: 1, type: types.song, label: 'song', id: 'TEST_000' }
+    ]);
+
     let info = await user.get_airdrop_info('test');
 
     assert.equal((typeof info.airdrop_exists),    'boolean');
@@ -962,6 +966,9 @@ describe('back fake', async function () {
     assert.equal((typeof info.allowed_claims),    'number');
     assert.equal((typeof info.songs_total),       'number');
 
-    await user.airdrop_claim('test');
+    let ids = await user.airdrop_claim('test');
+
+    assert.equal(ids.length, 1);
+    assert.equal((typeof ids[0]), 'string');
   });
 });

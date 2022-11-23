@@ -9,7 +9,9 @@ const DAPP = address(env.SEED);
     };
 
     const list = [
-      '3PMCF2VLr5BqtZdDDRoCV3DovXN6imeqVb5'
+      /*
+      '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe'
+      */
     ];
 
     for (const x of list) {
@@ -33,4 +35,3 @@ const DAPP = address(env.SEED);
     console.error(error);
   }
 })();
- 

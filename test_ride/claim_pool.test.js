@@ -109,4 +109,78 @@ describe('Claim Pool', async function () {
     expect(balance).to.equal(1);
     expect(allowed_1).to.equal(0);
   });
+
+  
+  it('Put 2 NFTs', async function () {
+    const pool  = address(accounts.pool);
+    const foo   = address(accounts.foo);
+    const bar   = address(accounts.bar);
+
+    const tx_whitelist = invokeScript(
+      { dApp: pool,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.pool);
+
+    await broadcast(tx_whitelist);
+    await waitForTx(tx_whitelist.id);
+
+    const tx_issue_0 = issue(
+      { name:         'Some NFT',
+        description:  'Some NFT',
+        quantity:     1,
+        decimals:     0,
+        reissuable:   false },
+      accounts.foo);
+
+    await broadcast(tx_issue_0);
+    await waitForTx(tx_issue_0.id);
+
+    const tx_issue_1 = issue(
+      { name:         'Some NFT',
+        description:  'Some NFT',
+        quantity:     1,
+        decimals:     0,
+        reissuable:   false },
+      accounts.foo);
+
+    await broadcast(tx_issue_1);
+    await waitForTx(tx_issue_1.id);
+
+    const tx_put = invokeScript(
+      { dApp: pool,
+        call: {
+          function: 'put_assets',
+          args: [
+            { type: 'string', value: 'testairdropname' }
+          ]
+        },
+        payment: [
+          { assetId: tx_issue_0.id, amount: 1 },
+          { assetId: tx_issue_1.id, amount: 1 }
+        ]
+      },
+      accounts.foo);
+
+    await broadcast(tx_put);
+    await waitForTx(tx_put.id);
+
+    let get_data = async (key) => {
+      try {
+        const x = await accountDataByKey(key, pool);
+        return x.value;
+      } catch (error) {
+      }
+      return 0;
+    };
+
+    const begin = await get_data('testairdropname_begin');
+    const end   = await get_data('testairdropname_end');
+
+    expect(end - begin).to.equal(2);
+  });
 });

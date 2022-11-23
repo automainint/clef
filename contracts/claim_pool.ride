@@ -11,28 +11,21 @@ func check_whitelist(caller: Address) = {
   }
 }
 
-func fold_put_assets(accum: (List[IntegerEntry|StringEntry], String, List[AttachedPayment]), index: Int) = {
-  let (list, airdrop, payments) = accum
+func fold_put_assets(accum: (List[IntegerEntry], String, Int, List[AttachedPayment]), index: Int) = {
+  let (list, airdrop, end, payments) = accum
 
   if index >= size(payments) then
     accum
   else if payments[index].amount != 1 then
     throw("Wrong payment " + (index + 1).toString() + " amount")
   else {
-    let key = airdrop + "_end"
-
-    let end = match getInteger(key) {
-      case j: Int => j
-      case _      => 0
-    }
-
     let id = payments[index].assetId.value().toBase58String()
 
     ( list ++ [
-        IntegerEntry(key, end + 1),
-        StringEntry(airdrop + "_X_" + end.toBytes().toBase58String(), id)
+        StringEntry(airdrop + "_X_" + (end + index).toBytes().toBase58String(), id)
       ],
       airdrop,
+      end,
       payments )
   }
 }
@@ -105,9 +98,17 @@ func put_assets(airdrop: String) = {
   else if i.payments.size() > 20 then
     throw("To many assets")
   else {
-    let (list, airdrop_, payments_) = FOLD<20>(indices_20, ([], airdrop, i.payments), fold_put_assets)
+    let k_end = airdrop + "_end"
 
-    ( list,
+    let end = match getInteger(k_end) {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let (list, airdrop_, end_, payments_) = FOLD<20>(indices_20, ([], airdrop, end, i.payments), fold_put_assets)
+
+    ( [ IntegerEntry(k_end, end + i.payments.size())
+      ] ++ list,
       unit )
   }
 }

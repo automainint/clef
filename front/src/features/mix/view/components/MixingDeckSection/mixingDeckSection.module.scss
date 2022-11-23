@@ -1,0 +1,18 @@
+@import 'shared/scss/variables.scss';
+
+.title {
+  padding: 0 18px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29.4109px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.mixingDeck {
+  width: 600px;
+  height: 300px;
+  margin-top: 16px;
+}

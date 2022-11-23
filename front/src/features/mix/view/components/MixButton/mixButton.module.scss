@@ -1,0 +1,19 @@
+@import 'shared/scss/variables.scss';
+
+.desc {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 0 3px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.03em;
+  color: $color-details;
+}
+
+.icon {
+  padding: 1.5px 0;
+}

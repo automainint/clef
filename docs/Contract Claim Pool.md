@@ -43,14 +43,14 @@ console.log(`User ${user_address} can claim ${allowed} assets.`);
 ##  Functions
 - `whitelist_add (account: String)` - Add account to whitelist. Whitelisted accounts can put assets into the pool and allow accounts to claim assets.
 - `whitelist_remove (account: String)` - Remove account from whitelist.
-- `put_asset (airdrop: String)` - Put an asset to the pool for specified airdrop.
+- `put_assets (airdrop: String)` - Put an asset to the pool for specified airdrop.
   - `airdrop` - airdrop name.
-  - Payments
-    - 1 asset to put.
-- `allow (airdrop: String, account: String, amount: Int)` - Allow account to claim assets from specified airdrop.
+  - Payment
+    - 1 to 10 assets.
+- `allow (airdrop: String, amount: Int, accounts: List[String])` - Allow accounts to claim assets from specified airdrop.
   - `airdrop` - airdrop name.
-  - `account` - base58 account address.
   - `amount` - how many assets specified account can claim.
+  - `accounts` - array of base58 account addresses.
 - `claim (airdrop: String, amount: Int)` - Claim assets from the specified airdrop.
   - `airdrop` - airdrop name.
   - `amount` - how many assets to claim; must be in range from 1 to 20.

@@ -14,10 +14,10 @@
       */
     ];
 
-    for (let i = 0; i < list.length; i += 20) {
+    for (let i = 0; i < list.length; i += 10) {
       let assets = [];
 
-      for (let j = i; j < i + 20 && j < list.length; j++) {
+      for (let j = i; j < i + 10 && j < list.length; j++) {
         assets.push({ assetId: list[j], amount: 1 });
       }
 
@@ -26,7 +26,7 @@
           call: {
             function: 'put_assets',
             args: [
-              { type: 'string', value: 'wct' }
+              { type: 'string', value: 'test' }
             ]
           },
           payment: assets

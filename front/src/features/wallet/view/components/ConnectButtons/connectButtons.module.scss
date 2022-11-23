@@ -1,0 +1,46 @@
+@import 'shared/scss/variables.scss';
+
+.button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: $color-bg;
+  border: 1px solid $color-border-wallet;
+  border-radius: 8px;
+  transition: border-color ease-out 0.2s;
+  cursor: pointer;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:hover {
+    border: 1px solid $color-button-text;
+  }
+}
+
+.buttonText {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  text-align: left;
+  color: $color-button-text;
+}
+
+.buttonDesc {
+  margin-top: 2px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.03em;
+  text-align: left;
+  color: $color-text;
+}

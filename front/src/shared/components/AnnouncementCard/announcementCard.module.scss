@@ -1,0 +1,57 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  padding: 20px;
+  color: $color-main;
+  border: 3px solid $color-border;
+  border-radius: 20px;
+}
+
+.blueGradient {
+  color: $color-main-invert;
+  background: $gradient-card;
+  border: 1px solid $color-border-button;
+}
+
+.title {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+}
+
+.titleIndented {
+  margin-top: 20px;
+}
+
+.text {
+  max-width: 378px;
+  margin-top: 8px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.03em;
+  color: $color-card-text;
+}
+
+.textInverted {
+  color: $color-main-invert;
+}
+
+.textIndented {
+  margin-top: 15px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.buttonsIndented {
+  margin-top: 35px;
+}

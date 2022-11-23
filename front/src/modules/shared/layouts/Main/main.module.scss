@@ -1,0 +1,29 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: grid;
+  grid-template-columns: 300px 900px;
+  min-width: $min-width;
+  max-width: $max-width;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.mainBar {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  top: 0;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.wallet {
+  padding: 16px;
+}
+
+.main {
+  width: 100%;
+}

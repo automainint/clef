@@ -1,0 +1,50 @@
+$mobile-min-width: 320px;
+$desktop-min-width: 1200px;
+
+$min-width: $mobile-min-width;
+$max-width: $desktop-min-width;
+
+$font-main: inter, arial, sans-serif;
+
+$color-main: #000;
+$color-main-additional: #040404;
+$color-main-invert: #fff;
+$color-main-middle: #818181;
+$color-secondary: #737373;
+$color-secondary-additional: #cbcbcb;
+$color-details: #a8a8a8;
+$color-details-additional: #bdbdbd;
+$color-card: #3f3f3f;
+$color-card-additional: #5a5a5a;
+$color-card-button: #696969;
+$color-card-text: #353535;
+$color-mark: #aaa;
+$color-wallet: #333;
+$color-controls-icon: #9a9a9a;
+$color-label: #bcbcbc;
+$color-pink: #ef5da8;
+$color-blue: #1d31fc;
+$color-green: #14ae5c;
+$color-button: #0d0d0d;
+$color-text: #b7b7b7;
+$color-button-text: #1f1e1e;
+$color-button-back: #bfbfbf;
+$color-desc: #929292;
+$color-desc-additional: #bababa;
+$color-deck-text: #404040;
+
+$color-bg: #fff;
+$color-bg-card: #f7f7f7;
+$color-bg-invert: #0e0e0e;
+
+$color-border: #e6e6e6;
+$color-border-additional: #efefef;
+$color-border-check: #b0b0b0;
+$color-border-wallet: #cecece;
+$color-border-button: #d3d3d3;
+$color-border-separator: #d9d9d9;
+$color-border-disc: #a4a4a4;
+$color-border-card: #c1c1c1;
+
+$gradient: linear-gradient(360deg, #292929 -119.14%, #000 -2.67%, #464646 101.96%);
+$gradient-card: linear-gradient(29.14deg, #1e5dff 16.92%, #a975ff 109.77%);

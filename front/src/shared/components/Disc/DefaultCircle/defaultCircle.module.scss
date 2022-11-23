@@ -1,0 +1,18 @@
+@keyframes drop {
+  from {
+    opacity: 0.25;
+    transform: scale(1.2);
+  }
+}
+
+.root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  opacity: 1;
+  transform: scale(1.05);
+  animation: drop ease-out 0.1s;
+}

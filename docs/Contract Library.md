@@ -1,5 +1,92 @@
 # `contracts/library.ride`
-
 Contract address
 - Mainnet: `3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe`
 - Testnet: `3N4XDqsd3iMrXb6kS7R7Wwd4azMsqUXMvfe`
+
+##  Data entries
+- `market_image_link` - URL to image for NFT marketplace.
+- `price_hybrid_token` - price token for mixing two songs without burning.
+- `price_hybrid_amount` - price amount for mixing two songs without burning.
+- `price_hybrid_increment` - price amount increment each 10 mixes.
+- `mint_count` - count for price amount increment.
+- `W_<Address>` - `true` if account _Address_ is in whitelist.
+- `count` - total number of created entities, including chords, arpeggios, rhythms and songs.
+- For each chord _Id_, where _Id_ is a base56 representation of the chord entity index:
+  - `<Id>_CL` - chord name.
+  - `<Id>_C0` - bass note.
+  - `<Id>_C1` - lead note.
+  - `<Id>_C2` - 1st note.
+  - `<Id>_C3` - 2nd note.
+  - `<Id>_C4` - 3rd note.
+- For each arpeggio _Id_, where _Id_ is a base56 representation of the apreggio entity index:
+  - `<Id>_AL` - arpeggio name.
+  - `<Id>_A00` .. `<Id>_A15` - notes' indices.
+- For each rhythm _Id_, where _Id_ is a base56 representation of the rhythm entity index:
+  - `<Id>_RL` - rhythm name.
+  - `<Id>_RS` - rhythm scale.
+  - `<Id>_R00` .. `<Id>_R15` - rhythm notes' durations. Every second duration is a pause.
+- For each song _Id_, where _Id_ is a base56 representation of the song entity index:
+  - `<Id>` - song NFT _Asset Id_.
+  - `<Id>_SL` - song name string.
+  - `<Id>_SN` - song name index. `0` if name index is not used.
+  - `<Id>_G` - song generation.
+  - `<Id>_SP0`, `<Id>_SP1` - song parent ids (base56 representation of the parent entity index).
+  - `<Id>_SB0` - song BPM.
+  - `<Id>_SB1` - song bar size.
+  - `<Id>_SB2` - song beat size.
+  - `<Id>_ST` - song tonality key.
+  - `<Id>_SC0` .. `<Id>_SC7` - song chords' ids (base56 representation of the chord entity index).
+  - `<Id>_SA` - song arpeggio id (base56 representation of the arpeggio entity index).
+  - `<Id>_SI0` .. `<Id>_SI5` - song instruments' sample names.
+  - For each instrument `*` from `0` to `5` (kick, snare, hihat, bass, back, lead):
+    - `<Id>_SI*0` .. `<Id>_SI*7` - instrument track 8-bar long rhythm sequence (base56 representation of the rhythm entity index).
+
+- For each song NFT _Asset Id_:
+  - `<Asset Id>` - a base56 representation of the song entity index.
+
+##  Functions
+- Contract owner functions
+  - `whitelist_add (account: String)` - Add account to whitelist.
+  - `whitelist_remove (account: String)` - Remove account from whitelist.
+- Whitelisted account functions
+  - `set_market_image (url: String)`
+  - `set_price_hybrid (token: String, amount: Int, increment: Int)`
+  - `burn_internal (asset_id: String)` - burn one NFT owned by the contract.
+    - `asset_id` - asset to burn.
+  - `burn ()` - burn one NFT.
+    - Payment
+      - 1 asset to burn
+  - Minting
+    - `mint_chord (index: Int, name: String, notes: List[Int])` - mint one chord.
+    - `mint_arpeggio (index: Int, name: String, notes: List[Int])` - mint one arpeggio.
+    - `mint_rhythm (index: Int, name: String, scale: Int, notes: List[Int])` - mint one rhythm.
+    - `mint_song ( ... )` - mint one song.
+      - Arguments
+        - `name: String` - song name.
+        - `parent_0: String` - first parent.
+        - `parent_1: String` - second parent.
+        - `bpm: Int` - song BPM.
+        - `bar_size: Int` - song bar size.
+        - `beat_size: Int` - song beat size.
+        - `tonality: Int` - song tonality key.
+        - `chords: List[String]` - sequence of 8 chords.
+        - `arpeggio: String` - arpeggio.
+        - `kick_instrument: String` - kick sample name.
+        - `snare_instrument: String` - snare sample name.
+        - `hihat_instrument: String` - hihat sample name.
+        - `bass_instrument: String` - bass sample name.
+        - `back_instrument: String` - back sample name.
+        - `lead_instrument: String` - lead sample name.
+        - `kick_rhythms: List[String]` - sequence of 8 kick rhythms.
+        - `snare_rhythms: List[String]` - sequence of 8 snare rhythms.
+        - `hihat_rhythms: List[String]` - sequence of 8 hihat rhythms.
+        - `bass_rhythms: List[String]` - sequence of 8 bass rhythms.
+        - `back_rhythms: List[String]` - sequence of 8 back rhythms.
+        - `lead_rhythms: List[String]` - sequence of 8 lead rhythms.
+- User functions
+  - `mint_hybrid (song_0: String, song_1: String)` - mint hybrid of two songs.
+    - Payment
+      - `price_hybrid_amount` of `price_hybrid_token`. If the amount is higher, the change will be returned to the caller.
+  - `mint_hybrid_and_burn ()` - mint hybrid of two songs and burn the songs.
+    - Payment
+      - 2 assets.

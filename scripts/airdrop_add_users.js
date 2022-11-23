@@ -28,7 +28,7 @@ const DAPP = address(env.SEED);
           call: {
             function: 'allow',
             args: [
-              { type: 'string',   value: 'wct' },
+              { type: 'string',   value: 'test' },
               { type: 'integer',  value: 1 },
               { type: 'list',     value: accounts }
             ]

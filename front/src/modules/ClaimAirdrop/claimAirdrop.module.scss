@@ -1,0 +1,28 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: grid;
+  grid-template-columns: 600px 300px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 60px 0;
+}
+
+.title {
+  padding: 0 18px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29.4109px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main;
+}
+
+.preloader {
+  padding: 0 18px;
+}

@@ -1,0 +1,72 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 256px;
+  max-width: 600px;
+  height: 100%;
+  min-height: 128px;
+  max-height: 296px;
+  background: $color-bg-card;
+  border-radius: 24px;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    height: 100%;
+    background-color: $color-border;
+  }
+}
+
+.small {
+  border-radius: 12px;
+}
+
+.slot {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-width: 108px;
+  height: 100%;
+  min-height: 108px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 84.67%;
+    height: 85.81%;
+    border: 18px solid $color-border-additional;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 12.67%;
+    height: 12.84%;
+    border-radius: 50%;
+    background-color: $color-bg-card;
+    z-index: 2;
+  }
+}
+
+.slotSmall {
+  width: min-content;
+  padding: 13px;
+
+  &::before {
+    border-width: 8px;
+  }
+}

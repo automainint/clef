@@ -1,0 +1,35 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  padding: 0 20px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20.1315px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-secondary;
+}
+
+.melodies {
+  margin: 0;
+  margin-top: 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.melodyCard {
+  margin: 0;
+  margin-top: 16px;
+  padding: 0 4px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}

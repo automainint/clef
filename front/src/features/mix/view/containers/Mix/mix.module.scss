@@ -1,0 +1,42 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: grid;
+  grid-template-columns: 600px 300px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 75px 0;
+}
+
+.contentAdditional {
+  padding: 53px 0;
+}
+
+.sideBar {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  top: 0;
+  height: 100vh;
+  padding: 120px 19px 28px 26px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.preloader {
+  padding: 12px 20px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: $color-details;
+}

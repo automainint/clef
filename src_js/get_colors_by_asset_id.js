@@ -52,9 +52,9 @@ let cache = {};
 
 /*  Fetch song chords and cache the response.
  */
-async function fetch_song_chords(id) {
-  if (!(id in cache)) {
-    cache[id] = fetch_values([
+async function fetch_song_chords(song_id) {
+  if (!(song_id in cache)) {
+    cache[song_id] = fetch_values([
       `${song_id}_SC0`,
       `${song_id}_SC1`,
       `${song_id}_SC2`,
@@ -66,14 +66,14 @@ async function fetch_song_chords(id) {
     ]);
   }
 
-  return await cache[id];
+  return await cache[song_id];
 }
 
 /*  Fetch chord notes and cache the response.
  */
-async function fetch_chord_notes(id) {
-  if (!(id in cache)) {
-    cache[id] = fetch_values([
+async function fetch_chord_notes(chord_id) {
+  if (!(chord_id in cache)) {
+    cache[chord_id] = fetch_values([
       `${chord_id}_C0`,
       `${chord_id}_C1`,
       `${chord_id}_C2`,
@@ -82,7 +82,7 @@ async function fetch_chord_notes(id) {
     ]);
   }
 
-  const notes_raw = await cache[id];
+  const notes_raw = await cache[chord_id];
   let   notes     = [];
 
   for (const x of notes_raw) {
