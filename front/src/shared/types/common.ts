@@ -31,3 +31,8 @@ export type ContainerTypes = {
   ObserveDNAButton: SongContainers['ObserveDNAButton'];
   Disc: SongContainers['Disc'];
 };
+
+export type NotificationStatus = {
+  status: 'success' | 'error';
+  text: string;
+};

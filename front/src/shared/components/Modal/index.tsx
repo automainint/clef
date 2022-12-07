@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
+import { Portal } from '../Portal';
 import styles from './modal.module.scss';
 
 type Props = {
@@ -37,28 +38,30 @@ const Modal: FC<PropsWithChildren<Props>> = ({
   return (
     <>
       {isOpen && (
-        <div className={styles.root} onClick={onClose} onKeyDown={() => {}} tabIndex={-1} role="button">
-          <div className={styles.wrapper}>
-            <div
-              className={styles.modal}
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={() => {}}
-              tabIndex={-1}
-              role="button"
-            >
-              {!withoutCloseButton && (
-                <input
-                  ref={closeRef}
-                  className={styles.cross}
-                  type="button"
-                  onClick={onClose}
-                  onBlur={(e) => e.currentTarget.focus()}
-                />
-              )}
-              {children}
+        <Portal>
+          <div className={styles.root} onClick={onClose} onKeyDown={() => {}} tabIndex={-1} role="button">
+            <div className={styles.wrapper}>
+              <div
+                className={styles.modal}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={() => {}}
+                tabIndex={-1}
+                role="button"
+              >
+                {!withoutCloseButton && (
+                  <input
+                    ref={closeRef}
+                    className={styles.cross}
+                    type="button"
+                    onClick={onClose}
+                    onBlur={(e) => e.currentTarget.focus()}
+                  />
+                )}
+                {children}
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
     </>
   );

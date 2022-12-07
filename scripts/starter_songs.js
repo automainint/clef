@@ -1,8 +1,4 @@
-const DAPP          = address(env.SEED);
-const USDN_QUANTITY = 100000000000;
-const HYBRID_PRICE  = 1000;
-
-const wvs = 10 ** 8;
+const DAPP = address(env.SEED);
 
 (async () => {
   try {
@@ -141,7 +137,7 @@ const wvs = 10 ** 8;
     const arpeggio_2  = '1111111T';
     const arpeggio_3  = '1111111U';
 
-    const rhythm_silent                = '11111119p';
+    const rhythm_silent                = '1111119p';
     const rhythm_fast                  = '1111111V';
     const rhythm_steady                = '1111111W';
     const rhythm_slow                  = '1111111X';
@@ -178,9 +174,10 @@ const wvs = 10 ** 8;
 
     /*  Moon Node, On-chain Romance, Puzzle Me, Made In WX, Clef In the Sky */
 
-    let count = 5;
+    let count = 10;
 
     for (let i = 0; i < count; i++) {
+      /*
       await make_song('Puzzle Me', 115, -2,
           [ chord_C, chord_C, chord_Am, chord_Am, chord_C, chord_C, chord_G, chord_G ],
           arpeggio_2,
@@ -231,8 +228,9 @@ const wvs = 10 ** 8;
           rhythm_long_1st_half,
           rhythm_long_2nd_half_fast
         );
+      */
 
-      /*await make_song('Bearish Silence', 125, -4,
+      await make_song('Bearish Silence', 125, -4,
           [ chord_C, chord_C, chord_G, chord_G, chord_F, chord_F, chord_G, chord_G ],
           arpeggio_0,
           rhythm_silent,
@@ -371,7 +369,7 @@ const wvs = 10 ** 8;
           rhythm_sync_lead,
           rhythm_long_1st_half,
           rhythm_steady
-        );*/
+        );
 
       console.log(`      ${i+1} of ${count}`);
     }

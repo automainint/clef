@@ -1,11 +1,12 @@
-import html2canvas from 'html2canvas';
+import dynamic from 'next/dynamic';
 import { observer } from 'mobx-react-lite';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-import { Disc as DiscComponent } from 'shared/components';
-import { isErrorWithMessage, Song } from 'shared/types';
-import { getSongColors, getSongID } from 'shared/utils';
+import { Song } from 'shared/types';
+import { getSongAssetID, getSongColors, getSongID } from 'shared/utils';
 import { useStore } from 'store/createStore';
+
+const ClefDisc = dynamic(() => import('./ClefDisc'), { ssr: false });
 
 type Props = {
   song: Song;
@@ -15,23 +16,8 @@ type Props = {
 const Disc: FC<Props> = observer(({ song, isSaveImage = false }) => {
   const { turntable, saveDiscImage } = useStore().song;
   const [isPlay, setIsPlay] = useState(false);
-  const discContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleRendered = async () => {
-    if (!isSaveImage || discContainerRef.current === null) return;
-    try {
-      const canvas = await html2canvas(discContainerRef.current, { backgroundColor: 'rgba(0, 0, 0, 0)' });
-      saveDiscImage(canvas.toDataURL('image/png', 0.9));
-    } catch (error) {
-      if (isErrorWithMessage(error)) {
-        // eslint-disable-next-line no-console
-        console.log(`Error: ${error.message}`);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(`Unknown render image error: ${JSON.stringify(error)}`);
-      }
-    }
-  };
+  const handleImageReady = (image: string) => saveDiscImage(image);
 
   useEffect(() => {
     setIsPlay(
@@ -40,7 +26,13 @@ const Disc: FC<Props> = observer(({ song, isSaveImage = false }) => {
   }, [turntable, song]);
 
   return (
-    <DiscComponent ref={discContainerRef} isAnimate={isPlay} colors={getSongColors(song)} onRendered={handleRendered} />
+    <ClefDisc
+      assetID={getSongAssetID(song)}
+      colors={getSongColors(song)}
+      isAnimate={isPlay}
+      onImageReady={isSaveImage ? handleImageReady : undefined}
+      borderColor="#efefef"
+    />
   );
 });
 

@@ -1,6 +1,6 @@
 const DAPP              = address(env.SEED);
 const USDN_QUANTITY     = 100000000000;
-const HYBRID_PRICE      = 10000000;
+const HYBRID_PRICE      = 30000000;
 const HYBRID_PRICE_INC  = 1000000;
 const MARKET_IMAGE_URL  = 'https://clef.one/sign.svg';
 
@@ -22,19 +22,13 @@ const wvs = 10 ** 8;
       /*  Create dummy market contract for testing.
        */
       console.log(`Master address: ${DAPP}`);
-      await setupAccounts({ market: 1 * wvs });
-
-      console.log('    ` Set dummy market script');
-      await compile_and_broadcast(
-        accounts.market,
-        file('market_dummy.ride'));
 
       console.log('    ` Set Clef library script');
       await compile_and_broadcast(
         env.SEED,
         file('library.ride').replace(
           '3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By',
-          address(accounts.market)));
+          '3NCbmjGV7YHKdkHEfWkfGhmZyXsJbymQ5Z5'));
 
     } else {
       console.log('    ` Set Clef library script');
@@ -45,11 +39,14 @@ const wvs = 10 ** 8;
 
     /*  USDN asset ID
      */
-    let usdn = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
+    let usdn            = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
+    let free_mix_token  = '3Luy24HNZY5RLKaJ8sc6jmER7QD8v1r7HBjQKX54skf1';
 
     if (env.CHAIN_ID === 'R' || env.CHAIN_ID === 'T') {
       /*  Use fake USDN token for testing.
        */
+
+      usdn = '23tToJpqbtaCajckMY52add5QwgwpAK7nEAsX4ffHs8C';
 
       /*console.log('    ` Issue fake USDN');
       const tx_usdn = issue(
@@ -67,7 +64,7 @@ const wvs = 10 ** 8;
       console.log(`    * Fake USDN asset id: ${usdn}`);*/
     }
 
-    /*console.log('    ` Set price hybrid');
+    console.log('    ` Set price hybrid');
     const tx_set_price = invokeScript(
       { dApp: DAPP,
         call: {
@@ -80,7 +77,20 @@ const wvs = 10 ** 8;
         } },
       env.SEED);
     await broadcast(tx_set_price);
-    await waitForTx(tx_set_price.id);*/
+    await waitForTx(tx_set_price.id);
+
+    console.log('    ` Set free mix token');
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: DAPP,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: free_mix_token }
+          ]
+        } },
+      env.SEED);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     /*console.log('    ` Set market image');
     const tx_set_image = invokeScript(

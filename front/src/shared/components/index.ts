@@ -16,10 +16,13 @@ export {
   ArrowRight,
   Note,
   Share,
+  Copy,
+  Twitter,
+  Telegram,
+  Download,
 } from './svg';
 export { MainBar } from './MainBar';
 export { MixingDeck } from './MixingDeck';
-export { Disc } from './Disc';
 export { Button } from './Button';
 export { MelodyCard } from './MelodyCard';
 export { Check } from './Check';
@@ -35,3 +38,8 @@ export { MessageCard } from './MessageCard';
 export { DiscsChain } from './DiscsChain';
 export { DiscsChainCard } from './DiscsChainCard';
 export { AnnouncementCard } from './AnnouncementCard';
+export { List } from './List';
+export { ListButton } from './ListButton';
+export { Notification } from './Notification';
+export { PopperButton } from './PopperButton';
+export { Portal } from './Portal';

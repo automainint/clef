@@ -393,6 +393,14 @@ async function get_resource_by_asset_id(asset_id) {
   return null;
 }
 
+function get_song_rarity_by_asset_id(asset_id) {
+  return new Promise((resolve, reject_) => {
+    setTimeout(() => {
+      resolve(54);
+    }, 2000);
+  });
+}
+
 class clearance_handler {
   constructor(id_) {
     this.id             = id_;
@@ -445,6 +453,14 @@ class clearance_handler {
       return;
 
     return account.balance;
+  }
+
+  async get_free_mix_balance() {
+    let account = find_account(this.id);
+    if (!account)
+      return;
+
+    return account.free_mix_balance;
   }
 
   async get_resources(options) {
@@ -593,6 +609,42 @@ class clearance_handler {
     return hybrid.id;
   }
 
+  async mint_hybrid_with_free_mix_token(songs) {
+    let ids = [];
+    for (const song of songs)
+      ids.push(song.id);
+
+    let account = find_account(this.id);
+    if (!account)
+      throw new Error('No account');
+
+    if (ids.length !== 2)
+      throw new Error('Invalid resources');
+    if (ids[0] === ids[1])
+      throw new Error('Invalid resources');
+    if (account.free_mix_balance < 1)
+      throw new Error('Not enough balance');
+
+    const song1 = find_resource(account.resources, types.song, [ ids[0] ], () => {});
+    const song2 = find_resource(account.resources, types.song, [ ids[1] ], () => {});
+
+    if (song1 === null || song2 === null)
+      throw new Error('Invalid resources');
+
+    /*  Imitate backend response delay.
+     */
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
+
+    const hybrid = mint_hybrid_internal(song1, song2);
+
+    account.resources.push(hybrid);
+    account.free_mix_balance -= 1;
+
+    return hybrid.id;
+  }
+
   async mint_hybrid_and_burn(songs) {
     let ids = [];
     for (const song of songs)
@@ -629,19 +681,19 @@ class clearance_handler {
     return hybrid.id;
   }
 
+  async can_mint_hybrid() {
+    let balance = await this.get_balance();
+    let price   = await this.get_price(types.hybrid);
+
+    return balance >= price;
+  }
+
   async get_wallet_address() {
     return 'f00ba7f00ba7f00ba7f00ba7';
   }
 
   async get_explorer_url() {
     return 'https://wavesexplorer.com/';
-  }
-
-  async can_mint_hybrid() {
-    let balance = await this.get_balance();
-    let price   = await this.get_price(types.hybrid);
-
-    return balance >= price;
   }
 
   async get_airdrop_info(airdrop_name) {
@@ -684,9 +736,10 @@ class clearance_handler {
 
 function new_account() {
   return {
-    id:         _id(),
-    balance:    0,
-    resources:  []
+    id:               _id(),
+    balance:          0,
+    free_mix_balance: 2,
+    resources:        []
   };
 }
 
@@ -702,9 +755,10 @@ async function authenticate(options) {
 }
 
 module.exports = {
-  env:                      env,
-  types:                    types,
-  authenticate:             authenticate,
-  get_resource_by_id:       get_resource_by_id,
-  get_resource_by_asset_id: get_resource_by_asset_id
+  env:                          env,
+  types:                        types,
+  authenticate:                 authenticate,
+  get_resource_by_id:           get_resource_by_id,
+  get_resource_by_asset_id:     get_resource_by_asset_id,
+  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id
 };

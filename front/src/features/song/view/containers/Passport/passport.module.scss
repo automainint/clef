@@ -1,7 +1,9 @@
 .preloader {
   display: flex;
   justify-content: center;
+  min-width: 300px;
   width: 100%;
+  min-height: 50px;
   height: 100%;
   padding: 26px;
 }

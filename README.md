@@ -62,20 +62,19 @@ const {
   });
   console.log('Playback stopped.');
   ```
-- `stop(Tone)` _async_ - stop audio playback.
-  - `Tone` argument - Tone.js interface.
+- `stop()` _async_ - stop audio playback.
   ```js
-  const Tone = require('tone');
-  await stop(Tone);
+  await stop();
   ```
 
 Default network settings:
 ```js
 const options = {
-  fetch:    window.fetch,                         // fetch function
-  clef_url: 'https://clef.one/',                  // for audio samples
-  node_url: 'https://nodes.wavesnodes.com/',      // waves blockchain node
-  library:  '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe' // clef library contract address
+  fetch:          window.fetch,                         // fetch function
+  clef_url:       'https://clef.one/',                  // for audio samples
+  clef_cache_url: 'https://cache.clef.one/',            // for cached data
+  node_url:       'https://nodes.wavesnodes.com/',      // waves blockchain node
+  library:        '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe' // clef library contract address
 };
 ```
 
@@ -151,6 +150,7 @@ const { env,
       ```
   - `logout()` _async_ - sign out.
   - `get_balance()` _async_ - returns a number, user balance.
+  - `get_free_mix_balance()` _async_ - returns an integer number, user free mix token balance.
   - `get_resources(options)` _async_ - returns an array of user resources.
     - Each resource contains at least those fields:
       - `id` - string, unique resource id.
@@ -188,6 +188,13 @@ const { env,
     await user.mint_hybrid([ songs[0], songs[1] ]);
     ```
 
+  - `mint_hybrid_with_free_mix_token(songs)` _async_ - mint a new song from two other songs. Pay with free mix token.
+    - `songs` argument is an array of 2 songs. Each song should have a field `id`.
+    ```js
+    let songs = await user.get_resources({ filter: types.song });
+    await user.mint_hybrid_with_free_mix_token([ songs[0], songs[1] ]);
+    ```
+
   - `mint_hybrid_and_purge(songs)` _async_ - mint a new song from two other songs and purge those songs.
     - `songs` argument is an array of 2 songs. Each song should have a field `id`.
     ```js
@@ -211,8 +218,7 @@ const { env,
 
   - `get_explorer_url()` _async_ - get explorer URL for user wallet. Returns a URL string.
 
-  - `can_mint_hybrid()` _async_ - returns `true` if the user has enough balance to mint a hybrid; or `false` otherwise.
-    Will check for both transaction `fee` and `payment`.
+  - `can_mint_hybrid()` _async_ - returns `true` if the user has enough balance to mint a hybrid; or `false` otherwise. Will check for both transaction `fee` and `payment`.
 
   - `get_airdrop_info(name)` _async_ - returns an object with fields `airdrop_exists`, `user_in_whitelist`, `allowed_claims` and `songs_total`.
     - `name` argument is a string, airdrop name.

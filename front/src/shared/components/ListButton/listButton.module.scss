@@ -1,0 +1,37 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 12px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  color: $color-list-text;
+  background-color: $color-bg;
+  border: 0;
+  transition: background-color ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-list-hover;
+  }
+
+  &:disabled {
+    color: $color-main-middle;
+    background-color: $color-list-hover;
+    cursor: default;
+  }
+}
+
+.preloader {
+  display: flex;
+  width: 16px;
+  height: 16px;
+}

@@ -1,18 +1,18 @@
 import { FC, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
 
 import { Button, Dna, Modal } from 'shared/components';
+import { Song } from 'shared/types';
 
 import { Passport } from '../Passport';
 
 type Props = {
-  id: string;
+  assetID: string;
+  song?: Song;
   isNew?: boolean;
   onClose?: () => void;
 };
 
-const ObserveDNAButton: FC<Props> = ({ id, isNew = false, onClose }) => {
-  const [modalContainer] = useState(() => document.createElement('div'));
+const ObserveDNAButton: FC<Props> = ({ assetID, song = undefined, isNew = false, onClose }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => {
@@ -26,13 +26,6 @@ const ObserveDNAButton: FC<Props> = ({ id, isNew = false, onClose }) => {
   };
 
   useEffect(() => {
-    document.body.appendChild(modalContainer);
-    return () => {
-      document.body.removeChild(modalContainer);
-    };
-  }, [modalContainer]);
-
-  useEffect(() => {
     if (!isNew) return;
     setShowModal(true);
   }, [isNew]);
@@ -42,12 +35,9 @@ const ObserveDNAButton: FC<Props> = ({ id, isNew = false, onClose }) => {
       <Button size="small" onClick={handleDnaClick}>
         <Dna /> Observe DNA
       </Button>
-      {ReactDOM.createPortal(
-        <Modal isOpen={showModal} onClose={handleModalClose} isManualClosing>
-          <Passport id={id} isNew={isNew} />
-        </Modal>,
-        modalContainer
-      )}
+      <Modal isOpen={showModal} onClose={handleModalClose} isManualClosing>
+        <Passport assetID={assetID} song={song} isNew={isNew} />
+      </Modal>
     </>
   );
 };

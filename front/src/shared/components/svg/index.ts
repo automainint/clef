@@ -14,3 +14,8 @@ export { Plus } from './Plus';
 export { ArrowRight } from './ArrowRight';
 export { Note } from './Note';
 export { Share } from './Share';
+export { Copy } from './Copy';
+export { Twitter } from './Twitter';
+export { Telegram } from './Telegram';
+export { Download } from './Download';
+export { Success } from './Success';

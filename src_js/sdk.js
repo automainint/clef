@@ -450,9 +450,16 @@ const VOL_MAX     = 0;
 
 /*  Network settings.
  */
-const CLEF_URL  = 'https://clef.one/';
-const NODE_URL  = 'https://nodes.wavesnodes.com/';
-const LIBRARY   = '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe';
+const CLEF_URL        = 'https://clef.one/';
+const CLEF_CACHE_URL  = 'https://cache.clef.one/';
+const NODE_URL        = 'https://nodes.wavesnodes.com/';
+const LIBRARY         = '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe';
+
+const FETCH_CONCURRENCY = 4;
+
+const FETCH_TIMEOUT_429 = 100;
+const FETCH_TIMEOUT_503 = 500;
+const FETCH_TIMEOUT_400 = 1000;
 
 /*  Note skip value.
  */
@@ -466,8 +473,26 @@ const NOTE_SKIP = 65535;
  *
  */
 
-let cache_raw = {};
-let cache     = {};
+let fetch_mutex = (() => {
+  let v = [];
+
+  for (let i = 0; i < FETCH_CONCURRENCY; i++) {
+    v.push(Promise.resolve());
+  }
+
+  return v;
+})();
+
+let fetch_index = 0;
+
+let cache = {
+  chords:           {},
+  arpeggios:        {},
+  rhythms:          {},
+  songs_raw:        {},
+  songs:            {},
+  cached_metadata:  {}
+};
 
 let audio_data = {
   volume: VOL_MAX,
@@ -476,10 +501,12 @@ let audio_data = {
   id:     null
 };
 
+let audio_mutex = Promise.resolve();
+
 /*
  *
  *
- *    BLOCKCHAIN UTILITIES
+ *    NETWORKING UTILITIES
  *
  *
  */
@@ -490,50 +517,122 @@ function adjust_options(options) {
   let v = { ...options };
 
   if (!('fetch' in v))
-    v.fetch     = window.fetch;
+    v.fetch           = window.fetch;
+  if (!('log' in v))
+    v.log             = () => {};
   if (!('clef_url' in v))
-    v.clef_url  = CLEF_URL;
+    v.clef_url        = CLEF_URL;
+  if (!('clef_cache_url' in v))
+    v.clef_cache_url  = CLEF_CACHE_URL;
   if (!('node_url' in v))
-    v.node_url  = NODE_URL;
+    v.node_url        = NODE_URL;
   if (!('library' in v))
-    v.library   = LIBRARY;
+    v.library         = LIBRARY;
 
   return v;
 }
 
+/*  Synchronized fetch.
+ */
+function sync_fetch(fetch_upstream, request, opts) {
+  return new Promise((resolve, reject) => {
+    const index = fetch_index;
+    fetch_index = (fetch_index + 1) % fetch_mutex.length;
+
+    fetch_mutex[index] = fetch_mutex[index].then(async () => {
+      try {
+        resolve(await fetch_upstream(request, opts));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+async function fetch_json_request(fetch_, request, request_opts, log_) {
+  const response = await sync_fetch(fetch_, request, request_opts);
+
+  if (response.status != 200)
+    log_(`Error ${response.status}: ${request}`);
+
+  /*  Too many requests.
+   */
+  if (response.status == 429)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        fetch_json_request(fetch_, request, request_opts, log_)
+          .catch(reject)
+          .then(resolve);
+      }, FETCH_TIMEOUT_429);
+    });
+
+  /*  Service unavailable.
+   */
+  if (response.status == 503)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        fetch_json_request(fetch_, request, request_opts, log_)
+          .catch(reject)
+          .then(resolve);
+      }, FETCH_TIMEOUT_503);
+    });
+
+  /*  Bad request.
+   *  Waves node may return this when there is too many requests.
+   */
+  if (response.status == 400)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        fetch_json_request(fetch_, request, request_opts, log_)
+          .catch(reject)
+          .then(resolve);
+      }, FETCH_TIMEOUT_400);
+    });
+
+  if (response.status != 200)
+    throw new Error(`Fetch request ${request} failed with status ${response.status}`);
+
+  return await response.json();
+}
+
+/*
+ *
+ *
+ *    BLOCKCHAIN UTILITIES
+ *
+ *
+ */
+
 /*  Fetch one smart contract value from the blockchain.
  */
 async function fetch_value(key, options) {
-  const { fetch, node_url, library } = adjust_options(options);
+  const { fetch, node_url, library, log } = adjust_options(options);
 
-  const response = await fetch(
+  const data = await fetch_json_request(
+    fetch,
     `${node_url}addresses/data/${library}/${key}`,
-    { method:   'GET' });
+    { method: 'GET' },
+    log);
 
-  if (response.status != 200)
-    throw new Error('Fetch failed');
-
-  return (await response.json()).value;
+  return data.value;
 }
 
 /*  Fetch multiple smart contract values from the blockchain.
  */
 async function fetch_values(keys, options) {
-  const { fetch, node_url, library } = adjust_options(options);
+  const { fetch, node_url, library, log } = adjust_options(options);
 
-  const response = await fetch(
+  const data = await fetch_json_request(
+    fetch,
     `${node_url}addresses/data/${library}`,
     { method:   'POST',
       body:     JSON.stringify({ keys: keys }),
       headers: {
         'Content-Type': 'application/json'
-      }
-    });
-
-  if (response.status != 200)
-    throw new Error('Fetch failed');
-
-  const data = await response.json();
+      },
+      log
+    },
+    log);
 
   let values = [];
 
@@ -552,8 +651,8 @@ async function fetch_values(keys, options) {
 /*  Fetch chord data by id.
  */
 async function fetch_chord(id, options) {
-  if (!(id in cache)) {
-    cache[id] = (async () => {
+  if (!(id in cache.chords)) {
+    cache.chords[id] = (async () => {
       let keys = [];
 
       for (let i = 0; i < KEYS_RHYTHM.length; i++) {
@@ -579,14 +678,14 @@ async function fetch_chord(id, options) {
     })();
   }
 
-  return await cache[id];
+  return await cache.chords[id];
 }
 
 /*  Fetch arpeggio data by id.
  */
 async function fetch_arpeggio(id, options) {
-  if (!(id in cache)) {
-    cache[id] = (async () => {
+  if (!(id in cache.arpeggios)) {
+    cache.arpeggios[id] = (async () => {
       let keys = [];
 
       for (let i = 0; i < KEYS_ARPEGGIO.length; i++) {
@@ -608,14 +707,14 @@ async function fetch_arpeggio(id, options) {
     })();
   }
 
-  return await cache[id];
+  return await cache.arpeggios[id];
 }
 
 /*  Fetch rhythm data by id.
  */
 async function fetch_rhythm(id, options) {
-  if (!(id in cache)) {
-    cache[id] = (async () => {
+  if (!(id in cache.rhythms)) {
+    cache.rhythms[id] = (async () => {
       let keys = [];
 
       for (let i = 0; i < KEYS_RHYTHM.length; i++) {
@@ -646,14 +745,14 @@ async function fetch_rhythm(id, options) {
     })();
   }
 
-  return await cache[id];
+  return await cache.rhythms[id];
 }
 
 /*  Fetch raw song data by id.
  */
 async function fetch_raw_song(id, options) {
-  if (!(id in cache_raw)) {
-    cache_raw[id] = (async () => {
+  if (!(id in cache.songs_raw)) {
+    cache.songs_raw[id] = (async () => {
       let keys = [ id ];
 
       for (let i = 0; i < KEYS_SONG.length; i++) {
@@ -743,71 +842,100 @@ async function fetch_raw_song(id, options) {
     })();
   }
 
-  return await cache_raw[id];
+  return await cache.songs_raw[id];
 }
 
 /*  Fetch raw song data by asset id.
  */
 async function fetch_raw_song_by_asset_id(asset_id, options) {
-  if (!(asset_id in cache_raw)) {
-    cache_raw[asset_id] = (async () => {
+  if (!(asset_id in cache.songs_raw)) {
+    cache.songs_raw[asset_id] = (async () => {
       const id = await fetch_value(asset_id, options);
 
-      return await fetch_raw_song(id);
+      return await fetch_raw_song(id, options);
     })();
   }
 
-  return await cache_raw[asset_id];
+  return await cache.songs_raw[asset_id];
 }
 
 /*  Fetch full song data by asset id.
  */
 async function fetch_song_by_asset_id(asset_id, options) {
-  const song_raw = await fetch_raw_song_by_asset_id(asset_id);
+  if (!(asset_id in cache.songs)) {
+    cache.songs[asset_id] = (async () => {
+      const song_raw = await fetch_raw_song_by_asset_id(asset_id);
 
-  let song = {
-    id:             song_raw.id,
-    asset_id:       song_raw.asset_id,
-    label:          song_raw.label,
-    name_index:     song_raw.name_index,
-    generation:     song_raw.generation,
-    parents:      [ song_raw.parents[0],
-                    song_raw.parents[1] ],
-    bpm:            song_raw.bpm,
-    bar_size:       song_raw.bar_size,
-    beat_size:      song_raw.beat_size,
-    tonality:       { key: song_raw.tonality },
-    chords:         [],
-    arpeggio:       await fetch_arpeggio(song_raw.arpeggio, options),
-    instruments:  {
-      kick:   song_raw.instruments[0],
-      snare:  song_raw.instruments[1],
-      hihat:  song_raw.instruments[2],
-      bass:   song_raw.instruments[3],
-      back:   song_raw.instruments[4],
-      lead:   song_raw.instruments[5]
-    },
-    rhythm: {
-      kick:   [], 
-      snare:  [],
-      hihat:  [],
-      bass:   [],
-      back:   [],
-      lead:   []
-    }
-  };
+      let song = {
+        id:             song_raw.id,
+        asset_id:       song_raw.asset_id,
+        label:          song_raw.label,
+        name_index:     song_raw.name_index,
+        generation:     song_raw.generation,
+        parents:      [ song_raw.parents[0],
+                        song_raw.parents[1] ],
+        bpm:            song_raw.bpm,
+        bar_size:       song_raw.bar_size,
+        beat_size:      song_raw.beat_size,
+        tonality:       { key: song_raw.tonality },
+        chords:         [],
+        arpeggio:       await fetch_arpeggio(song_raw.arpeggio, options),
+        instruments:  {
+          kick:   song_raw.instruments[0],
+          snare:  song_raw.instruments[1],
+          hihat:  song_raw.instruments[2],
+          bass:   song_raw.instruments[3],
+          back:   song_raw.instruments[4],
+          lead:   song_raw.instruments[5]
+        },
+        rhythm: {
+          kick:   [], 
+          snare:  [],
+          hihat:  [],
+          bass:   [],
+          back:   [],
+          lead:   []
+        }
+      };
 
-  for (let i = 0; i < 8; i++) {
-    song.chords.push(await fetch_chord(song_raw.chords[i], options));
-    song.rhythm.kick.push(await fetch_rhythm(song_raw.rhythm.kick[i], options));
-    song.rhythm.snare.push(await fetch_rhythm(song_raw.rhythm.snare[i], options));
-    song.rhythm.hihat.push(await fetch_rhythm(song_raw.rhythm.hihat[i], options));
-    song.rhythm.bass.push(await fetch_rhythm(song_raw.rhythm.bass[i], options));
-    song.rhythm.back.push(await fetch_rhythm(song_raw.rhythm.back[i], options));
-    song.rhythm.lead.push(await fetch_rhythm(song_raw.rhythm.lead[i], options));
+      for (let i = 0; i < 8; i++) {
+        song.chords.push(await fetch_chord(song_raw.chords[i], options));
+        song.rhythm.kick.push(await fetch_rhythm(song_raw.rhythm.kick[i], options));
+        song.rhythm.snare.push(await fetch_rhythm(song_raw.rhythm.snare[i], options));
+        song.rhythm.hihat.push(await fetch_rhythm(song_raw.rhythm.hihat[i], options));
+        song.rhythm.bass.push(await fetch_rhythm(song_raw.rhythm.bass[i], options));
+        song.rhythm.back.push(await fetch_rhythm(song_raw.rhythm.back[i], options));
+        song.rhythm.lead.push(await fetch_rhythm(song_raw.rhythm.lead[i], options));
+      }
+
+      return song;
+    })();
   }
 
-  return song;
+  return await cache.songs[asset_id];
+}
+
+async function fetch_cached_metadata_by_asset_id(asset_id, options) {
+  const { clef_cache_url, fetch } = adjust_options(options);
+
+  if (!(asset_id in cache.cached_metadata)) {
+    cache.cached_metadata[asset_id] = (async () => {
+      try {
+        const response = await fetch(
+          `${clef_cache_url}metadata/${asset_id}`,
+          { method: 'GET' });
+
+        if (response.status != 200)
+          return null;
+
+        return await response.json();
+      } catch (error_) {
+        return null;
+      }
+    })();
+  }
+
+  return await cache.cached_metadata[asset_id];
 }
 
 /*
@@ -1059,8 +1187,6 @@ function audio_new_sampler(Tone, name, options) {
   });
 }
 
-let audio_mutex = Promise.resolve();
-
 function audio_render(Tone, sheet, options) {
   return new Promise((resolve, reject) => {
     audio_mutex = audio_mutex.then(async () => {
@@ -1147,6 +1273,12 @@ function audio_render(Tone, sheet, options) {
 /*  Fetch song name by asset id.
  */
 async function get_song_name_by_asset_id(asset_id, options) {
+  const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
+
+  if (metadata != null) {
+    return metadata.name;
+  }
+
   const song_raw = await fetch_raw_song_by_asset_id(asset_id, options);
 
   if (song_raw.name_index === 0)
@@ -1158,6 +1290,12 @@ async function get_song_name_by_asset_id(asset_id, options) {
 /*  Fetch song colors by asset id.
  */
 async function get_song_colors_by_asset_id(asset_id, options) {
+  const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
+
+  if (metadata != null) {
+    return metadata.colors;
+  }
+
   const song_raw = await fetch_raw_song_by_asset_id(asset_id, options);
 
   let v = [];
@@ -1239,9 +1377,7 @@ async function play_song_by_asset_id(Tone, asset_id, ready, options) {
 
 /*  Stop playing.
  */
-async function stop(Tone) {
-  await audio_init(Tone);
-
+async function stop() {
   if (audio_data.player) {
     audio_data.player.stop();
     audio_data.stop();
@@ -1250,6 +1386,11 @@ async function stop(Tone) {
 
 module.exports = {
   COLORS:                       COLORS,
+  adjust_options:               adjust_options,
+  fetch_json_request:           fetch_json_request,
+  fetch_value:                  fetch_value,
+  fetch_values:                 fetch_values,
+  fetch_raw_song:               fetch_raw_song,
   fetch_song_by_asset_id:       fetch_song_by_asset_id,
   render_sheet:                 render_sheet,
   get_song_name_by_asset_id:    get_song_name_by_asset_id,

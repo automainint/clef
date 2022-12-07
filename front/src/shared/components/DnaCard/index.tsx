@@ -10,6 +10,7 @@ import styles from './dnaCard.module.scss';
 
 type Props = {
   disc: ReactNode;
+  rarity: ReactNode;
   title: string;
   melodyKey: string;
   tempo: string;
@@ -27,6 +28,7 @@ type Props = {
 
 const DnaCard: FC<Props> = ({
   disc,
+  rarity,
   title,
   melodyKey,
   tempo,
@@ -91,6 +93,7 @@ const DnaCard: FC<Props> = ({
           <p className={styles.desc}>Gen.</p>
           <p className={styles.detailsValue}>{generation}</p>
         </div>
+        {rarity}
       </div>
       <div className={styles.idSection}>
         <p className={styles.subtitle}>ID</p>

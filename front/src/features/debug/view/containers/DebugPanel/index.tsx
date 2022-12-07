@@ -47,24 +47,6 @@ const DebugPanel: FC<Props> = observer(() => {
           <NextLink href="http://localhost:3000/claim-airdrop/test">
             <a>claim-airdrop/test</a>
           </NextLink>
-          <NextLink href="http://localhost:3000/song/6">
-            <a>song/6</a>
-          </NextLink>
-          <NextLink href="http://localhost:3000/song/7">
-            <a>song/7</a>
-          </NextLink>
-          <NextLink href="http://localhost:3000/song/77">
-            <a>song/77</a>
-          </NextLink>
-          <NextLink href="http://localhost:3000/image/6">
-            <a>image/6</a>
-          </NextLink>
-          <NextLink href="http://localhost:3000/image/7">
-            <a>image/7</a>
-          </NextLink>
-          <NextLink href="http://localhost:3000/image/77">
-            <a>image/77</a>
-          </NextLink>
           <PlainButton onClick={handleGenerateClick} size="small" theme="filledDarkGradient">
             Generate song {songCount !== 0 && <>(new: {songCount})</>}
           </PlainButton>

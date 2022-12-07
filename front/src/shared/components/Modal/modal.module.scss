@@ -1,8 +1,8 @@
 @import 'shared/scss/variables.scss';
 
 @keyframes fade {
-  to {
-    background-color: rgb(0 0 0 / 20%);
+  from {
+    background-color: rgb(0 0 0 / 0%);
   }
 }
 
@@ -13,8 +13,7 @@
   right: 0;
   bottom: 0;
   max-height: 100%;
-  background-color: rgb(0 0 0 / 0%);
-  animation: fade ease-out 0.2s forwards;
+  background-color: rgb(0 0 0 / 20%);
   z-index: 200;
   overflow-x: hidden;
   overflow-y: auto;

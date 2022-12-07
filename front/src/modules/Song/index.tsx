@@ -16,6 +16,7 @@ const Song: NextPageWithLayout = observer(() => {
   const { id } = router.query;
 
   const isCorrectID = id !== undefined && !Array.isArray(id);
+  const tabTitle = `Clef - Song${subtitle && `: ${subtitle}`}`;
 
   const handlePassportLoad = (title: string) => {
     setSubtitle(title);
@@ -29,12 +30,12 @@ const Song: NextPageWithLayout = observer(() => {
   return (
     <>
       <Head>
-        <title>Clef - Song{subtitle && `: ${subtitle}`}</title>
+        <title>{tabTitle}</title>
       </Head>
       <div className={styles.root}>
         <div className={styles.content}>
           {isCorrectID ? (
-            <Passport id={id} onLoad={handlePassportLoad} />
+            <Passport assetID={id} onLoad={handlePassportLoad} />
           ) : (
             <div className={styles.preloader}>
               <Preloader isPending />

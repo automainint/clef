@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import { MelodyCard } from 'shared/components';
 import { ContainerTypes, Song } from 'shared/types';
-import { getSongID, getSongLabel } from 'shared/utils';
+import { getSongAssetID, getSongID, getSongLabel } from 'shared/utils';
 import { useStore } from 'store/createStore';
 
 import { MelodyOnDeck } from '../../components';
@@ -43,7 +43,14 @@ const Melody: FC<Props> = observer(
               { key: 'play', button: <PlayButton song={song} /> },
               {
                 key: 'passport',
-                button: <ObserveDNAButton id={getSongID(song)} isNew={showNewPassport} onClose={onClosePassport} />,
+                button: (
+                  <ObserveDNAButton
+                    assetID={getSongAssetID(song)}
+                    song={song}
+                    isNew={showNewPassport}
+                    onClose={onClosePassport}
+                  />
+                ),
                 size: 'wider',
               },
             ]}
@@ -60,7 +67,14 @@ const Melody: FC<Props> = observer(
               { key: 'play', button: <PlayButton song={song} /> },
               {
                 key: 'passport',
-                button: <ObserveDNAButton id={getSongID(song)} isNew={showNewPassport} onClose={onClosePassport} />,
+                button: (
+                  <ObserveDNAButton
+                    assetID={getSongAssetID(song)}
+                    song={song}
+                    isNew={showNewPassport}
+                    onClose={onClosePassport}
+                  />
+                ),
               },
             ]}
           />

@@ -640,6 +640,27 @@ describe('Library', async function () {
     expect(price_increment.value).to.equal(10);
   });
 
+  it('set free mix token', async function () {
+    const library = address(accounts.library);
+
+    const tx_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: 'foobar' }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_free_mix_token);
+    await waitForTx(tx_free_mix_token.id);
+
+    const free_mix_token = await accountDataByKey(`free_mix_token`, library);
+
+    expect(free_mix_token.value).to.equal('foobar');
+  });
+
   it('whitelist', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
@@ -858,6 +879,50 @@ describe('Library', async function () {
     await expect(broadcast(tx_set_price)).to.be.rejectedWith('Caller not in whitelist');
   });
 
+  it('can not set free mix token if not in whitelist', async function () {
+    const library = address(accounts.library);
+    const foo     = address(accounts.foo);
+
+    const tx_whitelist_add = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_add',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_add);
+    await waitForTx(tx_whitelist_add.id);
+
+    const tx_whitelist_remove = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'whitelist_remove',
+          args: [
+            { type: 'string', value: foo }
+          ]
+        } },
+      accounts.library);
+
+    await broadcast(tx_whitelist_remove);
+    await waitForTx(tx_whitelist_remove.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: 'foobar' }
+          ]
+        } },
+      accounts.foo);
+
+    await expect(broadcast(tx_set_free_mix_token)).to.be.rejectedWith('Caller not in whitelist');
+  });
+
+
   it('mint hybrid', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
@@ -879,6 +944,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1129,6 +1206,18 @@ describe('Library', async function () {
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
 
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
+
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
     await waitForTx(tx_mint_0.id);
@@ -1374,6 +1463,18 @@ describe('Library', async function () {
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
 
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
+
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
     await waitForTx(tx_mint_0.id);
@@ -1426,6 +1527,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1485,6 +1598,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1551,6 +1676,18 @@ describe('Library', async function () {
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
 
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
+
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
     await waitForTx(tx_mint_0.id);
@@ -1615,6 +1752,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1699,6 +1848,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     expect((await accountDataByKey(`price_hybrid_token`, library)).value).to.equal(usdn);
     expect((await accountDataByKey(`price_hybrid_amount`, library)).value).to.equal(price);
@@ -1818,7 +1979,7 @@ describe('Library', async function () {
     expect(balance_2).to.be.equal(1);
   });
 
-  it('after 10 hybrids price will increase', async function () {
+  it('after 1 hybrid price will increase', async function () {
     const library = address(accounts.library);
     const foo     = address(accounts.foo);
 
@@ -1839,6 +2000,18 @@ describe('Library', async function () {
       accounts.library);
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
+
+    const tx_set_free_mix_token = invokeScript(
+      { dApp: library,
+        call: {
+          function: 'set_free_mix_token',
+          args: [
+            { type: 'string', value: '' }
+          ]
+        } },
+      accounts.library);
+    await broadcast(tx_set_free_mix_token);
+    await waitForTx(tx_set_free_mix_token.id);
 
     const tx_mint_0 = tx_mint_song(library, accounts.library, 120, 4, 4, 5, '_foo');
     await broadcast(tx_mint_0);
@@ -1870,7 +2043,7 @@ describe('Library', async function () {
 
     let tx_wait = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 1; i++) {
       const tx_mint_hybrid = invokeScript(
         { dApp: library,
           call: {

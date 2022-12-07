@@ -3,7 +3,8 @@ const {
   types,
   authenticate,
   get_resource_by_id,
-  get_resource_by_asset_id
+  get_resource_by_asset_id,
+  get_song_rarity_by_asset_id
 } = require('../src_js/back_fake.js');
 
 const {
@@ -18,8 +19,7 @@ const {
   get_song_colors,
   get_song_chords,
   get_song_asset_id,
-  get_song_asset_url,
-  can_mint_hybrid
+  get_song_asset_url
 } = require('../src_js/music.js');
 
 const assert = require('assert');
@@ -514,6 +514,34 @@ describe('back fake', async function () {
     await user.logout();
   });
 
+  it('can mint hybrid with free mix token', async function () {
+    const price =
+      (await user.get_price(types.song)) * 2 +
+      (await user.get_price(types.chord)) * 4;
+
+    await user.add_balance(price);
+    
+    await user.buy(types.chord);
+    await user.buy(types.chord);
+
+    await user.mint_song(await user.get_resources({ filter: types.chord }));
+
+    await user.buy(types.chord);
+    await user.buy(types.chord);
+
+    await user.mint_song(await user.get_resources({ filter: types.chord }));
+
+    let songs = await user.get_resources({ filter: types.song });
+
+    await user.mint_hybrid_with_free_mix_token(songs);
+
+    songs = await user.get_resources({ filter: types.song });
+
+    assert.equal(songs.length, 3);
+
+    await user.logout();
+  });
+
   it('can mint hybrid with 2 songs', async function () {
     const price =
       (await user.get_price(types.song)) * 2 +
@@ -542,6 +570,7 @@ describe('back fake', async function () {
 
     await user.logout();
   });
+
 
   it('can mint hybrid and burn 2 songs', async function () {
     const price =
@@ -875,6 +904,12 @@ describe('back fake', async function () {
     await user.logout();
   });
 
+  it('can get song rarity', async function () {
+    const rarity = await get_song_rarity_by_asset_id('1111111111111111');
+
+    assert.ok(rarity >= 0 && rarity <= 100);
+  });
+
   it('music util compatibility checks', async function () {
     const price =
       (await user.get_price(types.song)) +
@@ -920,7 +955,6 @@ describe('back fake', async function () {
     assert.ok(get_song_chords(song)[5].length >= 3);
     assert.ok(get_song_chords(song)[6].length >= 3);
     assert.ok(get_song_chords(song)[7].length >= 3);
-    assert.ok(can_mint_hybrid(song));
 
     assert.equal(typeof get_song_asset_id(song), 'string');
 
@@ -938,18 +972,6 @@ describe('back fake', async function () {
 
   it('get explorer url', async function () {
     let url_obj = new URL(await user.get_explorer_url());
-
-    await user.logout();
-  });
-
-  it('mint hybrid balance check', async function () {
-    let price = await user.get_price(types.hybrid);
-
-    await user.add_balance(price - 1);
-    assert.ok(!(await user.can_mint_hybrid()));
-
-    await user.add_balance(1);
-    assert.ok(await user.can_mint_hybrid());
 
     await user.logout();
   });

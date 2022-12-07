@@ -17,6 +17,8 @@ const NOTE_SKIP       = 65535;
 const UPDATE_TIMEOUT  = 5000;
 
 const TOKEN_WAVES             = 'WAVES';
+const TOKEN_FREE_MIX          = '3Luy24HNZY5RLKaJ8sc6jmER7QD8v1r7HBjQKX54skf1';
+
 const KEY_PRICE_HYBRID_TOKEN  = 'price_hybrid_token';
 const KEY_PRICE_HYBRID_AMOUNT = 'price_hybrid_amount';
 
@@ -700,7 +702,12 @@ async function get_song_by_id(n) {
       })();
     }
 
-    return await cache[n];
+    const result = await cache[n];
+
+    if (result.type != types.song)
+      return null;
+
+    return result;
 
   } catch (error) {
     debug_log(error);
@@ -726,6 +733,24 @@ async function get_resource_by_id(id) {
 
 async function get_resource_by_asset_id(asset_id) {
   return await get_song_by_asset_id(asset_id);
+}
+
+async function get_song_rarity_by_asset_id(asset_id) {
+  return new Promise((resolve, reject) => {
+    let attempt;
+    let request = `/addresses/data/${id_library}/rarity_${asset_id}`;
+
+    attempt = () => {
+      fetch_get(request).then(data => {
+        if (data === null)
+          setTimeout(attempt, 2000);
+        else
+          resolve(data.value);
+      });
+    };
+
+    attempt();
+  });
 }
 
 class clearance_handler {
@@ -782,18 +807,26 @@ class clearance_handler {
           }
         }
 
-        let balance;
+        let response;
 
         if (this.price_token === TOKEN_WAVES) {
-          balance = await fetch_get(`/addresses/balance/${this.address}`);
+          response = await fetch_get(`/addresses/balance/${this.address}`);
         } else {
-          balance = await fetch_get(`/assets/balance/${this.address}/${this.price_token}`);
+          response = await fetch_get(`/assets/balance/${this.address}/${this.price_token}`);
         }
 
-        if (balance === null) {
+        if (response === null) {
           this.balance = 0;
         } else {
-          this.balance = balance.balance;
+          this.balance = response.balance;
+        }
+
+        response = await fetch_get(`/assets/balance/${this.address}/${TOKEN_FREE_MIX}`);
+
+        if (response === null) {
+          this.free_mix_balance = 0;
+        } else {
+          this.free_mix_balance = response.balance;
         }
 
         let v     = [];
@@ -853,6 +886,12 @@ class clearance_handler {
     await this.update();
 
     return this.balance / this.price_scale;
+  }
+
+  async get_free_mix_balance() {
+    await this.update();
+
+    return this.free_mix_balance;
   }
 
   async get_price(type) {
@@ -982,6 +1021,35 @@ class clearance_handler {
     });
   }
 
+  async mint_hybrid_with_free_mix_token(songs) {
+    if (songs.length != 2)
+      throw new Error('Wrong resources');
+    if (!('id' in songs[0]))
+      throw new Error('Wrong resources');
+    if (!('id' in songs[1]))
+      throw new Error('Wrong resources');
+
+    await this.update();
+
+    return await this.mint_hybrid_internal({
+      dApp: id_library,
+      call: {
+        function: 'mint_hybrid',
+        args: [
+          { type: 'string', value: songs[0].id },
+          { type: 'string', value: songs[1].id }
+        ],
+      },
+      payment: [
+        { assetId:  TOKEN_FREE_MIX,
+          amount:   1 }
+      ],
+      feeAssetId: HYBRID_FEE_ASSET_ID,
+      fee:        HYBRID_FEE
+    });
+  }
+
+
   async mint_hybrid_and_burn(songs) {
     if (songs.length != 2)
       throw new Error("Wrong resources");
@@ -1023,16 +1091,6 @@ class clearance_handler {
     if (this.signer) {
       await this.signer.logout();
     }
-  }
-
-  /*  @automainint
-   *
-   *  FIXME
-   *  Remove this method.
-   *  Use global function in frontend.
-   */
-  async get_resource_by_id(id) {
-    return await get_resource_by_id(id);
   }
 
   async get_airdrop_info(airdrop_name) {
@@ -1246,10 +1304,11 @@ async function authenticate(options) {
 }
 
 module.exports = {
-  env:                      env,
-  types:                    types,
-  NOTE_SKIP:                NOTE_SKIP,
-  authenticate:             authenticate,
-  get_resource_by_id:       get_resource_by_id,
-  get_resource_by_asset_id: get_resource_by_asset_id
+  env:                          env,
+  types:                        types,
+  NOTE_SKIP:                    NOTE_SKIP,
+  authenticate:                 authenticate,
+  get_resource_by_id:           get_resource_by_id,
+  get_resource_by_asset_id:     get_resource_by_asset_id,
+  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id
 };

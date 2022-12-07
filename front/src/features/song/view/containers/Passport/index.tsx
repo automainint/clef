@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 
 import { DnaCard, Preloader } from 'shared/components';
 import { usePreloader } from 'shared/hooks';
-import { isErrorWithMessage } from 'shared/types';
+import { isErrorWithMessage, Song } from 'shared/types';
 import {
   getSongAssetID,
   getSongAssetURL,
@@ -21,23 +21,26 @@ import { useStore } from 'store/createStore';
 import { getInstruments, getScaleFormat, getTimeFormat } from '../../../utils';
 import { Disc } from '../Disc';
 import { PlayButton } from '../PlayButton';
+import { Rarity } from '../Rarity';
 import { ShareButton } from '../ShareButton';
 import styles from './passport.module.scss';
 
 type Props = {
-  id: string;
+  assetID: string;
+  song?: Song;
   isNew?: boolean;
   onLoad?: (title: string) => void;
 };
 
-const Passport: FC<Props> = observer(({ id, isNew = false, onLoad = undefined }) => {
-  const { fetchSong, song } = useStore().song;
+const Passport: FC<Props> = observer(({ assetID, song = undefined, isNew = false, onLoad = undefined }) => {
+  const { fetchSong, saveSong, currentSong } = useStore().song;
   const { isPending, error, setLoadingStatus } = usePreloader('', true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await fetchSong(id);
+        if (song === undefined) await fetchSong(assetID);
+        else saveSong(song);
         setLoadingStatus({ isPending: false, error: '' });
       } catch (err) {
         setLoadingStatus({ isPending: false, error: 'something went wrong' });
@@ -52,42 +55,50 @@ const Passport: FC<Props> = observer(({ id, isNew = false, onLoad = undefined })
     };
 
     fetchData();
-  }, [setLoadingStatus, fetchSong, id]);
+  }, [setLoadingStatus, fetchSong, assetID, saveSong, song]);
 
   useEffect(() => {
-    if (isPending || error || song !== null) return;
+    if (isPending || error || currentSong !== null) return;
     setLoadingStatus({ isPending: false, error: 'song does not exist' });
-  }, [isPending, error, setLoadingStatus, song]);
+  }, [isPending, error, setLoadingStatus, currentSong]);
 
   useEffect(() => {
-    if (song === null) return;
-    const title = getSongLabel(song);
+    if (currentSong === null) return;
+    const title = getSongLabel(currentSong);
     if (typeof title !== 'string') return;
     onLoad?.(title);
-  }, [onLoad, song]);
+  }, [onLoad, currentSong]);
 
   return (
     <>
-      {isPending || error || song === null ? (
+      {isPending || error || currentSong === null ? (
         <div className={styles.preloader}>
           <Preloader isPending={isPending} error={error} />
         </div>
       ) : (
         <DnaCard
-          disc={<Disc song={song} isSaveImage={isNew} />}
-          title={getSongLabel(song)}
-          melodyKey={getSongTonality(song)}
-          tempo={getSongBPM(song)}
-          length={getTimeFormat(renderSheet(song).duration)}
-          meter={getScaleFormat(getSongMeter(song))}
-          generation={getSongGeneration(song)}
-          id={getSongAssetID(song)}
-          url={getSongAssetURL(song)}
-          chordNames={getSongChordNames(song)}
-          chords={getSongChords(song)}
-          instruments={getInstruments(renderSheet(song))}
+          disc={<Disc song={currentSong} isSaveImage />}
+          rarity={<Rarity assetID={getSongAssetID(currentSong)} />}
+          title={getSongLabel(currentSong)}
+          melodyKey={getSongTonality(currentSong)}
+          tempo={getSongBPM(currentSong)}
+          length={getTimeFormat(renderSheet(currentSong).duration)}
+          meter={getScaleFormat(getSongMeter(currentSong))}
+          generation={getSongGeneration(currentSong)}
+          id={getSongAssetID(currentSong)}
+          url={getSongAssetURL(currentSong)}
+          chordNames={getSongChordNames(currentSong)}
+          chords={getSongChords(currentSong)}
+          instruments={getInstruments(renderSheet(currentSong))}
           withMessage={isNew}
-          buttons={[{ key: 'play', button: <PlayButton song={song} /> }]}
+          buttons={[
+            { key: 'play', button: <PlayButton song={currentSong} /> },
+            {
+              key: 'share',
+              button: <ShareButton song={currentSong} />,
+              size: 'middle',
+            },
+          ]}
         />
       )}
     </>

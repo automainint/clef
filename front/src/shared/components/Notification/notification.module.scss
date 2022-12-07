@@ -1,0 +1,32 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes fade-in {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+}
+
+.root {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  top: 21px;
+  left: 50%;
+  padding: 8px 12px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-notification;
+  background-color: $color-bg;
+  border: 1px solid $color-border-notification;
+  border-radius: 8px;
+  z-index: 500;
+  transform: translateX(-50%);
+  animation: fade-in ease-out 0.2s;
+  cursor: default;
+}

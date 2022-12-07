@@ -50,3 +50,17 @@ jobs:
 
       - name: Run tests
         run:  npx surfboard test
+
+  build_front:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        working-directory: ${{ github.workspace }}/front
+        run: npm install
+
+      - name: Build    
+        working-directory: ${{ github.workspace }}/front
+        run: npx next build

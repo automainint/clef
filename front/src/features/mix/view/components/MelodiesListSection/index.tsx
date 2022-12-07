@@ -32,7 +32,11 @@ const MelodiesListSection: FC<PropsWithChildren<Props>> = ({ children, melodies,
             title="No melodies in your wallet yet"
             desc="For now, you can purchase the melodies on Puzzle Market"
             action={
-              <PlainButton href="https://puzzlemarket.org/" isExternal theme="filledDark">
+              <PlainButton
+                href="https://puzzlemarket.org/collection/3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe/Clef%20genesis%20songs"
+                isExternal
+                theme="filledDark"
+              >
                 Shop at Puzzle Market
               </PlainButton>
             }

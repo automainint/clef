@@ -2,22 +2,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "wav": "node src_js/render_wav.js",
     "test": "mocha test_js/**.js"
   },
   "dependencies": {
-    "@waves.exchange/provider-cloud": "^1.0.3",
-    "@waves.exchange/provider-web": "^1.1.9-beta.0",
-    "@waves/provider-keeper": "^0.4.1",
-    "@waves/signer": "^1.0.11",
     "async-mutex": "^0.3.2",
-    "browser-run": "^11.0.0",
-    "browserify": "^17.0.0",
-    "identity-img": "^2.0.0",
     "mocha": "^10.0.0",
     "node-fetch": "2.x",
-    "string-to-stream": "^3.0.1",
-    "tone": "^14.7.77",
     "yargs": "^17.4.0"
   }
 }

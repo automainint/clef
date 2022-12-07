@@ -1,0 +1,26 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes fade-in {
+  from {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.root {
+  position: relative;
+}
+
+.popper {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: max-content;
+  padding: 8px 0;
+  background-color: $color-bg;
+  border: 1px solid $color-border-popper;
+  border-radius: 8px;
+  opacity: 1;
+  z-index: 10;
+  animation: fade-in ease-out 0.2s;
+}

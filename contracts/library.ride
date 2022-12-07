@@ -3,13 +3,15 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let nft_creation_address  = Address(base58'3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By')
-let price_increase_period = 10
+let price_increase_period = 1
 
 let mint_collection     = "Clef genesis songs"
 let mint_description    = "Genesis Clef song. This melody is crafted to become your electronic jam. Use it on clef.one 💚🤍"
 
 let hybrid_collection   = "Clef mixes"
 let hybrid_description  = "Clef mix. This melody was created by an algorithm. Enjoy this jam or use it on clef.one"
+
+let indices_20 = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ]
 
 func to_key(n: Int) = {
   n.toBytes().toBase58String()
@@ -165,11 +167,89 @@ func make_hybrid_tx(i: Invocation, song_0: String, song_1: String) = {
   ]
 }
 
+func mint_hybrid_paid(i: Invocation, song_0: String, song_1: String) = {
+  let caller_addr   = Address(i.caller.bytes);
+  let song_0_id     = getStringValue(song_0).fromBase58String();
+  let song_1_id     = getStringValue(song_1).fromBase58String();
+  let price_amount  = getIntegerValue("price_hybrid_amount");
+  let price_token   = getStringValue("price_hybrid_token");
+  let price_change  = hybrid_calculate_change(i, price_token, price_amount);
+
+  if price_change < 0 then
+    throw("Wrong payment")
+  else if song_0_id == song_1_id then
+    throw("Songs should be different")
+  else if assetBalance(caller_addr, song_0_id) < 1 then
+    throw("Caller do not own first song")
+  else if assetBalance(caller_addr, song_1_id) < 1 then
+    throw("Caller do not own second song")
+  else {
+    let mint_count = match getInteger("mint_count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let price_count_inc = IntegerEntry("mint_count", mint_count + 1)
+
+    let price_increase =
+      if (mint_count % (price_increase_period)) == (price_increase_period - 1) then
+        [ price_count_inc,
+          IntegerEntry(
+            "price_hybrid_amount",
+            price_amount + getIntegerValue("price_hybrid_increment")
+          ) ]
+      else
+        [ price_count_inc ]
+
+    if price_change > 0 then
+      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase ++ [
+          ScriptTransfer(
+            caller_addr,
+            price_change,
+            if price_token == "" then unit else price_token.fromBase58String()
+          )
+        ],
+        unit )
+    else
+      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase,
+        unit )
+  }
+}
+
+func mint_hybrid_free(i: Invocation, song_0: String, song_1: String) = {
+  let caller_addr   = Address(i.caller.bytes);
+  let song_0_id     = getStringValue(song_0).fromBase58String();
+  let song_1_id     = getStringValue(song_1).fromBase58String();
+
+  if song_0_id == song_1_id then
+    throw("Songs should be different")
+  else if assetBalance(caller_addr, song_0_id) < 1 then
+    throw("Caller do not own first song")
+  else if assetBalance(caller_addr, song_1_id) < 1 then
+    throw("Caller do not own second song")
+  else
+    ( make_hybrid_tx(i, song_0, song_1),
+      unit )
+}
+
 func check_whitelist(caller: Address) = {
   this == caller || match getBoolean("W_" + caller.bytes.toBase58String()) {
     case x: Boolean => x
     case _          => false
   }
+}
+
+func fold_set_rarity(accum: (List[IntegerEntry], List[String], List[Int]), index: Int) = {
+  let (entries, assets, values) = accum
+
+  if index >= size(assets) then
+    accum
+  else if values[index] < 0 || values[index] > 100 then
+    throw("Invalid rarity value (must be in range from 0 to 100)")
+  else
+    ( entries :+ IntegerEntry("rarity_" + assets[index], values[index]),
+      assets,
+      values )
 }
 
 @Callable(i)
@@ -191,6 +271,36 @@ func whitelist_remove(user: String) = {
 }
 
 @Callable(i)
+func set_daemon(address: String) = {
+  if this != i.caller then
+    throw("Caller is not dApp owner")
+  else
+   ( [ StringEntry("daemon", address) ],
+     unit )
+}
+
+@Callable(i)
+func set_rarity(assets: List[String], values: List[Int]) = {
+  if match getString("daemon") {
+    case x: String  => x != i.caller.bytes.toBase58String()
+    case _          => true
+  } then
+    throw("Caller is not daemon")
+  else if size(assets) == 0 then
+    throw("No assets")
+  else if size(assets) > 20 then
+    throw("To many assets (must be no more than 20)")
+  else if size(assets) != size(values) then
+    throw("Assets and values list size mismatch")
+  else {
+    let ( entries, assets_, values_ ) = FOLD<20>(indices_20, ([], assets, values), fold_set_rarity)
+
+    ( entries,
+      unit )
+  }
+}
+
+@Callable(i)
 func set_market_image(url: String) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
@@ -209,6 +319,15 @@ func set_price_hybrid(token: String, amount: Int, increment: Int) = {
         IntegerEntry( "price_hybrid_amount",    amount),
         IntegerEntry( "price_hybrid_increment", increment)
       ],
+      unit )
+}
+
+@Callable(i)
+func set_free_mix_token(token: String) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else
+    ( [ StringEntry("free_mix_token", token) ],
       unit )
 }
 
@@ -499,52 +618,16 @@ func mint_hybrid(
   song_0: String,
   song_1: String
 ) = {
-  let caller_addr   = Address(i.caller.bytes);
-  let song_0_id     = getStringValue(song_0).fromBase58String();
-  let song_1_id     = getStringValue(song_1).fromBase58String();
-  let price_amount  = getIntegerValue("price_hybrid_amount");
-  let price_token   = getStringValue("price_hybrid_token");
-  let price_change  = hybrid_calculate_change(i, price_token, price_amount);
-
-  if price_change < 0 then
-    throw("Wrong payment")
-  else if song_0_id == song_1_id then
-    throw("Songs should be different")
-  else if assetBalance(caller_addr, song_0_id) < 1 then
-    throw("Caller do not own first song")
-  else if assetBalance(caller_addr, song_1_id) < 1 then
-    throw("Caller do not own second song")
-  else {
-    let mint_count = match getInteger("mint_count") {
-      case j: Int => j
-      case _      => 0
-    }
-
-    let price_count_inc = IntegerEntry("mint_count", mint_count + 1)
-
-    let price_increase =
-      if (mint_count % (price_increase_period)) == (price_increase_period - 1) then
-        [ price_count_inc,
-          IntegerEntry(
-            "price_hybrid_amount",
-            price_amount + getIntegerValue("price_hybrid_increment")
-          ) ]
-      else
-        [ price_count_inc ]
-
-    if price_change > 0 then
-      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase ++ [
-          ScriptTransfer(
-            Address(i.caller.bytes),
-            price_change,
-            if price_token == "" then unit else price_token.fromBase58String()
-          )
-        ],
-        unit )
-    else
-      ( make_hybrid_tx(i, song_0, song_1) ++ price_increase,
-        unit )
-  }
+  if  i.payments.size() == 1 &&
+      getStringValue("free_mix_token") == match i.payments[0].assetId {
+        case b: ByteVector  => b.toBase58String()
+        case _              => ""
+      } &&
+      i.payments[0].amount == 1
+  then
+    mint_hybrid_free(i, song_0, song_1)
+  else
+    mint_hybrid_paid(i, song_0, song_1)
 }
 
 @Callable(i)

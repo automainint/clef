@@ -11,6 +11,7 @@ Contract address
 - `mint_count` - count for price amount increment.
 - `W_<Address>` - `true` if account _Address_ is in whitelist.
 - `count` - total number of created entities, including chords, arpeggios, rhythms and songs.
+- `daemon` - address of the rarity daemon account.
 - For each chord _Id_, where _Id_ is a base56 representation of the chord entity index:
   - `<Id>_CL` - chord name.
   - `<Id>_C0` - bass note.
@@ -43,11 +44,13 @@ Contract address
 
 - For each song NFT _Asset Id_:
   - `<Asset Id>` - a base56 representation of the song entity index.
+  - `rarity_<Asset Id>` - song rarity value from `0` to `100`.
 
 ##  Functions
 - Contract owner functions
   - `whitelist_add (account: String)` - Add account to whitelist.
   - `whitelist_remove (account: String)` - Remove account from whitelist.
+  - `set_daemon(account: String)` - Set rarity daemon account address.
 - Whitelisted account functions
   - `set_market_image (url: String)`
   - `set_price_hybrid (token: String, amount: Int, increment: Int)`
@@ -83,6 +86,8 @@ Contract address
         - `bass_rhythms: List[String]` - sequence of 8 bass rhythms.
         - `back_rhythms: List[String]` - sequence of 8 back rhythms.
         - `lead_rhythms: List[String]` - sequence of 8 lead rhythms.
+- Daemon account functions
+  - `set_rarity(assets: List[String], values: List[Int])` - set rarity values.
 - User functions
   - `mint_hybrid (song_0: String, song_1: String)` - mint hybrid of two songs.
     - Payment
