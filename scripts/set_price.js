@@ -1,6 +1,7 @@
 const DAPP              = address(env.SEED);
-const HYBRID_PRICE      = 10000000;
-const HYBRID_PRICE_INC  = 1000000;
+const HYBRID_PRICE      =  30000000;
+const HYBRID_PRICE_MAX  = 100000000;
+const HYBRID_PRICE_INC  =   1000000;
 
 (async () => {
   try {
@@ -16,6 +17,7 @@ const HYBRID_PRICE_INC  = 1000000;
           args: [
             { type: 'string',   value: usdn },
             { type: 'integer',  value: HYBRID_PRICE },
+            { type: 'integer',  value: HYBRID_PRICE_MAX },
             { type: 'integer',  value: HYBRID_PRICE_INC }
           ]
         } },

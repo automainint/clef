@@ -370,6 +370,17 @@ const DAPP = address(env.SEED);
           rhythm_long_1st_half,
           rhythm_steady
         );
+      await make_song('U R My Metaverse', 125, 1,
+          [ chord_C, chord_C, chord_G, chord_G, chord_F, chord_F, chord_E, chord_E ],
+          arpeggio_2,
+          rhythm_steady,
+          rhythm_middle,
+          rhythm_off_beat,
+          rhythm_sync_lead,
+          rhythm_long_1st_half,
+          rhythm_fast
+        );
+
 
       console.log(`      ${i+1} of ${count}`);
     }

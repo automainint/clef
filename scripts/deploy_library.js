@@ -1,7 +1,8 @@
 const DAPP              = address(env.SEED);
 const USDN_QUANTITY     = 100000000000;
-const HYBRID_PRICE      = 30000000;
-const HYBRID_PRICE_INC  = 1000000;
+const HYBRID_PRICE      = 100000000;
+const HYBRID_PRICE_MAX  = 100000000;
+const HYBRID_PRICE_INC  =   1000000;
 const MARKET_IMAGE_URL  = 'https://clef.one/sign.svg';
 
 const wvs = 10 ** 8;
@@ -72,6 +73,7 @@ const wvs = 10 ** 8;
           args: [
             { type: 'string',   value: usdn },
             { type: 'integer',  value: HYBRID_PRICE },
+            { type: 'integer',  value: HYBRID_PRICE_MAX },
             { type: 'integer',  value: HYBRID_PRICE_INC }
           ]
         } },
@@ -79,7 +81,7 @@ const wvs = 10 ** 8;
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
 
-    console.log('    ` Set free mix token');
+    /*console.log('    ` Set free mix token');
     const tx_set_free_mix_token = invokeScript(
       { dApp: DAPP,
         call: {
@@ -92,7 +94,7 @@ const wvs = 10 ** 8;
     await broadcast(tx_set_free_mix_token);
     await waitForTx(tx_set_free_mix_token.id);
 
-    /*console.log('    ` Set market image');
+    console.log('    ` Set market image');
     const tx_set_image = invokeScript(
       { dApp: DAPP,
         call: {

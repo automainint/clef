@@ -24,7 +24,7 @@ const KEY_PRICE_HYBRID_AMOUNT = 'price_hybrid_amount';
 
 const HYBRID_FEE_ASSET_ID     = TOKEN_WAVES;
 const HYBRID_FEE              = 500000;
-const HYBRID_PRICE_EXTRA      = 2;
+const HYBRID_PRICE_EXTRA      = 5;
 
 const CLAIM_FEE_ASSET_ID      = TOKEN_WAVES;
 const CLAIM_FEE               = 500000;

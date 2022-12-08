@@ -1272,7 +1272,7 @@ function audio_render(Tone, sheet, options) {
 
 /*  Fetch song name by asset id.
  */
-async function get_song_name_by_asset_id(asset_id, options) {
+async function get_song_name_by_asset_id(asset_id, options = {}) {
   const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
 
   if (metadata != null) {
@@ -1289,7 +1289,7 @@ async function get_song_name_by_asset_id(asset_id, options) {
 
 /*  Fetch song colors by asset id.
  */
-async function get_song_colors_by_asset_id(asset_id, options) {
+async function get_song_colors_by_asset_id(asset_id, options = {}) {
   const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
 
   if (metadata != null) {
@@ -1334,7 +1334,7 @@ async function set_volume(volume) {
 
 /*  Play song by asset id.
  */
-async function play_song_by_asset_id(Tone, asset_id, ready, options) {
+async function play_song_by_asset_id(Tone, asset_id, ready, options = {}) {
   await audio_init(Tone);
 
   const song = await fetch_song_by_asset_id(asset_id, options);

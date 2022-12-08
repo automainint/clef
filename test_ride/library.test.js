@@ -623,6 +623,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: 'foo' },
             { type: 'integer',  value: 42 },
+            { type: 'integer',  value: 1000 },
             { type: 'integer',  value: 10 }
           ]
         } },
@@ -685,6 +686,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: 'foo' },
             { type: 'integer',  value: 42 },
+            { type: 'integer',  value: 1000 },
             { type: 'integer',  value: 10 }
           ]
         } },
@@ -871,6 +873,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: 'foo' },
             { type: 'integer',  value: 42 },
+            { type: 'integer',  value: 1000 },
             { type: 'integer',  value: 10 }
           ]
         } },
@@ -938,6 +941,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1199,6 +1203,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1456,6 +1461,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1521,6 +1527,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1592,6 +1599,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1669,6 +1677,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1746,6 +1755,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1842,6 +1852,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: usdn },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },
@@ -1994,6 +2005,7 @@ describe('Library', async function () {
           args: [
             { type: 'string',   value: '' },
             { type: 'integer',  value: price },
+            { type: 'integer',  value: price * 100 },
             { type: 'integer',  value: incr }
           ]
         } },

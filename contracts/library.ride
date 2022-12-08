@@ -172,6 +172,7 @@ func mint_hybrid_paid(i: Invocation, song_0: String, song_1: String) = {
   let song_0_id     = getStringValue(song_0).fromBase58String();
   let song_1_id     = getStringValue(song_1).fromBase58String();
   let price_amount  = getIntegerValue("price_hybrid_amount");
+  let price_limit   = getIntegerValue("price_hybrid_limit");
   let price_token   = getStringValue("price_hybrid_token");
   let price_change  = hybrid_calculate_change(i, price_token, price_amount);
 
@@ -184,19 +185,18 @@ func mint_hybrid_paid(i: Invocation, song_0: String, song_1: String) = {
   else if assetBalance(caller_addr, song_1_id) < 1 then
     throw("Caller do not own second song")
   else {
-    let mint_count = match getInteger("mint_count") {
-      case j: Int => j
-      case _      => 0
-    }
-
+    let mint_count      = getIntegerValue("mint_count")
+    let price_inc       = getIntegerValue("price_hybrid_increment")
     let price_count_inc = IntegerEntry("mint_count", mint_count + 1)
 
     let price_increase =
-      if (mint_count % (price_increase_period)) == (price_increase_period - 1) then
+      if  (mint_count % (price_increase_period)) == (price_increase_period - 1) &&
+          price_amount + price_inc < price_limit
+      then
         [ price_count_inc,
           IntegerEntry(
             "price_hybrid_amount",
-            price_amount + getIntegerValue("price_hybrid_increment")
+            price_amount + price_inc
           ) ]
       else
         [ price_count_inc ]
@@ -311,12 +311,14 @@ func set_market_image(url: String) = {
 }
 
 @Callable(i)
-func set_price_hybrid(token: String, amount: Int, increment: Int) = {
+func set_price_hybrid(token: String, amount: Int, limit: Int, increment: Int) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
   else
-    ( [ StringEntry(  "price_hybrid_token",     token),
+    ( [ IntegerEntry( "mint_count",             0),
+        StringEntry(  "price_hybrid_token",     token),
         IntegerEntry( "price_hybrid_amount",    amount),
+        IntegerEntry( "price_hybrid_limit",     limit),
         IntegerEntry( "price_hybrid_increment", increment)
       ],
       unit )
