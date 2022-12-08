@@ -15,12 +15,15 @@ class WalletStore {
 
   balance: number = 0;
 
+  freeMixBalance: number = 0;
+
   constructor() {
     makeObservable(this, {
       user: observable,
       address: observable,
       explorerURL: observable,
       balance: observable,
+      freeMixBalance: observable,
       keeperAuth: action.bound,
       cloudAuth: action.bound,
       webAuth: action.bound,
@@ -28,6 +31,7 @@ class WalletStore {
       getAddress: action.bound,
       getExplorerURL: action.bound,
       getBalance: action.bound,
+      getFreeMixBalance: action.bound,
     });
   }
 
@@ -126,6 +130,21 @@ class WalletStore {
       const data = await this.api.userApi.fetchBalance(user);
       runInAction(() => {
         this.balance = data;
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  getFreeMixBalance = async (user: User) => {
+    try {
+      const data = await this.api.userApi.fetchFreeMixBalance(user);
+      runInAction(() => {
+        this.freeMixBalance = data;
       });
     } catch (error) {
       if (error instanceof Error) {

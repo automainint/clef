@@ -104,12 +104,19 @@ class MixStore {
     }
   };
 
-  mintHybrid = async (user: User, isBurn: boolean = false) => {
+  mintHybrid = async (user: User, isBurn: boolean = false, isMixWithFTM: boolean = false) => {
     try {
       if (!isHybrid(this.hybrid)) return;
-      const hybridID = isBurn
-        ? await this.api.userApi.mintHybridAndBurn(user, this.hybrid)
-        : await this.api.userApi.mintHybrid(user, this.hybrid);
+
+      let hybridID = '';
+      if (isBurn) {
+        hybridID = await this.api.userApi.mintHybridAndBurn(user, this.hybrid);
+      } else {
+        hybridID = isMixWithFTM
+          ? await this.api.userApi.mintHybridWithFreeMixToken(user, this.hybrid)
+          : await this.api.userApi.mintHybrid(user, this.hybrid);
+      }
+
       const data = await this.api.resourcesApi.fetchResourceByID(hybridID);
       runInAction(() => {
         if (data !== null && isSong(data)) this.newHybrid = data;

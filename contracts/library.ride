@@ -325,11 +325,13 @@ func set_price_hybrid(token: String, amount: Int, limit: Int, increment: Int) = 
 }
 
 @Callable(i)
-func set_free_mix_token(token: String) = {
+func set_free_mix_token(token: String, amount: Int) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
   else
-    ( [ StringEntry("free_mix_token", token) ],
+    ( [ StringEntry(  "free_mix_token", token),
+        IntegerEntry( "free_mix_amount", amount)
+      ],
       unit )
 }
 
@@ -625,7 +627,7 @@ func mint_hybrid(
         case b: ByteVector  => b.toBase58String()
         case _              => ""
       } &&
-      i.payments[0].amount == 1
+      i.payments[0].amount == getIntegerValue("free_mix_amount")
   then
     mint_hybrid_free(i, song_0, song_1)
   else

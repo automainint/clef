@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import cn from 'classnames';
 
 import { Check } from '../Check';
@@ -8,18 +8,22 @@ import styles from './discsChainCard.module.scss';
 type Props = {
   desc: string;
   price: string;
+  isDiscount?: boolean;
   isChecked?: boolean;
   isBurn?: boolean;
   isDisabled?: boolean;
+  switcher?: ReactNode | null;
   onChange?: () => void;
 };
 
 const DiscsChainCard: FC<Props> = ({
   desc,
   price,
+  isDiscount = false,
   isChecked = false,
   isBurn = false,
   isDisabled = false,
+  switcher = null,
   onChange,
 }) => (
   <div
@@ -34,9 +38,15 @@ const DiscsChainCard: FC<Props> = ({
     </div>
     <div className={styles.footer}>
       <p className={styles.desc}>{desc}</p>
-      <Check isChecked={isChecked} isDisabled={isDisabled} onChange={onChange}>
-        {price}
-      </Check>
+      <div className={styles.priceOptions}>
+        {switcher}
+        <div className={styles.price}>
+          {isDiscount && <div className={styles.discount}>Promo</div>}
+          <Check isChecked={isChecked} isDisabled={isDisabled} onChange={onChange}>
+            {price}
+          </Check>
+        </div>
+      </div>
     </div>
   </div>
 );

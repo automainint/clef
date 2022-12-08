@@ -1,0 +1,19 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-card-additional;
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: default;
+}

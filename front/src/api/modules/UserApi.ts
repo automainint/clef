@@ -11,6 +11,16 @@ class UserApi {
     throw new Error(error);
   }
 
+  async fetchFreeMixBalance(user: User): Promise<number> {
+    const response = await user.get_free_mix_balance?.();
+
+    if (response !== undefined) {
+      return response;
+    }
+    const error = 'get_free_mix_balance not responding';
+    throw new Error(error);
+  }
+
   async fetchWalletAddress(user: User): Promise<string> {
     const response = await user.get_wallet_address?.();
 
@@ -98,6 +108,16 @@ class UserApi {
       return response;
     }
     const error = 'mint_hybrid_and_burn not responding';
+    throw new Error(error);
+  }
+
+  async mintHybridWithFreeMixToken(user: User, hybrid: Hybrid): Promise<string> {
+    const response = await user.mint_hybrid_with_free_mix_token?.(hybrid);
+
+    if (response !== undefined) {
+      return response;
+    }
+    const error = 'mint_hybrid_with_free_mix_token not responding';
     throw new Error(error);
   }
 

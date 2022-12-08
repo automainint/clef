@@ -43,3 +43,4 @@ export { ListButton } from './ListButton';
 export { Notification } from './Notification';
 export { PopperButton } from './PopperButton';
 export { Portal } from './Portal';
+export { Switch } from './Switch';

@@ -12,11 +12,12 @@ import { Main } from '../shared';
 type StaticProps = {};
 
 const Mix: NextPageWithLayout<StaticProps> = observer(() => {
-  const { user, getBalance } = useStore().wallet;
+  const { user, getBalance, getFreeMixBalance, freeMixBalance } = useStore().wallet;
 
   const handleMix = async () => {
     if (user === null) return;
     await getBalance(user);
+    await getFreeMixBalance(user);
   };
 
   return (
@@ -26,6 +27,7 @@ const Mix: NextPageWithLayout<StaticProps> = observer(() => {
       </Head>
       <MixFeature
         user={user}
+        haveFMT={freeMixBalance > 0}
         ConnectButton={ConnectButton}
         PlayButton={PlayButton}
         ObserveDNAButton={ObserveDNAButton}

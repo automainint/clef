@@ -649,7 +649,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: 'foobar' }
+            { type: 'string',   value: 'foobar' },
+            { type: 'integer',  value: 1 }
           ]
         } },
       accounts.library);
@@ -917,7 +918,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: 'foobar' }
+            { type: 'string',   value: 'foobar' },
+            { type: 'integer',  value: 1 }
           ]
         } },
       accounts.foo);
@@ -954,7 +956,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string',   value: '' },
+            { type: 'integer',  value: 1 }
           ]
         } },
       accounts.library);
@@ -1216,7 +1219,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1474,7 +1478,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1540,7 +1545,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1612,7 +1618,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1690,7 +1697,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1768,7 +1776,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -1865,7 +1874,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);
@@ -2018,7 +2028,8 @@ describe('Library', async function () {
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: '' }
+            { type: 'string', value: '' },
+            { type: 'integer', value: 1 }
           ]
         } },
       accounts.library);

@@ -17,12 +17,14 @@ const Wallet: FC<Props> = observer(() => {
     address,
     explorerURL,
     balance,
+    freeMixBalance,
     keeperAuth,
     cloudAuth,
     webAuth,
     getAddress,
     getExplorerURL,
     getBalance,
+    getFreeMixBalance,
     disconnect,
   } = useStore().wallet;
   const { isPending, error, setLoadingStatus } = usePreloader('', true);
@@ -107,7 +109,7 @@ const Wallet: FC<Props> = observer(() => {
     const fetchData = async () => {
       setLoadingStatus({ isPending: true, error: '' });
       try {
-        await Promise.all([getAddress(user), getExplorerURL(user), getBalance(user)]);
+        await Promise.all([getAddress(user), getExplorerURL(user), getBalance(user), getFreeMixBalance(user)]);
         setLoadingStatus({ isPending: false, error: '' });
       } catch (err) {
         setLoadingStatus({ isPending: false, error: 'something went wrong' });
@@ -122,7 +124,7 @@ const Wallet: FC<Props> = observer(() => {
     };
 
     fetchData();
-  }, [user, getAddress, getExplorerURL, getBalance, setLoadingStatus]);
+  }, [user, getAddress, getExplorerURL, getBalance, setLoadingStatus, getFreeMixBalance]);
 
   return (
     <>
@@ -144,7 +146,10 @@ const Wallet: FC<Props> = observer(() => {
             <WalletComponent
               address={address}
               explorerURL={explorerURL}
-              currencies={[{ label: 'USDN', value: balance }]}
+              currencies={[
+                { label: 'USDN', value: balance },
+                { label: 'FMT', value: freeMixBalance },
+              ]}
               onDisconnectClick={handleDisconnectClick}
             />
           )}

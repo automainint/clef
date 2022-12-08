@@ -24,7 +24,7 @@ const KEY_PRICE_HYBRID_AMOUNT = 'price_hybrid_amount';
 
 const HYBRID_FEE_ASSET_ID     = TOKEN_WAVES;
 const HYBRID_FEE              = 500000;
-const HYBRID_PRICE_EXTRA      = 2;
+const HYBRID_PRICE_EXTRA      = 5;
 
 const CLAIM_FEE_ASSET_ID      = TOKEN_WAVES;
 const CLAIM_FEE               = 500000;
@@ -798,6 +798,9 @@ class clearance_handler {
             this.price_scale  = 10 ** details.decimals;
           }
 
+          const details = await fetch_get(`/assets/details/${TOKEN_FREE_MIX}`);
+          this.free_mix_token_scale = 10 ** details.decimals;
+
           const price_amount = await fetch_get(`/addresses/data/${id_library}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
           if (price_amount === null) {
@@ -891,7 +894,7 @@ class clearance_handler {
   async get_free_mix_balance() {
     await this.update();
 
-    return this.free_mix_balance;
+    return this.free_mix_balance / this.free_mix_token_scale;
   }
 
   async get_price(type) {
@@ -1042,7 +1045,7 @@ class clearance_handler {
       },
       payment: [
         { assetId:  TOKEN_FREE_MIX,
-          amount:   1 }
+          amount:   this.free_mix_token_scale }
       ],
       feeAssetId: HYBRID_FEE_ASSET_ID,
       fee:        HYBRID_FEE

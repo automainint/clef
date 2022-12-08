@@ -45,3 +45,32 @@
   letter-spacing: -0.05em;
   color: $color-main;
 }
+
+.priceOptions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.discount {
+  position: relative;
+  top: -2px;
+  padding: 2px 8px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  display: flex;
+  align-items: flex-end;
+  color: $color-main-invert;
+  background-color: $color-pink;
+  border-radius: 2px;
+  transform: rotate(15deg);
+}

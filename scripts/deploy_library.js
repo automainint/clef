@@ -65,7 +65,7 @@ const wvs = 10 ** 8;
       console.log(`    * Fake USDN asset id: ${usdn}`);*/
     }
 
-    console.log('    ` Set price hybrid');
+    /*console.log('    ` Set price hybrid');
     const tx_set_price = invokeScript(
       { dApp: DAPP,
         call: {
@@ -81,13 +81,14 @@ const wvs = 10 ** 8;
     await broadcast(tx_set_price);
     await waitForTx(tx_set_price.id);
 
-    /*console.log('    ` Set free mix token');
+    console.log('    ` Set free mix token');
     const tx_set_free_mix_token = invokeScript(
       { dApp: DAPP,
         call: {
           function: 'set_free_mix_token',
           args: [
-            { type: 'string', value: free_mix_token }
+            { type: 'string', value: free_mix_token },
+            { type: 'integer', value: 100000000 }
           ]
         } },
       env.SEED);

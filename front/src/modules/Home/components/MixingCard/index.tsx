@@ -27,7 +27,7 @@ const MixingCard: FC<Props> = ({ ConnectButton, isAuth = false }) => (
         key: 'connect-or-start',
         button: isAuth ? (
           <PlainButton href={routes.mix} theme="borderedLight">
-            Start Mixing
+            Go to Mixing
           </PlainButton>
         ) : (
           <ConnectButton />
@@ -36,7 +36,11 @@ const MixingCard: FC<Props> = ({ ConnectButton, isAuth = false }) => (
       {
         key: 'shop-at-market',
         button: (
-          <PlainButton href="https://puzzlemarket.org/" isExternal theme="filledLight">
+          <PlainButton
+            href="https://puzzlemarket.org/collection/3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe/Clef%20genesis%20songs"
+            isExternal
+            theme="filledLight"
+          >
             Shop at Puzzle Market
           </PlainButton>
         ),
