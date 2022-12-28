@@ -9,3 +9,6 @@ export const routes = {
   release: '/release',
   song: '/song',
 } as const;
+
+export const mobileMaxWidthBP = 599;
+export const mobilePaddings = 40;

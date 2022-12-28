@@ -16,21 +16,38 @@ const DAPP = address(env.SEED);
       */
     ];
 
-    for (let i = 0; i < list.length; i += 20) {
-      let accounts = [];
+    if (list.length > 0) {
+      for (let i = 0; i < list.length; i += 20) {
+        let accounts = [];
 
-      for (let j = i; j < i + 20 && j < list.length; j++) {
-        accounts.push({ type: 'string', value: list[j] });
+        for (let j = i; j < i + 20 && j < list.length; j++) {
+          accounts.push({ type: 'string', value: list[j] });
+        }
+
+        const tx = invokeScript(
+          { dApp: DAPP,
+            call: {
+              function: 'allow',
+              args: [
+                { type: 'string',   value: 'xm' },
+                { type: 'integer',  value: 1 },
+                { type: 'list',     value: accounts }
+              ]
+            } },
+          env.SEED);
+
+        await broadcast(tx);
+        await sleep_for(1000);
+        await waitForTx(tx.id);
       }
-
+    } else {
       const tx = invokeScript(
         { dApp: DAPP,
           call: {
-            function: 'allow',
+            function: 'allow_anyone',
             args: [
-              { type: 'string',   value: 'test' },
-              { type: 'integer',  value: 1 },
-              { type: 'list',     value: accounts }
+              { type: 'string',   value: 'xm' },
+              { type: 'integer',  value: 1 }
             ]
           } },
         env.SEED);

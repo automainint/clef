@@ -6,7 +6,7 @@ import { PlainButton } from 'shared/components';
 import { ConnectButton } from 'features/wallet';
 import { useStore } from 'store/createStore';
 
-import { Main } from '../shared';
+import { MainNotAdaptive } from '../shared';
 import { MixingCard, PuzzleHoldersAirdropCard, WCTHoldersAirdropCard } from './components';
 import { anchors } from './constants';
 import styles from './home.module.scss';
@@ -59,6 +59,6 @@ const Home: NextPageWithLayout<StaticProps> = observer(() => {
   );
 });
 
-Home.getLayout = (page) => <Main>{page}</Main>;
+Home.getLayout = (page) => <MainNotAdaptive>{page}</MainNotAdaptive>;
 
 export { Home, type StaticProps };

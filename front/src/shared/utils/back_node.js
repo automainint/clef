@@ -799,7 +799,12 @@ class clearance_handler {
           }
 
           const details = await fetch_get(`/assets/details/${TOKEN_FREE_MIX}`);
-          this.free_mix_token_scale = 10 ** details.decimals;
+
+          if (details === null) {
+            this.free_mix_token_scale = 1;
+          } else {
+            this.free_mix_token_scale = 10 ** details.decimals;
+          }
 
           const price_amount = await fetch_get(`/addresses/data/${id_library}/${KEY_PRICE_HYBRID_AMOUNT}`);
 
@@ -1114,8 +1119,9 @@ class clearance_handler {
         songs_total:        0
       };
 
-    const begin   = await get_value(`begin`, 0);
-    const allowed = await get_value(`A_${this.address}`, -1);
+    const begin           = await get_value(`begin`, 0);
+    const allowed_anyone  = await get_value('AA', -1);
+    const allowed         = await get_value(`A_${this.address}`, allowed_anyone);
 
     if (allowed === -1)
       return {
@@ -1137,16 +1143,17 @@ class clearance_handler {
     if (!this.signer)
       throw new Error('No signer');
 
-    const get_value = async (key) => {
+    const get_value = async (key, def) => {
       const response = await fetch_get(`/addresses/data/${id_claim_pool}/${airdrop_name}_${key}`)
       if (response === null)
-        return 0;
+        return def;
       return response.value;
     };
 
-    const begin   = await get_value(`begin`);
-    const end     = await get_value(`end`);
-    const allowed = await get_value(`A_${this.address}`);
+    const begin           = await get_value(`begin`, 0);
+    const end             = await get_value(`end`, 0);
+    const allowed_anyone  = await get_value('AA', 0);
+    const allowed         = await get_value(`A_${this.address}`, allowed_anyone);
 
     let amount = allowed;
     if (amount > CLAIM_LIMIT)

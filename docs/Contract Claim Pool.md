@@ -7,6 +7,7 @@ Contract address
 - `W_<Address>` - `true` if _Address_ is whitelisted to allow claims.
 - For each _Airdrop_:
   - `<Airdrop>_A_<Address>` - integer value, how many assets can claim specified _Address_.
+  - `<Airdrop>_AA` - integer value, how many assets can claim any address.
   - `<Airdrop>_begin` - integer value, start of the claim queue.
   - `<Airdrop>_end` - integer value, end of the claim queue.
   - `<Airdrop>_X_<Key>` - string value, _N-th_ asset id in queue, where _Key_ is an base58 representation of _N_.
@@ -51,6 +52,9 @@ console.log(`User ${user_address} can claim ${allowed} assets.`);
   - `airdrop` - airdrop name.
   - `amount` - how many assets specified account can claim.
   - `accounts` - array of base58 account addresses.
+- `allow_anyone (airdrop: String, amount: Int)` - Allow any account to claim assets from specified airdrop.
+  - `airdrop` - airdrop name.
+  - `amount` - how many assets individual account can claim.
 - `claim (airdrop: String, amount: Int)` - Claim assets from the specified airdrop.
   - `airdrop` - airdrop name.
   - `amount` - how many assets to claim; must be in range from 1 to 20.

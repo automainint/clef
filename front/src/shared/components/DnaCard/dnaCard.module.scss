@@ -48,17 +48,49 @@
   min-height: 166px;
   padding: 26px 30px 28px;
   background: $color-bg-card;
+
+  @media (max-width: $mobile-max-width) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 34px 20px 20px;
+  }
+}
+
+.logo {
+  display: none;
+  fill: $color-note-additional;
+
+  @media (max-width: $mobile-max-width) {
+    display: block;
+  }
 }
 
 .disc {
   width: 112px;
   height: 112px;
+
+  @media (max-width: $mobile-max-width) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 256px;
+    height: 100%;
+    max-height: 256px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
 }
 
 .info {
   display: flex;
   flex-direction: column;
   min-height: 112px;
+
+  @media (max-width: $mobile-max-width) {
+    align-items: center;
+    width: 100%;
+  }
 }
 
 .desc {
@@ -71,6 +103,13 @@
   color: $color-details-additional;
 }
 
+.descMobileLarge {
+  @media (max-width: $mobile-max-width) {
+    font-size: 16px;
+    line-height: 19px;
+  }
+}
+
 .title {
   flex-grow: 1;
   font-family: $font-main;
@@ -80,30 +119,69 @@
   line-height: 30px;
   letter-spacing: -0.05em;
   color: $color-main;
+
+  @media (max-width: $mobile-max-width) {
+    line-height: 34px;
+    text-align: center;
+  }
 }
 
 .buttons {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+
+  @media (max-width: $mobile-max-width) {
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+  }
 }
 
 .button {
   min-width: 42px;
   min-height: 42px;
+
+  @media (max-width: $mobile-max-width) {
+    width: 100%;
+    max-width: 164px;
+  }
+
+  @media (max-width: $mobile-two-thirds-bp-width) {
+    max-width: none;
+  }
 }
 
 .buttonSizeMiddle {
   width: 51px;
+
+  @media (max-width: $mobile-max-width) {
+    width: 100%;
+  }
 }
 
 .passport {
   padding: 20px 30px 32px;
+
+  @media (max-width: $mobile-max-width) {
+    padding: 32px 20px 36px;
+  }
 }
 
 .details {
   display: flex;
   gap: 28px;
+
+  @media (max-width: $mobile-max-width) {
+    gap: 24px;
+    justify-content: center;
+  }
+
+  @media (max-width: $mobile-two-thirds-bp-width) {
+    gap: 12px;
+    justify-content: space-around;
+  }
 }
 
 .detailsItem {
@@ -142,6 +220,11 @@
   padding: 14px 0;
   border-top: 1px solid $color-border-separator;
   border-bottom: 1px solid $color-border-separator;
+
+  @media (max-width: $mobile-max-width) {
+    gap: 24px;
+    margin-top: 32px;
+  }
 }
 
 .idLink {

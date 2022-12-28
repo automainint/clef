@@ -9,7 +9,7 @@ import { ClaimAirdrop as ClaimAirdropFeature } from 'features/claimAirdrop';
 import { NextPageWithLayout } from 'shared/types';
 import { Preloader } from 'shared/components';
 
-import { Main } from '../shared';
+import { MainNotAdaptive } from '../shared';
 import styles from './claimAirdrop.module.scss';
 
 type StaticProps = {};
@@ -47,6 +47,6 @@ const ClaimAirdrop: NextPageWithLayout<StaticProps> = observer(() => {
   );
 });
 
-ClaimAirdrop.getLayout = (page) => <Main>{page}</Main>;
+ClaimAirdrop.getLayout = (page) => <MainNotAdaptive>{page}</MainNotAdaptive>;
 
 export { ClaimAirdrop, type StaticProps };

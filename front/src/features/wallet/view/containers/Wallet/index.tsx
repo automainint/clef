@@ -147,7 +147,7 @@ const Wallet: FC<Props> = observer(() => {
               address={address}
               explorerURL={explorerURL}
               currencies={[
-                { label: 'USDN', value: balance },
+                { label: 'USDT', value: balance },
                 { label: 'FMT', value: freeMixBalance },
               ]}
               onDisconnectClick={handleDisconnectClick}

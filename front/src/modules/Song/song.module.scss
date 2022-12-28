@@ -4,6 +4,11 @@
   display: grid;
   grid-template-columns: 600px 300px;
   min-height: 100%;
+
+  @media (max-width: $tablet-max-width) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .content {
@@ -12,6 +17,10 @@
   gap: 12px;
   padding: 34px 0;
   background-color: $color-bg-card;
+
+  @media (max-width: $mobile-max-width) {
+    padding-top: 0;
+  }
 }
 
 .preloader {

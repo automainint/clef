@@ -1,4 +1,11 @@
 $mobile-min-width: 320px;
+$mobile-two-thirds-bp-width: 506px;
+$mobile-max-width: 599px;
+
+$tablet-min-width: 600px;
+$tablet-two-thirds-bp-width: 1000px;
+$tablet-max-width: 1199px;
+
 $desktop-min-width: 1200px;
 
 $min-width: $mobile-min-width;
@@ -50,6 +57,7 @@ $color-border-disc: #a4a4a4;
 $color-border-card: #c1c1c1;
 $color-border-popper: $color-border-wallet;
 $color-border-notification: #b9b9b9;
+$color-note-additional: $color-border-separator;
 
 $gradient: linear-gradient(360deg, #292929 -119.14%, #000 -2.67%, #464646 101.96%);
 $gradient-card: linear-gradient(29.14deg, #1e5dff 16.92%, #a975ff 109.77%);

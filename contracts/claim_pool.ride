@@ -132,9 +132,37 @@ func allow(airdrop: String, amount: Int, accounts: List[String]) = {
 }
 
 @Callable(i)
+func allow_anyone(airdrop: String, amount: Int) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else if amount == 0 then
+    throw("Wrong amount")
+  else {
+    let key = airdrop + "_AA"
+
+    let allowed = match getInteger(key) {
+      case j: Int => j
+      case _      => 0
+    }
+
+    ( [ IntegerEntry(key, allowed + amount) ],
+      unit )
+  }
+}
+
+@Callable(i)
 func claim(airdrop: String, amount: Int) = {
   let k_allowed = airdrop + "_A_" + i.caller.bytes.toBase58String()
-  let allowed   = getIntegerValue(k_allowed)
+
+  let allowed_anyone = match getInteger(airdrop + "_AA") {
+    case j: Int => j
+    case _      => 0
+  }
+
+  let allowed = match getInteger(k_allowed) {
+    case j: Int => j
+    case _      => allowed_anyone
+  }
 
   if allowed < amount then
     throw("Caller not allowed to claim")

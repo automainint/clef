@@ -7,6 +7,14 @@
   max-width: $max-width;
   width: 100%;
   margin: 0 auto;
+
+  @media (max-width: $tablet-max-width) {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    min-width: auto;
+    max-width: 600px;
+  }
 }
 
 .mainBar {
@@ -18,6 +26,12 @@
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+
+  @media (max-width: $tablet-max-width) {
+    position: static;
+    height: auto;
+    order: 1;
+  }
 }
 
 .wallet {

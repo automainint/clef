@@ -1,5 +1,5 @@
 const DAPP              = address(env.SEED);
-const USDN_QUANTITY     = 100000000000;
+const USDT_QUANTITY     = 100000000000;
 const HYBRID_PRICE      = 100000000;
 const HYBRID_PRICE_MAX  = 100000000;
 const HYBRID_PRICE_INC  =   1000000;
@@ -38,31 +38,31 @@ const wvs = 10 ** 8;
         file('library.ride'));
     }
 
-    /*  USDN asset ID
+    /*  USDT asset ID
      */
-    let usdn            = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
+    let usdt            = '34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ';
     let free_mix_token  = '3Luy24HNZY5RLKaJ8sc6jmER7QD8v1r7HBjQKX54skf1';
 
     if (env.CHAIN_ID === 'R' || env.CHAIN_ID === 'T') {
-      /*  Use fake USDN token for testing.
+      /*  Use fake USDT token for testing.
        */
 
-      usdn = '23tToJpqbtaCajckMY52add5QwgwpAK7nEAsX4ffHs8C';
+      usdt = '23tToJpqbtaCajckMY52add5QwgwpAK7nEAsX4ffHs8C';
 
-      /*console.log('    ` Issue fake USDN');
-      const tx_usdn = issue(
+      /*console.log('    ` Issue fake USDT');
+      const tx_usdt = issue(
         { name:         'FUSD',
-          description:  'Fake USDN token for testing purposes',
-          quantity:     USDN_QUANTITY,
+          description:  'Fake USDT token for testing purposes',
+          quantity:     USDT_QUANTITY,
           decimals:     6,
           reissuable:   true },
         env.SEED);
-      await broadcast(tx_usdn);
-      await waitForTx(tx_usdn.id);
+      await broadcast(tx_usdt);
+      await waitForTx(tx_usdt.id);
 
-      usdn = (await transactionById(tx_usdn.id)).assetId;
+      usdt = (await transactionById(tx_usdt.id)).assetId;
 
-      console.log(`    * Fake USDN asset id: ${usdn}`);*/
+      console.log(`    * Fake USDT asset id: ${usdt}`);*/
     }
 
     /*console.log('    ` Set price hybrid');
@@ -71,7 +71,7 @@ const wvs = 10 ** 8;
         call: {
           function: 'set_price_hybrid',
           args: [
-            { type: 'string',   value: usdn },
+            { type: 'string',   value: usdt },
             { type: 'integer',  value: HYBRID_PRICE },
             { type: 'integer',  value: HYBRID_PRICE_MAX },
             { type: 'integer',  value: HYBRID_PRICE_INC }

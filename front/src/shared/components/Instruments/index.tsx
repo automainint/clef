@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import { InstrumentLine } from 'shared/types';
+import { mobileMaxWidthBP, mobilePaddings } from 'shared/constants';
 
+import { defaultLineWidth } from './constants';
 import styles from './instruments.module.scss';
 
 type Props = {
@@ -10,12 +12,23 @@ type Props = {
 };
 
 const Instruments: FC<Props> = ({ instruments }) => {
-  const lineWidth = 260;
+  const [lineWidth, setLineWidth] = useState(defaultLineWidth);
 
   const isNarrow = (duration: number) => {
     const widthPer = lineWidth * duration;
     return widthPer < 2 && widthPer !== 0;
   };
+
+  useEffect(() => {
+    if (!window) return;
+    const changeLineWidth = () => {
+      if (window.screen.width > mobileMaxWidthBP) setLineWidth(260);
+      else setLineWidth(window.screen.width - mobilePaddings);
+    };
+    changeLineWidth();
+    window.addEventListener('resize', changeLineWidth);
+    return () => window.removeEventListener('resize', changeLineWidth);
+  }, []);
 
   return (
     <div className={styles.root}>

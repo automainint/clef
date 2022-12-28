@@ -15,7 +15,7 @@ const DAPP = address(env.SEED);
         notes.push(65535);
     };
 
-    const make_song = async (name, bpm, key, chords, melody, kick, snare, hihat, bass, back, lead) => {
+    const make_song = async (name, bpm, key, chords, melody, kick, snare, hihat, bass, back, lead, samples = 'alpha') => {
       const tx_song = invokeScript(
         { dApp: DAPP,
           call: {
@@ -39,12 +39,12 @@ const DAPP = address(env.SEED);
                 { type: 'string', value: chords[7] }
               ] },
               { type: 'string', value: melody },
-              { type: 'string', value: 'kick-alpha' },
-              { type: 'string', value: 'snare-alpha' },
-              { type: 'string', value: 'hihat-alpha' },
-              { type: 'string', value: 'bass-alpha' },
-              { type: 'string', value: 'back-alpha' },
-              { type: 'string', value: 'lead-alpha' },
+              { type: 'string', value: `kick-${samples}` },
+              { type: 'string', value: `snare-${samples}` },
+              { type: 'string', value: `hihat-${samples}` },
+              { type: 'string', value: `bass-${samples}` },
+              { type: 'string', value: `back-${samples}` },
+              { type: 'string', value: `lead-${samples}` },
               { type: 'list', value: [
                 { type: 'string', value: kick },
                 { type: 'string', value: kick },
@@ -114,28 +114,32 @@ const DAPP = address(env.SEED);
       await waitForTx(tx_song.id);
     };
 
-    const chord_C      = '11111111';
-    const chord_Dm     = '11111112';
-    const chord_Em     = '11111113';
-    const chord_E      = '11111114';
-    const chord_F      = '11111115';
-    const chord_G      = '11111116';
-    const chord_Am     = '11111117';
-    const chord_Csus2  = '11111118';
-    const chord_Dsus2  = '11111119';
-    const chord_Fsus2  = '1111111A';
-    const chord_Gsus2  = '1111111B';
-    const chord_Asus2  = '1111111C';
-    const chord_Csus4  = '1111111D';
-    const chord_Dsus4  = '1111111E';
-    const chord_Esus4  = '1111111F';
-    const chord_Gsus4  = '1111111G';
-    const chord_Asus4  = '1111111H';
+    const chord_C     = '11111111';
+    const chord_Dm    = '11111112';
+    const chord_Em    = '11111113';
+    const chord_E     = '11111114';
+    const chord_F     = '11111115';
+    const chord_G     = '11111116';
+    const chord_Am    = '11111117';
+    const chord_Csus2 = '11111118';
+    const chord_Dsus2 = '11111119';
+    const chord_Fsus2 = '1111111A';
+    const chord_Gsus2 = '1111111B';
+    const chord_Asus2 = '1111111C';
+    const chord_Csus4 = '1111111D';
+    const chord_Dsus4 = '1111111E';
+    const chord_Esus4 = '1111111F';
+    const chord_Gsus4 = '1111111G';
+    const chord_Asus4 = '1111111H';
 
-    const arpeggio_0  = '1111111R';
-    const arpeggio_1  = '1111111S';
-    const arpeggio_2  = '1111111T';
-    const arpeggio_3  = '1111111U';
+    const chord_Cmaj7p  = '1111111J';
+    const chord_Ddim7   = '1111111K';
+
+    const arpeggio_0    = '1111111R';
+    const arpeggio_1    = '1111111S';
+    const arpeggio_2    = '1111111T';
+    const arpeggio_3    = '1111111U';
+    const arpeggio_nil  = '1111119o';
 
     const rhythm_silent                = '1111119p';
     const rhythm_fast                  = '1111111V';
@@ -170,11 +174,33 @@ const DAPP = address(env.SEED);
     const rhythm_long_2nd_half_steady  = '1111111z';
     const rhythm_long_2nd_half_slow    = '111111121';
 
+    const rhythm_sync_xmas             = '111111122';
+
     console.log('    ` Make songs');
+
+    /*  Xmas song
+     *    C
+     *    Cmaj7+
+     *    F
+     *    Ddim7
+     */
+    for (let i = 0; i < 25; i++) {
+      await make_song('Merry Clefmas', 120, 0,
+          [ chord_C, chord_Cmaj7p, chord_F, chord_Ddim7, chord_C, chord_Cmaj7p, chord_F, chord_Ddim7 ],
+          arpeggio_nil,
+          rhythm_slower,
+          rhythm_long_2nd_half,
+          rhythm_off_beat,
+          rhythm_slowest,
+          rhythm_slowest,
+          rhythm_sync_xmas,
+          'xmas'
+        );
+    }
 
     /*  Moon Node, On-chain Romance, Puzzle Me, Made In WX, Clef In the Sky */
 
-    let count = 10;
+    let count = 0;
 
     for (let i = 0; i < count; i++) {
       /*
@@ -228,7 +254,6 @@ const DAPP = address(env.SEED);
           rhythm_long_1st_half,
           rhythm_long_2nd_half_fast
         );
-      */
 
       await make_song('Bearish Silence', 125, -4,
           [ chord_C, chord_C, chord_G, chord_G, chord_F, chord_F, chord_G, chord_G ],
@@ -380,7 +405,7 @@ const DAPP = address(env.SEED);
           rhythm_long_1st_half,
           rhythm_fast
         );
-
+      */
 
       console.log(`      ${i+1} of ${count}`);
     }

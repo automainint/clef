@@ -2,7 +2,6 @@ import { FC, PropsWithChildren } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Wallet } from 'features/wallet';
-import { DebugPanel } from 'features/debug';
 import { MainBar } from 'shared/components';
 
 import styles from './main.module.scss';

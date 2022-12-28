@@ -1,11 +1,9 @@
 export { getInstruments } from './getInstruments';
 
 export const getTimeFormat = (seconds: number) => {
-  const time = new Date(seconds * 1000).toLocaleTimeString('ru', {
-    hour: undefined,
-    minute: 'numeric',
-    second: '2-digit',
-  });
+  const date = new Date(0);
+  date.setSeconds(seconds);
+  const time = date.toISOString().substring(14, 19);
   return time[0] === '0' ? time.substring(1) : time;
 };
 

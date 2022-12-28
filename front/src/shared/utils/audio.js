@@ -131,7 +131,9 @@ async function render_audio(Tone, sheet, log) {
     }, sheet.duration + 2);
 
   } catch (error) {
-    log(error);
+    if (log) {
+      log(error);
+    }
   }
 
   /*  Tone.js bug

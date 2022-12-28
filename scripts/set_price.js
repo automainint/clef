@@ -1,13 +1,13 @@
 const DAPP              = address(env.SEED);
-const HYBRID_PRICE      =  30000000;
+const HYBRID_PRICE      =  80000000;
 const HYBRID_PRICE_MAX  = 100000000;
 const HYBRID_PRICE_INC  =   1000000;
 
 (async () => {
   try {
-    /*  USDN asset ID
+    /*  USDT asset ID
      */
-    let usdn = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
+    let usdt = '34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ';
 
     console.log('    ` Set price hybrid');
     const tx_set_price = invokeScript(
@@ -15,7 +15,7 @@ const HYBRID_PRICE_INC  =   1000000;
         call: {
           function: 'set_price_hybrid',
           args: [
-            { type: 'string',   value: usdn },
+            { type: 'string',   value: usdt },
             { type: 'integer',  value: HYBRID_PRICE },
             { type: 'integer',  value: HYBRID_PRICE_MAX },
             { type: 'integer',  value: HYBRID_PRICE_INC }

@@ -7,11 +7,6 @@
     };
 
     const list = [
-      /*
-      '7GzMcUxzoc1CGSmqkJMmG1dE3nhoQp2psY9Rs8LBcphw',
-      'DE7cveszeBsgQQJdUcKnzvmNihdkhfyhDXJ49VzmwN9p',
-      'BZuJFHBUAj24mEZM4w5JxrtvQHb5uLiim1iBeV6U28gE'
-      */
     ];
 
     for (let i = 0; i < list.length; i += 10) {
@@ -26,7 +21,7 @@
           call: {
             function: 'put_assets',
             args: [
-              { type: 'string', value: 'test' }
+              { type: 'string', value: 'xm' }
             ]
           },
           payment: assets

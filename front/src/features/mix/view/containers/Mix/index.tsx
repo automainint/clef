@@ -222,7 +222,7 @@ const Mix: FC<Props> = observer(
             <MixingOptionsSection onBackButtonClick={handleBackButtonClick}>
               <DiscsChainCard
                 desc="Keep parent melodies"
-                price={`${hybridPrice} USDN`}
+                price={`${hybridPrice} USDT`}
                 isDiscount={hybridPrice < 100}
                 isChecked={!isBurn}
                 isDisabled={!isEnoughForMix}

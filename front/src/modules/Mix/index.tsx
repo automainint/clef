@@ -7,7 +7,7 @@ import { Mix as MixFeature } from 'features/mix';
 import { ConnectButton } from 'features/wallet';
 import { Disc, ObserveDNAButton, PlayButton } from 'features/song';
 
-import { Main } from '../shared';
+import { MainNotAdaptive } from '../shared';
 
 type StaticProps = {};
 
@@ -38,6 +38,6 @@ const Mix: NextPageWithLayout<StaticProps> = observer(() => {
   );
 });
 
-Mix.getLayout = (page) => <Main>{page}</Main>;
+Mix.getLayout = (page) => <MainNotAdaptive>{page}</MainNotAdaptive>;
 
 export { Mix, type StaticProps };
