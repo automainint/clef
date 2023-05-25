@@ -20,6 +20,13 @@ export {
   Twitter,
   Telegram,
   Download,
+  Chord,
+  Beat,
+  Vibe,
+  Next,
+  Volume,
+  CrossFade,
+  Heart,
 } from './svg';
 export { MainBar } from './MainBar';
 export { MixingDeck } from './MixingDeck';
@@ -44,3 +51,16 @@ export { Notification } from './Notification';
 export { PopperButton } from './PopperButton';
 export { Portal } from './Portal';
 export { Switch } from './Switch';
+export { ModuleCard } from './ModuleCard';
+export { ElementCard } from './ElementCard';
+export { ElementIcon } from './ElementIcon';
+export { RadioBox } from './RadioBox';
+export { SongCard } from './SongCard';
+export { NotePreloader } from './NotePreloader';
+export { LaunchButton } from './LaunchButton';
+export { StickyBar } from './StickyBar';
+export { PushButton } from './PushButton';
+export { Drawer } from './Drawer';
+export { Tabs } from './Tabs';
+export { RangeSlider } from './RangeSlider';
+export { LikeButton } from './LikeButton';

@@ -1,0 +1,57 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  min-width: 40px;
+  background-color: $color-bg;
+  border: 1px solid $color-border-popper;
+  border-radius: 8px;
+  padding: 16px;
+
+  > :only-child {
+    position: relative;
+    width: 2px;
+    height: 68px;
+    margin: 0 auto;
+    background-color: $color-bg-icon-button;
+    box-shadow: none;
+    cursor: pointer;
+
+    * {
+      user-select: none;
+    }
+
+    > :nth-child(1) {
+      background-color: $color-bg-icon;
+    }
+
+    > :nth-child(2) {
+      left: 50%;
+      width: 30px;
+      height: 6px;
+      background-color: transparent;
+      border: 0;
+      transform: translateX(-50%);
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 6px;
+        height: 6px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: $color-bg-icon;
+      }
+
+      > * {
+        display: none;
+      }
+    }
+
+    > :nth-child(3) {
+      display: none;
+    }
+  }
+}

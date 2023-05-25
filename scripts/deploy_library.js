@@ -20,10 +20,6 @@ const wvs = 10 ** 8;
     };
 
     if (env.CHAIN_ID === 'R' || env.CHAIN_ID === 'T') {
-      /*  Create dummy market contract for testing.
-       */
-      console.log(`Master address: ${DAPP}`);
-
       console.log('    ` Set Clef library script');
       await compile_and_broadcast(
         env.SEED,

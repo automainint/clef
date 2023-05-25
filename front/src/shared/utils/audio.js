@@ -4,229 +4,50 @@ const {
   diatonic_minor,
   pitch_to_midi,
   beat_to_sec,
-  render_sheet
+  render_sheet,
+  make_song
 } = require('./music.js');
 
-const { Mutex } = require('async-mutex');
+const radio = require('./radio.js');
 
-const vol_silence = -10000;
-const vol_min     = -60;
-const vol_max     = 0;
+const sdk       = require('./sdk.js');
+const { types } = require('./types.js');
 
-var lock        = new Mutex();
-var lock_render = new Mutex();
+async function render_song(Tone, song) {
+  const sheet = sdk.render_sheet(song);
 
-var data = {
-  init: false,
-  player: null,
-  volume: vol_max,
-  id: 0
-};
-
-async function _init(Tone) {
-  const release = await lock.acquire();
-  if (data.init) {
-    release();
-    return;
-  }
-  Tone.start();
-  Tone.Transport.start();
-  data.init = true;
-  release();
+  return await sdk.render_audio(Tone, sheet);
 }
 
-async function load_urls(name) {
-  try {
-    const urls = await fetch(`/samples/${name}/urls.json`);
+async function play(Tone, entity, ready, log) {
+  const song = make_song(entity);
 
-    if (urls.status != 200)
-      return {};
-
-    return JSON.parse(await urls.text());
-    
-  } catch (error) { }
-  return {};
-}
-
-function new_sampler(Tone, name) {
-  return new Promise((resolve, reject) => {
-    load_urls(name).then(urls => {
-      let sampler;
-
-      sampler = new Tone.Sampler({
-        urls:     urls,
-        baseUrl:  `/samples/${name}/`,
-        onload: () => {
-          resolve(sampler)
-        }
-      }).toDestination();
-    }).catch(error => { reject(error); });
-  });
-}
-
-async function render_audio(Tone, sheet, log) {
-  let buffer = null;
-
-  const release = await lock_render.acquire();
-
-  try {
-    buffer = await Tone.Offline(async ({ transport }) => {
-      const instr = [
-        new_sampler(Tone, sheet.instruments.kick),
-        new_sampler(Tone, sheet.instruments.snare),
-        new_sampler(Tone, sheet.instruments.hihat),
-        new_sampler(Tone, sheet.instruments.bass),
-        new_sampler(Tone, sheet.instruments.back),
-        new_sampler(Tone, sheet.instruments.lead) ];
-
-      const kick  = await instr[0];
-      const snare = await instr[1];
-      const hihat = await instr[2];
-      const bass  = await instr[3];
-      const back  = await instr[4];
-      const lead  = await instr[5];
-
-      const _note = (midi) => {
-        return Tone.Frequency(48 + midi, 'midi').toNote();
-      };
-
-      const render_part = (part_sheet, on_note) => {
-        let part = new Tone.Part((time, note) => {
-          if (time < sheet.duration + 0.01 && note.duration > 0)
-            on_note(time, note);
-        }, part_sheet);
-
-        part.loop      = true;
-        part.loopStart = 0;
-        part.loopEnd   = sheet.duration;
-
-        part.start();
-      };
-
-      render_part(sheet.bass, (time, note) => {
-        bass.triggerAttackRelease(_note(note.note), note.duration, time, note.velocity);
-      });
-
-      render_part(sheet.back, (time, note) => {
-        back.triggerAttackRelease(_note(note.note), note.duration, time, note.velocity);
-      });
-
-      render_part(sheet.lead, (time, note) => {
-        lead.triggerAttackRelease(_note(note.note), note.duration, time, note.velocity);
-      });
-
-      render_part(sheet.kick, (time, note) => {
-        kick.triggerAttackRelease('A2', note.duration, time, note.velocity);
-      });
-
-      render_part(sheet.snare, (time, note) => {
-        snare.triggerAttackRelease('A2', note.duration, time, note.velocity);
-      });
-
-      render_part(sheet.hihat, (time, note) => {
-        hihat.triggerAttackRelease('A2', note.duration, time, note.velocity);
-      });
-
-      transport.start();
-    }, sheet.duration + 2);
-
-  } catch (error) {
-    if (log) {
-      log(error);
-    }
-  }
-
-  /*  Tone.js bug
-   *  Make sure rendering don't overlap.
-   */
-  setTimeout(release, 100);
-
-  return buffer;
-}
-
-async function render_song(Tone, song, log) {
-  const sheet = render_sheet(song);
-
-  if (log) {
-    //log('Song:');
-    //log(JSON.stringify(song, null, '  '));
-    //log('Sheet:');
-    //log(JSON.stringify(sheet, null, '  '));
-  }
-
-  return await render_audio(Tone, sheet, log);
+  await sdk.play_song_data(
+    Tone,
+    song,
+    async () => { ready(); },
+    log,
+    entity.type == types.song);
 }
 
 async function play_song(Tone, song, ready, log) {
-  await _init(Tone);
-
-  let release = await lock.acquire();
-
-  if (data.id === song.id) {
-    data.player.stop();
-    data.stop();
-
-    ready();
-
-    data.player.start();
-
+  if ('rhythm' in song) {
+    await sdk.play_song_data(Tone, song, async () => { ready(); }, log);
   } else {
-    release();
-
-    const sheet = render_sheet(song);
-
-    const buffer = await render_audio(Tone, sheet, log)
-
-    release = await lock.acquire();
-
-    if (data.player) {
-      data.player.stop();
-      data.stop();
-    }
-
-    ready();
-
-    if (buffer != null) {
-      data.player = new Tone.Player().toDestination();
-      data.player.volume.value = data.volume;
-      data.player.buffer = buffer;
-      data.player.start();
-      data.id = song.id;
-      data.duration = sheet.duration + 2;
-    }
+    await sdk.play_song_by_asset_id(Tone, song.asset_id, async () => { ready(); }, log);
   }
-
-  await new Promise((resolve, reject) => {
-    data.stop = resolve;
-    release();
-
-    setTimeout(
-      () => { resolve(); },
-      Math.floor(data.duration * 1000));
-  });
 }
 
 async function stop(Tone) {
-  await _init(Tone);
-
-  const release = await lock.acquire();
-  if (data.player) {
-    data.player.stop();
-    data.stop();
-  }
-  release();
+  /*  FIXME
+   *  Hack: don't stop radio.
+   */
+  if (!radio.state.playing)
+    await sdk.stop(Tone);
 }
 
 async function set_volume(volume_) {
-  if (volume_ <= 0)
-    data.volume = vol_silence;
-  else if (volume_ >= 1)
-    data.volume = vol_max;
-  else
-    data.volume = vol_min + (vol_max - vol_min) * Math.log2(volume_ + 1);
-
-  if (data.player)
-    data.player.volume.value = data.volume;
+  await sdk.set_volume(volume_);
 }
 
 function write_wav(buffer, put) {
@@ -275,6 +96,7 @@ function write_wav(buffer, put) {
 
 module.exports = {
   render_song:  render_song,
+  play:         play,
   play_song:    play_song,
   stop:         stop,
   set_volume:   set_volume,

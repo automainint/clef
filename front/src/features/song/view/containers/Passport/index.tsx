@@ -3,106 +3,95 @@ import { FC, useEffect } from 'react';
 
 import { DnaCard, Preloader } from 'shared/components';
 import { usePreloader } from 'shared/hooks';
-import { isErrorWithMessage, Song } from 'shared/types';
-import {
-  getSongAssetID,
-  getSongAssetURL,
-  getSongBPM,
-  getSongChordNames,
-  getSongChords,
-  getSongGeneration,
-  getSongLabel,
-  getSongMeter,
-  getSongTonality,
-  renderSheet,
-} from 'shared/utils';
+import { ContainerTypes, isErrorWithMessage, ResourceType } from 'shared/types';
+
 import { useStore } from 'store/createStore';
 
-import { getInstruments, getScaleFormat, getTimeFormat } from '../../../utils';
 import { Disc } from '../Disc';
-import { PlayButton } from '../PlayButton';
 import { Rarity } from '../Rarity';
 import { ShareButton } from '../ShareButton';
 import styles from './passport.module.scss';
 
 type Props = {
   assetID: string;
-  song?: Song;
-  isNew?: boolean;
+  currentPlayingID: string;
+  PlayButton: ContainerTypes['PlayButton'];
+  withMessageForType?: ResourceType | null;
   onLoad?: (title: string) => void;
 };
 
-const Passport: FC<Props> = observer(({ assetID, song = undefined, isNew = false, onLoad = undefined }) => {
-  const { fetchSong, saveSong, currentSong } = useStore().song;
-  const { isPending, error, setLoadingStatus } = usePreloader('', true);
+const Passport: FC<Props> = observer(
+  ({ assetID, currentPlayingID, PlayButton, withMessageForType = null, onLoad = undefined }) => {
+    const { fetchSong, fetchPassport, passport, currentSong } = useStore().song;
+    const { isPending, error, setLoadingStatus } = usePreloader('', true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (song === undefined) await fetchSong(assetID);
-        else saveSong(song);
-        setLoadingStatus({ isPending: false, error: '' });
-      } catch (err) {
-        setLoadingStatus({ isPending: false, error: 'something went wrong' });
-        if (isErrorWithMessage(err)) {
-          // eslint-disable-next-line no-console
-          console.log(`Error: ${err.message}`);
-        } else {
-          // eslint-disable-next-line no-console
-          console.log(`Unknown error: ${JSON.stringify(err)}`);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          await fetchSong(assetID);
+          await fetchPassport();
+          setLoadingStatus({ isPending: false, error: '' });
+        } catch (err) {
+          setLoadingStatus({ isPending: false, error: 'something went wrong' });
+          if (isErrorWithMessage(err)) {
+            // eslint-disable-next-line no-console
+            console.log(`Error: ${err.message}`);
+          } else {
+            // eslint-disable-next-line no-console
+            console.log(`Unknown error: ${JSON.stringify(err)}`);
+          }
         }
-      }
-    };
+      };
 
-    fetchData();
-  }, [setLoadingStatus, fetchSong, assetID, saveSong, song]);
+      fetchData();
+    }, [setLoadingStatus, fetchSong, fetchPassport, assetID]);
 
-  useEffect(() => {
-    if (isPending || error || currentSong !== null) return;
-    setLoadingStatus({ isPending: false, error: 'song does not exist' });
-  }, [isPending, error, setLoadingStatus, currentSong]);
+    useEffect(() => {
+      if (isPending || error || currentSong !== null) return;
+      setLoadingStatus({ isPending: false, error: 'song does not exist' });
+    }, [isPending, error, setLoadingStatus, currentSong]);
 
-  useEffect(() => {
-    if (currentSong === null) return;
-    const title = getSongLabel(currentSong);
-    if (typeof title !== 'string') return;
-    onLoad?.(title);
-  }, [onLoad, currentSong]);
+    useEffect(() => {
+      if (passport === null) return;
+      onLoad?.(passport.label);
+    }, [onLoad, passport]);
 
-  return (
-    <>
-      {isPending || error || currentSong === null ? (
-        <div className={styles.preloader}>
-          <Preloader isPending={isPending} error={error} />
-        </div>
-      ) : (
-        <DnaCard
-          disc={<Disc song={currentSong} isSaveImage />}
-          rarity={<Rarity assetID={getSongAssetID(currentSong)} />}
-          title={getSongLabel(currentSong)}
-          melodyKey={getSongTonality(currentSong)}
-          tempo={getSongBPM(currentSong)}
-          length={getTimeFormat(renderSheet(currentSong).duration)}
-          meter={getScaleFormat(getSongMeter(currentSong))}
-          generation={getSongGeneration(currentSong)}
-          id={getSongAssetID(currentSong)}
-          url={getSongAssetURL(currentSong)}
-          chordNames={getSongChordNames(currentSong)}
-          chords={getSongChords(currentSong)}
-          instruments={getInstruments(renderSheet(currentSong))}
-          withMessage={isNew}
-          buttons={[
-            { key: 'play', button: <PlayButton song={currentSong} /> },
-            {
-              key: 'share',
-              button: <ShareButton song={currentSong} />,
-              size: 'middle',
-            },
-          ]}
-        />
-      )}
-    </>
-  );
-});
+    return (
+      <>
+        {isPending || error || currentSong === null || passport === null ? (
+          <div className={styles.preloader}>
+            <Preloader isPending={isPending} error={error} />
+          </div>
+        ) : (
+          <DnaCard
+            slotElement={<Disc song={currentSong} isPlaying={currentPlayingID === passport.id} isSaveImage />}
+            rarity={<Rarity assetID={passport.asset_id} />}
+            title={passport.label}
+            desc="Track"
+            melodyKey={passport.tonality}
+            tempo={passport.songBPM}
+            length={passport.time}
+            meter={passport.scale}
+            generation={passport.generation}
+            id={passport.asset_id}
+            url={passport.url}
+            chordNames={passport.chordNames}
+            chords={passport.chords}
+            instruments={passport.instruments}
+            withMessageForType={withMessageForType}
+            buttons={[
+              { key: 'play', button: <PlayButton playableResource={currentSong} /> },
+              {
+                key: 'share',
+                button: <ShareButton song={currentSong} />,
+                size: 'middle',
+              },
+            ]}
+          />
+        )}
+      </>
+    );
+  }
+);
 
 export { Passport };

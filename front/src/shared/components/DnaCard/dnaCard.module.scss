@@ -1,24 +1,33 @@
 @import 'shared/scss/variables.scss';
 
 .root {
-  max-width: 600px;
+  width: 600px;
   background-color: $color-bg;
+
+  @media (max-width: $mobile-max-width) {
+    width: 100vw;
+  }
 }
 
 .message {
   display: flex;
+  gap: 20px;
   padding: 24px;
   background: $color-bg-card;
+
+  @media (max-width: $mobile-two-thirds-bp-width) {
+    flex-direction: column;
+  }
+}
+
+.messageThemeDark {
+  background-color: $color-bg-dark;
 }
 
 .messageIcon {
   padding: 2px 1px;
   width: 30px;
   height: 30px;
-}
-
-.messageText {
-  margin-left: 20px;
 }
 
 .messageTitle {
@@ -29,6 +38,10 @@
   line-height: 34px;
   letter-spacing: -0.05em;
   color: $color-main;
+}
+
+.messageTitleThemeDark {
+  color: $color-main-invert;
 }
 
 .messageDesc {
@@ -57,6 +70,10 @@
   }
 }
 
+.headerThemeDark {
+  background-color: $color-bg-dark;
+}
+
 .logo {
   display: none;
   fill: $color-note-additional;
@@ -66,7 +83,7 @@
   }
 }
 
-.disc {
+.slotElement {
   width: 112px;
   height: 112px;
 
@@ -101,6 +118,10 @@
   line-height: 17px;
   letter-spacing: -0.05em;
   color: $color-details-additional;
+}
+
+.descThemeDark {
+  color: $color-details-additional-light;
 }
 
 .descMobileLarge {
@@ -201,6 +222,10 @@
   color: $color-main-middle;
 }
 
+.detailsValueThemeDark {
+  color: $color-main-invert;
+}
+
 .subtitle {
   font-family: $font-main;
   font-style: normal;
@@ -209,6 +234,10 @@
   line-height: 19px;
   letter-spacing: -0.05em;
   color: $color-details-additional;
+}
+
+.subtitleThemeDark {
+  color: $color-details-additional-light;
 }
 
 .idSection {
@@ -246,6 +275,16 @@
   &:hover {
     color: $color-main;
     stroke: $color-main;
+  }
+}
+
+.idLinkThemeDark {
+  color: $color-main-invert;
+  stroke: $color-main-invert;
+
+  &:hover {
+    color: $color-main-invert;
+    stroke: $color-main-invert;
   }
 }
 

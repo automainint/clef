@@ -25,12 +25,13 @@ type Props = {
   PlayButton: ContainerTypes['PlayButton'];
   ObserveDNAButton: ContainerTypes['ObserveDNAButton'];
   Disc: ContainerTypes['Disc'];
+  currentPlayingID: string;
   haveFMT?: boolean;
   onMix?: () => void;
 };
 
 const Mix: FC<Props> = observer(
-  ({ user, ConnectButton, PlayButton, ObserveDNAButton, Disc, haveFMT = false, onMix }) => {
+  ({ user, ConnectButton, PlayButton, ObserveDNAButton, Disc, currentPlayingID, haveFMT = false, onMix }) => {
     const {
       songs,
       hybrid,
@@ -222,8 +223,8 @@ const Mix: FC<Props> = observer(
             <MixingOptionsSection onBackButtonClick={handleBackButtonClick}>
               <DiscsChainCard
                 desc="Keep parent melodies"
-                price={`${hybridPrice} USDT`}
-                isDiscount={hybridPrice < 100}
+                price={hybridPrice !== null ? `${hybridPrice.amount} ${hybridPrice.asset_name.toUpperCase()}` : ''}
+                isDiscount={hybridPrice !== null && hybridPrice.amount < 100}
                 isChecked={!isBurn}
                 isDisabled={!isEnoughForMix}
                 switcher={
@@ -250,6 +251,7 @@ const Mix: FC<Props> = observer(
                       <Melody
                         song={hybrid[0]}
                         PlayButton={PlayButton}
+                        currentPlayingID={currentPlayingID}
                         ObserveDNAButton={ObserveDNAButton}
                         Disc={Disc}
                         isDeckCard
@@ -263,6 +265,7 @@ const Mix: FC<Props> = observer(
                       <Melody
                         song={hybrid[1]}
                         PlayButton={PlayButton}
+                        currentPlayingID={currentPlayingID}
                         ObserveDNAButton={ObserveDNAButton}
                         Disc={Disc}
                         isDeckCard
@@ -289,6 +292,7 @@ const Mix: FC<Props> = observer(
                       <Melody
                         song={song}
                         PlayButton={PlayButton}
+                        currentPlayingID={currentPlayingID}
                         ObserveDNAButton={ObserveDNAButton}
                         Disc={Disc}
                         showNewPassport={
@@ -321,8 +325,20 @@ const Mix: FC<Props> = observer(
           />
           <AnchorButton hidden={withAnchor === null ? undefined : !withAnchor} onClick={scrollTop}>
             <MixingDeck
-              leftSide={hybrid[0] !== null ? <Disc song={hybrid[0]} /> : <></>}
-              rightSide={hybrid[1] !== null ? <Disc song={hybrid[1]} /> : <></>}
+              leftSide={
+                hybrid[0] !== null ? (
+                  <Disc isPlaying={currentPlayingID === getSongID(hybrid[0])} song={hybrid[0]} />
+                ) : (
+                  <></>
+                )
+              }
+              rightSide={
+                hybrid[1] !== null ? (
+                  <Disc isPlaying={currentPlayingID === getSongID(hybrid[1])} song={hybrid[1]} />
+                ) : (
+                  <></>
+                )
+              }
               isSmall
             />
           </AnchorButton>

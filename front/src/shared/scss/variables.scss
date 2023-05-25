@@ -21,9 +21,11 @@ $color-secondary: #737373;
 $color-secondary-additional: #cbcbcb;
 $color-details: #a8a8a8;
 $color-details-additional: #bdbdbd;
+$color-details-additional-light: #dadada;
 $color-card: #3f3f3f;
 $color-card-additional: #5a5a5a;
 $color-card-button: #696969;
+$color-card-button-light: #ccc;
 $color-card-text: #353535;
 $color-mark: #aaa;
 $color-wallet: #333;
@@ -32,6 +34,8 @@ $color-label: #bcbcbc;
 $color-pink: #ef5da8;
 $color-blue: #1d31fc;
 $color-green: #14ae5c;
+$color-gold: #f4c20e;
+$color-red: #ff5e5e;
 $color-button: #0d0d0d;
 $color-text: #b7b7b7;
 $color-button-text: #1f1e1e;
@@ -42,10 +46,20 @@ $color-deck-text: #404040;
 $color-list-text: #333;
 $color-list-hover: #f8f8f8;
 $color-notification: $color-list-text;
+$color-tab: #d0d0d0;
 
 $color-bg: #fff;
 $color-bg-card: #f7f7f7;
 $color-bg-invert: #0e0e0e;
+$color-bg-cover: #6632ac;
+$color-bg-mix: #ac324f;
+$color-bg-genesis: #116ad1;
+$color-bg-cover-light: rgba(102 50 172 / 16%);
+$color-bg-mix-light: rgba(172 50 80 / 16%);
+$color-bg-genesis-light: rgba(17 106 209 / 16%);
+$color-bg-dark: $color-wallet;
+$color-bg-icon: #424242;
+$color-bg-icon-button: #d9d9d9;
 
 $color-border: #e6e6e6;
 $color-border-additional: #efefef;
@@ -61,3 +75,17 @@ $color-note-additional: $color-border-separator;
 
 $gradient: linear-gradient(360deg, #292929 -119.14%, #000 -2.67%, #464646 101.96%);
 $gradient-card: linear-gradient(29.14deg, #1e5dff 16.92%, #a975ff 109.77%);
+$gradient-element-card: linear-gradient(180deg, #6a6571 0%, #19181c 100%);
+$gradient-element-card-selected: linear-gradient(180deg, #9b91a9 0%, #19181c 100%);
+$gradient-songs: linear-gradient(180deg, #bc8aff 0%, #6632ac 100%);
+$gradient-elements: linear-gradient(180deg, #2cde73 0%, #19b356 100%);
+$gradient-disc-card: conic-gradient(
+  from 180deg at 50% 29.35%,
+  #f7f7f7 0deg,
+  rgba(146 146 146 / 30%) 50deg,
+  #f7f7f7 101.26deg,
+  rgba(146 146 146 / 30%) 230deg,
+  #f7f7f7 360deg
+);
+$gradient-tab-button: linear-gradient(19.09deg, rgba(196 196 196 / 97%) -10.93%, #4d4d4d 257.73%);
+$gradient-border: linear-gradient(#fff, #fff) padding-box, linear-gradient(75deg, #c3c3c3, #4d4d4d) border-box;

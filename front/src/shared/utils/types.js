@@ -1,15 +1,8 @@
 /* eslint-disable */
 
-const types = {
-  chord:    'chord',
-  arpeggio: 'arpeggio',
-  rhythm:   'rhythm',
-  beat:     'beat',
-  song:     'song',
-  hybrid:   'hybrid'
-};
+const sdk = require('./sdk.js');
 
 module.exports = {
-  types: types
+  types: sdk.TYPES
 };
 

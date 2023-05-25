@@ -2,42 +2,54 @@
 
 .root {
   display: grid;
-  grid-template-columns: 300px 900px;
-  min-width: $min-width;
-  max-width: $max-width;
+  grid-template-columns: 600px auto;
   width: 100%;
-  margin: 0 auto;
-
-  @media (max-width: $tablet-max-width) {
-    display: flex;
-    flex-direction: column;
-    width: auto;
-    min-width: auto;
-    max-width: 600px;
-  }
 }
 
-.mainBar {
+.wing {
   position: sticky;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  gap: 30px;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  padding-top: 105px;
+  z-index: 1;
+}
+
+.colWrapper {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+}
+
+.col {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  top: 0;
   height: 100vh;
-  overflow-x: hidden;
   overflow-y: auto;
-
-  @media (max-width: $tablet-max-width) {
-    position: static;
-    height: auto;
-    order: 1;
-  }
-}
-
-.wallet {
-  padding: 16px;
 }
 
 .main {
+  width: 600px;
+  min-width: 600px;
+  max-width: 600px;
+  min-height: 100%;
+}
+
+.mintButton {
+  padding: 0 37px 0 56px;
+}
+
+.assetsWallet {
+  flex-grow: 1;
   width: 100%;
+  padding-left: 18px;
+}
+
+.radio {
+  padding: 17px 18px 17px 32px;
 }

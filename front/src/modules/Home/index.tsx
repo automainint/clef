@@ -6,8 +6,8 @@ import { PlainButton } from 'shared/components';
 import { ConnectButton } from 'features/wallet';
 import { useStore } from 'store/createStore';
 
-import { MainNotAdaptive } from '../shared';
-import { MixingCard, PuzzleHoldersAirdropCard, WCTHoldersAirdropCard } from './components';
+import { Base, Main } from '../shared';
+import { TrialCard, MixingCard, PuzzleHoldersAirdropCard, WCTHoldersAirdropCard } from './components';
 import { anchors } from './constants';
 import styles from './home.module.scss';
 
@@ -22,24 +22,39 @@ const Home: NextPageWithLayout<StaticProps> = observer(() => {
         <title>Clef</title>
       </Head>
       <div className={styles.root}>
-        <div className={styles.content}>
-          <h1 className={styles.title}>Welcome to Clef</h1>
-          <div className={styles.cards}>
-            <div className={styles.card} id={anchors.mixing}>
-              <MixingCard ConnectButton={ConnectButton} isAuth={user !== null} />
-            </div>
-            <div className={styles.card} id={anchors.puzzleHoldersAirdrop}>
-              <PuzzleHoldersAirdropCard />
-            </div>
-            <div className={styles.card} id={anchors.wctHoldersAirdrop}>
-              <WCTHoldersAirdropCard />
-            </div>
+        <h1 className={styles.title}>Welcome to Clef</h1>
+        <div className={styles.cards}>
+          <div className={styles.card} id={anchors.trial}>
+            <TrialCard />
+          </div>
+          <div className={styles.card} id={anchors.mixing}>
+            <MixingCard ConnectButton={ConnectButton} isAuth={user !== null} />
+          </div>
+          <div className={styles.card} id={anchors.puzzleHoldersAirdrop}>
+            <PuzzleHoldersAirdropCard />
+          </div>
+          <div className={styles.card} id={anchors.wctHoldersAirdrop}>
+            <WCTHoldersAirdropCard />
           </div>
         </div>
+      </div>
+    </>
+  );
+});
+
+Home.getLayout = (page) => (
+  <Base>
+    <Main
+      slot={
         <div className={styles.sideBar}>
           <p className={styles.subtitle}>Timeline</p>
           <div className={styles.button}>
-            <PlainButton href={`#${anchors.mixing}`} theme="filledDarkGradient" isAlongEdges>
+            <PlainButton href={`#${anchors.trial}`} theme="filledDarkGradient" isAlongEdges>
+              Free trial
+            </PlainButton>
+          </div>
+          <div className={styles.button}>
+            <PlainButton href={`#${anchors.mixing}`} theme="borderedDark" isAlongEdges>
               Mixing Added
             </PlainButton>
           </div>
@@ -54,11 +69,11 @@ const Home: NextPageWithLayout<StaticProps> = observer(() => {
             </PlainButton>
           </div>
         </div>
-      </div>
-    </>
-  );
-});
-
-Home.getLayout = (page) => <MainNotAdaptive>{page}</MainNotAdaptive>;
+      }
+    >
+      {page}
+    </Main>
+  </Base>
+);
 
 export { Home, type StaticProps };

@@ -13,7 +13,7 @@ const DebugPanel: FC<Props> = observer(() => {
   const { user, getBalance } = useStore().wallet;
   const { generateSong, addBalance } = useStore().debug;
   const { getSongs, getCanMintHybrid } = useStore().mix;
-  const { volume, setVolume } = useStore().song;
+  const { volume, setVolume } = useStore().turntable;
   const [songCount, setSongCount] = useState(0);
 
   const handleGenerateClick = async () => {
@@ -56,7 +56,9 @@ const DebugPanel: FC<Props> = observer(() => {
           <PlainButton onClick={handleAddBalanceClick} size="small" theme="filledDarkGradient">
             Add balance
           </PlainButton>
-          <div className={styles.volumeLabel}>Volume {volume !== 0 && <>{(volume * 100).toFixed()}%</>}</div>
+          <div className={styles.volumeLabel}>
+            Volume {volume.value !== 0 && <>{(volume.value * 100).toFixed()}%</>}
+          </div>
         </div>
         <div className={styles.volumeBox}>
           <input
@@ -65,7 +67,7 @@ const DebugPanel: FC<Props> = observer(() => {
             min={0}
             max={1}
             step={0.01}
-            value={volume}
+            value={volume.value}
             onChange={handleVolumeChange}
           />
         </div>

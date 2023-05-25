@@ -1,0 +1,77 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes blink {
+  from {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.2;
+  }
+}
+
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.popup {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: 137.5%;
+  left: -29%;
+  min-height: 33px;
+  padding: 8px 12px;
+  background: $color-bg;
+  border: 1px solid $color-border-popper;
+  border-radius: 8px;
+
+  > :first-child {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    color: $color-red;
+  }
+
+  > :last-child {
+    margin-left: 4px;
+    font-family: $font-main;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: -0.05em;
+    color: $color-main-middle;
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  fill: transparent;
+  transition: fill ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover,
+  &Filled {
+    fill: $color-bg-icon;
+  }
+
+  &:disabled {
+    fill: transparent;
+    cursor: default;
+  }
+
+  &Blinked {
+    animation: blink ease-in-out 2s infinite;
+  }
+}

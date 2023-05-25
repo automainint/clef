@@ -1,21 +1,32 @@
-import { Hybrid, Resources, MintResources, ResourcesOptions, ResourceType, User, AirdropInfo } from 'shared/types';
+import { currency } from 'shared/constants';
+import {
+  Hybrid,
+  Resources,
+  MintResources,
+  ResourcesOptions,
+  ResourceType,
+  User,
+  AirdropInfo,
+  Song,
+  Currency,
+} from 'shared/types';
 
 class UserApi {
-  async fetchBalance(user: User): Promise<number> {
+  async fetchBalance(user: User): Promise<Currency> {
     const response = await user.get_balance?.();
 
     if (response !== undefined) {
-      return response;
+      return { asset_name: response.asset_name, amount: response.amount };
     }
     const error = 'get_balance not responding';
     throw new Error(error);
   }
 
-  async fetchFreeMixBalance(user: User): Promise<number> {
+  async fetchFreeMixBalance(user: User): Promise<Currency> {
     const response = await user.get_free_mix_balance?.();
 
     if (response !== undefined) {
-      return response;
+      return { asset_name: currency.fmt, amount: response };
     }
     const error = 'get_free_mix_balance not responding';
     throw new Error(error);
@@ -51,11 +62,11 @@ class UserApi {
     throw new Error(error);
   }
 
-  async fetchPrice(user: User, type: ResourceType): Promise<number> {
+  async fetchPrice(user: User, type: ResourceType): Promise<Currency> {
     const response = await user.get_price?.(type);
 
     if (response !== undefined) {
-      return response;
+      return { asset_name: response.asset_name, amount: response.amount };
     }
     const error = 'get_price not responding';
     throw new Error(error);
@@ -68,6 +79,16 @@ class UserApi {
       return response;
     }
     const error = 'get_airdrop_info not responding';
+    throw new Error(error);
+  }
+
+  async fetchLikes(user: User): Promise<string[]> {
+    const response = await user.get_likes?.();
+
+    if (response !== undefined) {
+      return response;
+    }
+    const error = 'get_likes not responding';
     throw new Error(error);
   }
 
@@ -88,6 +109,16 @@ class UserApi {
       return response;
     }
     const error = 'mint_song not responding';
+    throw new Error(error);
+  }
+
+  async mintSongClone(user: User, song: Song): Promise<string> {
+    const response = await user.mint_song_clone?.(song);
+
+    if (response !== undefined) {
+      return response;
+    }
+    const error = 'mint_song_clone not responding';
     throw new Error(error);
   }
 
@@ -139,6 +170,10 @@ class UserApi {
 
   async airdropClaim(user: User, name: string) {
     await user.airdrop_claim?.(name);
+  }
+
+  async like(user: User, assetID: string) {
+    await user.like?.(assetID);
   }
 }
 

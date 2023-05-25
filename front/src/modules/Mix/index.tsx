@@ -5,14 +5,16 @@ import { useStore } from 'store/createStore';
 import { NextPageWithLayout } from 'shared/types';
 import { Mix as MixFeature } from 'features/mix';
 import { ConnectButton } from 'features/wallet';
-import { Disc, ObserveDNAButton, PlayButton } from 'features/song';
+import { Disc, ObserveDNAButton } from 'features/song';
+import { PlayButton } from 'features/turntable';
 
-import { MainNotAdaptive } from '../shared';
+import { Base } from '../shared';
 
 type StaticProps = {};
 
 const Mix: NextPageWithLayout<StaticProps> = observer(() => {
   const { user, getBalance, getFreeMixBalance, freeMixBalance } = useStore().wallet;
+  const { currentPlayingID } = useStore().turntable;
 
   const handleMix = async () => {
     if (user === null) return;
@@ -27,17 +29,18 @@ const Mix: NextPageWithLayout<StaticProps> = observer(() => {
       </Head>
       <MixFeature
         user={user}
-        haveFMT={freeMixBalance > 0}
+        haveFMT={freeMixBalance !== null && freeMixBalance.amount > 0}
         ConnectButton={ConnectButton}
         PlayButton={PlayButton}
         ObserveDNAButton={ObserveDNAButton}
         Disc={Disc}
+        currentPlayingID={currentPlayingID}
         onMix={handleMix}
       />
     </>
   );
 });
 
-Mix.getLayout = (page) => <MainNotAdaptive>{page}</MainNotAdaptive>;
+Mix.getLayout = (page) => <Base>{page}</Base>;
 
 export { Mix, type StaticProps };

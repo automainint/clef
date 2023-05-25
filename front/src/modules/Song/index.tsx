@@ -5,15 +5,19 @@ import { useEffect, useState } from 'react';
 
 import { NextPageWithLayout } from 'shared/types';
 import { Passport } from 'features/song';
-
+import { PlayButton } from 'features/turntable';
+import { useStore } from 'store/createStore';
 import { Preloader } from 'shared/components';
-import { Main } from '../shared';
+
+import { Base } from '../shared';
 import styles from './song.module.scss';
 
 const Song: NextPageWithLayout = observer(() => {
   const [subtitle, setSubtitle] = useState<string>('');
   const router = useRouter();
   const { id } = router.query;
+
+  const { currentPlayingID } = useStore().turntable;
 
   const isCorrectID = id !== undefined && !Array.isArray(id);
   const tabTitle = `Clef - Song${subtitle && `: ${subtitle}`}`;
@@ -35,7 +39,12 @@ const Song: NextPageWithLayout = observer(() => {
       <div className={styles.root}>
         <div className={styles.content}>
           {isCorrectID ? (
-            <Passport assetID={id} onLoad={handlePassportLoad} />
+            <Passport
+              assetID={id}
+              PlayButton={PlayButton}
+              currentPlayingID={currentPlayingID}
+              onLoad={handlePassportLoad}
+            />
           ) : (
             <div className={styles.preloader}>
               <Preloader isPending />
@@ -47,6 +56,6 @@ const Song: NextPageWithLayout = observer(() => {
   );
 });
 
-Song.getLayout = (page) => <Main>{page}</Main>;
+Song.getLayout = (page) => <Base isAdaptive>{page}</Base>;
 
 export { Song };

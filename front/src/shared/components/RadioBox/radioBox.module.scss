@@ -1,0 +1,11 @@
+.root {
+  display: block;
+  cursor: pointer;
+}
+
+.radioHidden {
+  display: block;
+  width: 0;
+  height: 0;
+  appearance: none;
+}

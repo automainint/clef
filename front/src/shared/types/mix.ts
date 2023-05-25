@@ -1,4 +1,4 @@
-import { Song } from './resource';
+import { Song } from './song';
 
 export type HybridRaw = [Song | null, Song | null];
 

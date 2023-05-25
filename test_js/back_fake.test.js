@@ -65,7 +65,7 @@ describe('back fake', async function () {
   });
 
   it('balance is zero initially', async function () {
-    assert.equal(await user.get_balance(), 0);
+    assert.equal((await user.get_balance()).amount, 0);
 
     await user.logout();
   });
@@ -78,7 +78,7 @@ describe('back fake', async function () {
 
   it('balance will increase by request', async function () {
     await user.add_balance(10);
-    assert.ok(await user.get_balance() === 10);
+    assert.ok((await user.get_balance()).amount === 10);
 
     await user.logout();
   });
@@ -87,14 +87,22 @@ describe('back fake', async function () {
     await user.add_balance(10);
     await user.logout();
 
-    assert.ok(await user.get_balance() === undefined);
+    let k = false;
+
+    try {
+      await user.get_balance();
+    } catch (e_) {
+      k = true;
+    }
+
+    assert.ok(k);
   });
 
   it('can get prices', async function () {
-    assert.ok(await user.get_price(types.chord) > 0);
-    assert.ok(await user.get_price(types.rhythm) > 0);
-    assert.ok(await user.get_price(types.beat) > 0);
-    assert.ok(await user.get_price(types.hybrid) > 0);
+    assert.ok((await user.get_price(types.chord)).amount > 0);
+    assert.ok((await user.get_price(types.rhythm)).amount > 0);
+    assert.ok((await user.get_price(types.beat)).amount > 0);
+    assert.ok((await user.get_price(types.hybrid)).amount > 0);
 
     await user.logout();
   });
@@ -107,7 +115,7 @@ describe('back fake', async function () {
   });
 
   it('can buy chord with positive balance', async function () {
-    const price = await user.get_price(types.chord);
+    const price = (await user.get_price(types.chord)).amount;
     await user.add_balance(price);
     await user.buy(types.chord);
     let res = await user.get_resources({ filter: types.chord });
@@ -118,17 +126,17 @@ describe('back fake', async function () {
   });
 
   it('balance will decrease after spent on chord', async function () {
-    const price = await user.get_price(types.chord);
+    const price = (await user.get_price(types.chord)).amount;
     await user.add_balance(price + 10);
-    const balance = await user.get_balance();
+    const balance = (await user.get_balance()).amount;
     await user.buy(types.chord);
-    assert.equal(await user.get_balance(), balance - price);
+    assert.equal((await user.get_balance()).amount, balance - price);
 
     await user.logout();
   });
 
   it('resource ids should be unique', async function () {
-    const price = await user.get_price(types.chord);
+    const price = (await user.get_price(types.chord)).amount;
     await user.add_balance(price * 4);
     await user.buy(types.chord);
     await user.buy(types.chord);
@@ -145,7 +153,7 @@ describe('back fake', async function () {
   });
 
   it('can get resources by pages 1', async function () {
-    const price = await user.get_price(types.chord);
+    const price = (await user.get_price(types.chord)).amount;
     await user.add_balance(price * 5);
     await user.buy(types.chord);
     await user.buy(types.chord);
@@ -175,8 +183,8 @@ describe('back fake', async function () {
 
   it('can get resources by pages 2', async function () {
     const price =
-      (await user.get_price(types.chord)) * 3 +
-      (await user.get_price(types.rhythm)) * 2;
+      (await user.get_price(types.chord)).amount * 3 +
+      (await user.get_price(types.rhythm)).amount * 2;
     await user.add_balance(price);
 
     await user.buy(types.chord);
@@ -212,7 +220,7 @@ describe('back fake', async function () {
   });
 
   it('can buy rhythm with positive balance', async function () {
-    const price = await user.get_price(types.rhythm);
+    const price = (await user.get_price(types.rhythm)).amount;
     await user.add_balance(price);
     await user.buy(types.rhythm);
     let res = await user.get_resources({ filter: types.rhythm });
@@ -223,11 +231,11 @@ describe('back fake', async function () {
   });
 
   it('balance will decrease after spent on rhythm', async function () {
-    const price = await user.get_price(types.rhythm);
+    const price = (await user.get_price(types.rhythm)).amount;
     await user.add_balance(price + 10);
-    const balance = await user.get_balance();
+    const balance = (await user.get_balance()).amount;
     await user.buy(types.rhythm);
-    assert.equal(await user.get_balance(), balance - price);
+    assert.equal((await user.get_balance()).amount, balance - price);
 
     await user.logout();
   });
@@ -240,7 +248,7 @@ describe('back fake', async function () {
   });
 
   it('can buy beat with positive balance', async function () {
-    const price = await user.get_price(types.beat);
+    const price = (await user.get_price(types.beat)).amount;
     await user.add_balance(price);
     await user.buy(types.beat);
     let res = await user.get_resources({ filter: types.beat });
@@ -251,20 +259,20 @@ describe('back fake', async function () {
   });
 
   it('balance will decrease after spent on beat', async function () {
-    const price = await user.get_price(types.beat);
+    const price = (await user.get_price(types.beat)).amount;
     await user.add_balance(price + 10);
-    const balance = await user.get_balance();
+    const balance = (await user.get_balance()).amount;
     await user.buy(types.beat);
-    assert.equal(await user.get_balance(), balance - price);
+    assert.equal((await user.get_balance()).amount, balance - price);
 
     await user.logout();
   });
 
 
   it('can filter multiple types', async function () {
-    const price = (await user.get_price(types.chord)) +
-                  (await user.get_price(types.rhythm)) +
-                  (await user.get_price(types.beat));
+    const price = (await user.get_price(types.chord)).amount +
+                  (await user.get_price(types.rhythm)).amount +
+                  (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
 
@@ -295,7 +303,7 @@ describe('back fake', async function () {
   });
 
   it('can not mint song with zero resources', async function () {
-    const price = await user.get_price(types.song);
+    const price = (await user.get_price(types.song)).amount;
     await user.add_balance(price + 100);
 
     let ok = false;
@@ -313,8 +321,8 @@ describe('back fake', async function () {
 
   it('can mint song with 2 chords', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2;
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2;
 
     await user.add_balance(price);
     
@@ -330,9 +338,9 @@ describe('back fake', async function () {
 
   it('can not mint song with more than 4 resources', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) * 3;
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount * 3;
 
     await user.add_balance(price);
     
@@ -357,9 +365,9 @@ describe('back fake', async function () {
 
   it('can mint song with 2 chords and 2 rhythms', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) * 2;
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount * 2;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -375,9 +383,9 @@ describe('back fake', async function () {
 
   it('can mint song with 2 chords and 1 beat', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -392,10 +400,10 @@ describe('back fake', async function () {
 
   it('resources will be spent when song is minted', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -412,10 +420,10 @@ describe('back fake', async function () {
 
   it('minted song will contain spent resources', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -457,10 +465,10 @@ describe('back fake', async function () {
 
   it('minted song should not have parents', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -479,10 +487,10 @@ describe('back fake', async function () {
 
   it('minted song should have a label and a type', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -516,8 +524,8 @@ describe('back fake', async function () {
 
   it('can mint hybrid with free mix token', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4;
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4;
 
     await user.add_balance(price);
     
@@ -544,9 +552,9 @@ describe('back fake', async function () {
 
   it('can mint hybrid with 2 songs', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4 +
-      (await user.get_price(types.hybrid));
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4 +
+      (await user.get_price(types.hybrid)).amount;
 
     await user.add_balance(price);
     
@@ -574,8 +582,8 @@ describe('back fake', async function () {
 
   it('can mint hybrid and burn 2 songs', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4;
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4;
 
     await user.add_balance(price);
 
@@ -602,8 +610,8 @@ describe('back fake', async function () {
 
   it('mint and burn songs order', async function () {
     const price =
-      (await user.get_price(types.song)) * 4 +
-      (await user.get_price(types.chord)) * 8;
+      (await user.get_price(types.song)).amount * 4 +
+      (await user.get_price(types.chord)).amount * 8;
 
     await user.add_balance(price);
 
@@ -636,8 +644,8 @@ describe('back fake', async function () {
 
   it('minted song checks', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2;
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -678,10 +686,10 @@ describe('back fake', async function () {
 
   it('minted custom song checks', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -727,9 +735,9 @@ describe('back fake', async function () {
 
   it('hybrid checks', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4 +
-      (await user.get_price(types.hybrid));
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4 +
+      (await user.get_price(types.hybrid)).amount;
 
     await user.add_balance(price);
     
@@ -782,8 +790,8 @@ describe('back fake', async function () {
 
   it('can render minted song', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2;
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2;
 
     await user.add_balance(price);
 
@@ -791,7 +799,7 @@ describe('back fake', async function () {
     await user.buy(types.chord);
     await user.mint_song(await user.get_resources({ filter: types.chord }));
 
-    const sheet = render_sheet((await user.get_resources({ filter: types.song }))[0]);
+    const sheet = await render_sheet((await user.get_resources({ filter: types.song }))[0]);
 
     assert.equal((typeof sheet.instruments.kick), 'string');
     assert.equal((typeof sheet.instruments.snare), 'string');
@@ -812,9 +820,9 @@ describe('back fake', async function () {
 
   it('can render hybrid', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4 +
-      (await user.get_price(types.hybrid));
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4 +
+      (await user.get_price(types.hybrid)).amount;
 
     await user.add_balance(price);
     
@@ -831,7 +839,7 @@ describe('back fake', async function () {
     await user.mint_hybrid(await user.get_resources({ filter: types.song }));
 
     const songs = await user.get_resources({ filter: types.song });
-    const sheet = render_sheet(songs[2]);
+    const sheet = await render_sheet(songs[2]);
 
     assert.equal((typeof sheet.instruments.kick), 'string');
     assert.equal((typeof sheet.instruments.snare), 'string');
@@ -852,9 +860,9 @@ describe('back fake', async function () {
 
   it('can get resource by id', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4 +
-      (await user.get_price(types.hybrid));
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4 +
+      (await user.get_price(types.hybrid)).amount;
 
     await user.add_balance(price);
     
@@ -884,9 +892,9 @@ describe('back fake', async function () {
 
   it('can get resource by asset id', async function () {
     const price =
-      (await user.get_price(types.song)) * 2 +
-      (await user.get_price(types.chord)) * 4 +
-      (await user.get_price(types.hybrid));
+      (await user.get_price(types.song)).amount * 2 +
+      (await user.get_price(types.chord)).amount * 4 +
+      (await user.get_price(types.hybrid)).amount;
 
     await user.add_balance(price);
     
@@ -912,10 +920,10 @@ describe('back fake', async function () {
 
   it('music util compatibility checks', async function () {
     const price =
-      (await user.get_price(types.song)) +
-      (await user.get_price(types.chord)) * 2 +
-      (await user.get_price(types.rhythm)) +
-      (await user.get_price(types.beat));
+      (await user.get_price(types.song)).amount +
+      (await user.get_price(types.chord)).amount * 2 +
+      (await user.get_price(types.rhythm)).amount +
+      (await user.get_price(types.beat)).amount;
 
     await user.add_balance(price);
     await user.buy(types.chord);
@@ -927,38 +935,42 @@ describe('back fake', async function () {
 
     const song = (await user.get_resources({ filter: types.song }))[0];
 
-    assert.equal(get_song_id(song), song_id);
-    assert.equal((typeof get_song_label(song)), 'string');
-    assert.equal(get_song_parents(song).length, 0);
-    assert.equal((typeof get_song_bpm(song)), 'number');
-    assert.equal(get_song_meter(song).length, 2);
-    assert.equal((typeof get_song_meter(song)[0]), 'number');
-    assert.equal((typeof get_song_meter(song)[1]), 'number');
-    assert.equal((typeof get_song_tonality(song)), 'string');
+    assert.equal(await get_song_id(song), song_id);
+    assert.equal((typeof await get_song_label(song)), 'string');
+    assert.equal((await get_song_parents(song)).length, 0);
+    assert.equal((typeof await get_song_bpm(song)), 'number');
+    assert.equal((await get_song_meter(song)).length, 2);
+    assert.equal((typeof (await get_song_meter(song))[0]), 'number');
+    assert.equal((typeof (await get_song_meter(song))[1]), 'number');
+    assert.equal((typeof await get_song_tonality(song)), 'string');
 
-    assert.equal(get_song_colors(song).length, 8);
-    assert.equal((typeof get_song_colors(song)[0]), 'number');
-    assert.equal((typeof get_song_colors(song)[1]), 'number');
-    assert.equal((typeof get_song_colors(song)[2]), 'number');
-    assert.equal((typeof get_song_colors(song)[3]), 'number');
-    assert.equal((typeof get_song_colors(song)[4]), 'number');
-    assert.equal((typeof get_song_colors(song)[5]), 'number');
-    assert.equal((typeof get_song_colors(song)[6]), 'number');
-    assert.equal((typeof get_song_colors(song)[7]), 'number');
+    let v = await get_song_colors(song);
 
-    assert.equal(get_song_chords(song).length, 8);
-    assert.ok(get_song_chords(song)[0].length >= 3);
-    assert.ok(get_song_chords(song)[1].length >= 3);
-    assert.ok(get_song_chords(song)[2].length >= 3);
-    assert.ok(get_song_chords(song)[3].length >= 3);
-    assert.ok(get_song_chords(song)[4].length >= 3);
-    assert.ok(get_song_chords(song)[5].length >= 3);
-    assert.ok(get_song_chords(song)[6].length >= 3);
-    assert.ok(get_song_chords(song)[7].length >= 3);
+    assert.equal(v.length, 8);
+    assert.equal((typeof v[0]), 'number');
+    assert.equal((typeof v[1]), 'number');
+    assert.equal((typeof v[2]), 'number');
+    assert.equal((typeof v[3]), 'number');
+    assert.equal((typeof v[4]), 'number');
+    assert.equal((typeof v[5]), 'number');
+    assert.equal((typeof v[6]), 'number');
+    assert.equal((typeof v[7]), 'number');
 
-    assert.equal(typeof get_song_asset_id(song), 'string');
+    v = await get_song_chords(song);
 
-    const url = new URL(get_song_asset_url(song));
+    assert.equal(v.length, 8);
+    assert.ok(v[0].length >= 3);
+    assert.ok(v[1].length >= 3);
+    assert.ok(v[2].length >= 3);
+    assert.ok(v[3].length >= 3);
+    assert.ok(v[4].length >= 3);
+    assert.ok(v[5].length >= 3);
+    assert.ok(v[6].length >= 3);
+    assert.ok(v[7].length >= 3);
+
+    assert.equal(typeof await get_song_asset_id(song), 'string');
+
+    const url = new URL(await get_song_asset_url(song));
 
     await user.logout();
   });

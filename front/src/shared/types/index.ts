@@ -5,5 +5,8 @@ export * from './music';
 export * from './resource';
 export * from './airdrop';
 export * from './user';
+export * from './turntable';
+export * from './element';
 export * from './song';
+export * from './currency';
 export * from './typeGuards';

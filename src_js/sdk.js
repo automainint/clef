@@ -407,8 +407,13 @@ const ADJECTIVES = [
 /*  Smart contract data entries.
  */
 
-const KEYS_CHORD = [
+const KEYS_CHORD_DEPRECATED = [
   '_CL', '_C0', '_C1', '_C2', '_C3', '_C4'
+];
+
+const KEYS_CHORD = [
+  '_CL', '_C00', '_C01', '_C02', '_C03', '_C04', '_C05', '_C06', '_C07', '_C08',
+  '_C09', '_C10', '_C11', '_C12', '_C13', '_C14', '_C15'
 ];
 
 const KEYS_ARPEGGIO = [
@@ -433,6 +438,16 @@ const KEYS_SONG = [
   '_SI54', '_SI55', '_SI56', '_SI57'
 ];
 
+const TYPES = {
+  chord:    'chord',
+  arpeggio: 'arpeggio',
+  rhythm:   'rhythm',
+  beat:     'beat',       /* Beat - collection of meter, rmp, drum samples and rhythms. */
+  vibe:     'vibe',       /* Vibe - collection of tonal samples and rhythms. */
+  song:     'song',
+  hybrid:   'hybrid'
+};
+
 /*  Chord colors.
  */
 const COLORS = {
@@ -442,11 +457,14 @@ const COLORS = {
   weird:    3
 };
 
-/*  Volume settings.
+/*  Audio settings.
  */
-const VOL_SILENCE = -10000;
-const VOL_MIN     = -60;
-const VOL_MAX     = 0;
+const VOL_SILENCE   = -10000;
+const VOL_MIN       = -60;
+const VOL_MAX       = 0;
+
+const MIN_DURATION  = 16;
+const EPS           = 0.001;
 
 /*  Network settings.
  */
@@ -455,11 +473,13 @@ const CLEF_CACHE_URL  = 'https://cache.clef.one/';
 const NODE_URL        = 'https://nodes.wavesnodes.com/';
 const LIBRARY         = '3P4m4beJ6p1pMPHqCQMAXEdquUuXJz72CMe';
 
+const FETCH_TIMEOUT     = 5000;
 const FETCH_CONCURRENCY = 4;
 
-const FETCH_TIMEOUT_429 = 100;
-const FETCH_TIMEOUT_503 = 500;
-const FETCH_TIMEOUT_400 = 1000;
+const FETCH_RETRY_429 = 100;
+const FETCH_RETRY_502 = 1000;
+const FETCH_RETRY_503 = 500;
+const FETCH_RETRY_400 = 1000;
 
 /*  Note skip value.
  */
@@ -495,13 +515,17 @@ let cache = {
 };
 
 let audio_data = {
-  volume: VOL_MAX,
-  player: null,
-  stop:   null,
-  id:     null
+  volume:       VOL_MAX,
+  player:       null,
+  prev_player:  null,
+  stop:         null,
+  id:           null,
+  duration:     0,
+  stop_called:  false
 };
 
 let audio_mutex = Promise.resolve();
+let stop_mutex  = Promise.resolve();
 
 /*
  *
@@ -511,13 +535,42 @@ let audio_mutex = Promise.resolve();
  *
  */
 
+/*  Fetch with timeout.
+ */
+async function fetch_with_timeout(fetch_upstream, request, fetch_opts) {
+  const controller = new AbortController();
+
+  const id = setTimeout(() => {
+    controller.abort();
+  }, FETCH_TIMEOUT);
+
+  let response;
+
+  try {
+    response = await fetch_upstream(request, {
+      ...fetch_opts,
+      signal: controller.signal
+    });
+  } catch (error) {
+    return {
+      status: 408 /* timeout */
+    };
+  }
+
+  clearTimeout(id);
+  return response;
+}
+
 /*  Adjust network options. Set default values if needed.
  */
 function adjust_options(options) {
   let v = { ...options };
 
   if (!('fetch' in v))
-    v.fetch           = window.fetch;
+    v.fetch = (req, opts) => {
+      return fetch_with_timeout(window.fetch, req, opts);
+    };
+
   if (!('log' in v))
     v.log             = () => {};
   if (!('clef_url' in v))
@@ -528,6 +581,9 @@ function adjust_options(options) {
     v.node_url        = NODE_URL;
   if (!('library' in v))
     v.library         = LIBRARY;
+
+  if (v.node_url.length == 0 || v.node_url[v.node_url.length - 1] != '/')
+    v.node_url = `${v.node_url}/`;
 
   return v;
 }
@@ -557,40 +613,56 @@ async function fetch_json_request(fetch_, request, request_opts, log_) {
 
   /*  Too many requests.
    */
-  if (response.status == 429)
+  if (response.status == 429) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         fetch_json_request(fetch_, request, request_opts, log_)
           .catch(reject)
           .then(resolve);
-      }, FETCH_TIMEOUT_429);
+      }, FETCH_RETRY_429);
     });
+  }
+
+  /*  Bad gateway.
+   */
+  if (response.status == 502) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        fetch_json_request(fetch_, request, request_opts, log_)
+          .catch(reject)
+          .then(resolve);
+      }, FETCH_RETRY_502);
+    });
+  }
 
   /*  Service unavailable.
    */
-  if (response.status == 503)
+  if (response.status == 503) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         fetch_json_request(fetch_, request, request_opts, log_)
           .catch(reject)
           .then(resolve);
-      }, FETCH_TIMEOUT_503);
+      }, FETCH_RETRY_503);
     });
+  }
 
   /*  Bad request.
    *  Waves node may return this when there is too many requests.
    */
-  if (response.status == 400)
+  if (response.status == 400) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         fetch_json_request(fetch_, request, request_opts, log_)
           .catch(reject)
           .then(resolve);
-      }, FETCH_TIMEOUT_400);
+      }, FETCH_RETRY_400);
     });
+  }
 
-  if (response.status != 200)
+  if (response.status != 200) {
     throw new Error(`Fetch request ${request} failed with status ${response.status}`);
+  }
 
   return await response.json();
 }
@@ -620,6 +692,56 @@ async function fetch_value(key, options) {
 /*  Fetch multiple smart contract values from the blockchain.
  */
 async function fetch_values(keys, options) {
+  if (keys.length === 0) {
+    return [];
+  }
+
+  const { fetch, node_url, library, log } = adjust_options(options);
+
+  const data = await fetch_json_request(
+    fetch,
+    `${node_url}addresses/data/${library}`,
+    { method:   'POST',
+      body:     JSON.stringify({ keys: keys }),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      log
+    },
+    log);
+
+  let values    = [];
+  let not_found = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    let found = false;
+    for (const x of data) {
+      if (x.key === keys[i]) {
+        found = true;
+        values.push(x.value);
+        break;
+      }
+    }
+    if (!found) {
+      not_found.push(keys[i]);
+    }
+  }
+
+  if (values.length != keys.length) {
+    throw new Error('Unable to fetch all values (not found ' + JSON.stringify(not_found) + ')');
+  }
+
+  return values;
+}
+
+/*  Fetch multiple smart contract values from the blockchain.
+ *  Don't throw if some values wasn't fetched.
+ */
+async function fetch_some_values(keys, options) {
+  if (keys.length === 0) {
+    return [];
+  }
+
   const { fetch, node_url, library, log } = adjust_options(options);
 
   const data = await fetch_json_request(
@@ -643,6 +765,8 @@ async function fetch_values(keys, options) {
         break;
       }
     }
+    if (values.length != i + 1)
+      values.push(null);
   }
 
   return values;
@@ -653,28 +777,56 @@ async function fetch_values(keys, options) {
 async function fetch_chord(id, options) {
   if (!(id in cache.chords)) {
     cache.chords[id] = (async () => {
-      let keys = [];
+      try {
+        let keys = [];
 
-      for (let i = 0; i < KEYS_RHYTHM.length; i++) {
-        keys.push(`${id}${KEYS_CHORD[i]}`);
+        for (let i = 0; i < KEYS_CHORD.length; i++) {
+          keys.push(`${id}${KEYS_CHORD[i]}`);
+        }
+
+        const data = await fetch_values(keys, options);
+
+        let notes = [];
+
+        for (let i = 0; i < 16; i++) {
+          const note = data[1 + i];
+          if (note === NOTE_SKIP)
+            break;
+          notes.push(note);
+        }
+
+        return {
+          id:     id,
+          label:  data[0],
+          notes:  notes
+        };
+      } catch (error) {
+        const { log } = adjust_options(options);
+        log(error.message);
+
+        let keys = [];
+
+        for (let i = 0; i < KEYS_CHORD_DEPRECATED.length; i++) {
+          keys.push(`${id}${KEYS_CHORD_DEPRECATED[i]}`);
+        }
+
+        const data = await fetch_values(keys, options);
+
+        let notes = [];
+
+        for (let i = 0; i < 5; i++) {
+          const note = data[1 + i];
+          if (note === NOTE_SKIP)
+            break;
+          notes.push(note);
+        }
+
+        return {
+          id:     id,
+          label:  data[0],
+          notes:  notes
+        };
       }
-
-      const data = await fetch_values(keys, options);
-
-      let notes = [];
-
-      for (let i = 0; i < 5; i++) {
-        const note = data[1 + i];
-        if (note === NOTE_SKIP)
-          break;
-        notes.push(note);
-      }
-
-      return {
-        id:     id,
-        label:  data[0],
-        notes:  notes
-      };
     })();
   }
 
@@ -759,7 +911,30 @@ async function fetch_raw_song(id, options) {
         keys.push(`${id}${KEYS_SONG[i]}`);
       }
 
-      const data = await fetch_values(keys, options);
+      keys.push(`${id}_SM`); // DEPRECATED arrpeggio key
+
+      const data = await fetch_some_values(keys, options);
+
+      // Label
+      if (data[1] === null) {
+        data[1] = '(Unknown song)';
+      }
+
+      // Name index
+      if (data[2] === null) {
+        data[2] = 0;
+      }
+
+      // DEPRECATED arrpeggio key
+      if (data[18] === null) {
+        data[18] = data[73];
+      }
+
+      for (let i = 0; i < KEYS_SONG.length; i++) {
+        if (data[i] === null) {
+          throw new Error(`Failed to fetch song ${id} (key ${i} ${keys[i]} not found)`);
+        }
+      }
 
       return {
         id:               id,
@@ -861,14 +1036,15 @@ async function fetch_raw_song_by_asset_id(asset_id, options) {
 
 /*  Fetch full song data by asset id.
  */
-async function fetch_song_by_asset_id(asset_id, options) {
+async function fetch_song_data_by_asset_id(asset_id, options) {
   if (!(asset_id in cache.songs)) {
     cache.songs[asset_id] = (async () => {
-      const song_raw = await fetch_raw_song_by_asset_id(asset_id);
+      const song_raw = await fetch_raw_song_by_asset_id(asset_id, options);
 
       let song = {
         id:             song_raw.id,
         asset_id:       song_raw.asset_id,
+        type:           TYPES.song,
         label:          song_raw.label,
         name_index:     song_raw.name_index,
         generation:     song_raw.generation,
@@ -889,7 +1065,7 @@ async function fetch_song_by_asset_id(asset_id, options) {
           lead:   song_raw.instruments[5]
         },
         rhythm: {
-          kick:   [], 
+          kick:   [],
           snare:  [],
           hihat:  [],
           bass:   [],
@@ -915,27 +1091,69 @@ async function fetch_song_by_asset_id(asset_id, options) {
   return await cache.songs[asset_id];
 }
 
+/*  Fetch full song data by id.
+ */
+async function fetch_song_data(id, options) {
+  const song_raw = await fetch_raw_song(id, options);
+  return await fetch_song_data_by_asset_id(song_raw.asset_id, options);
+}
+
 async function fetch_cached_metadata_by_asset_id(asset_id, options) {
-  const { clef_cache_url, fetch } = adjust_options(options);
+  const { node_url, clef_cache_url, fetch } = adjust_options(options);
 
   if (!(asset_id in cache.cached_metadata)) {
     cache.cached_metadata[asset_id] = (async () => {
-      try {
-        const response = await fetch(
-          `${clef_cache_url}metadata/${asset_id}`,
-          { method: 'GET' });
-
-        if (response.status != 200)
-          return null;
-
-        return await response.json();
-      } catch (error_) {
+      /*  Ignore cache for testnet.
+       */
+      if (node_url.includes('testnet')) {
         return null;
       }
+
+      const response = await fetch(
+        `${clef_cache_url}metadata/${asset_id}`,
+        { method: 'GET' });
+
+      if (response.status != 200) {
+        return null;
+      }
+
+      return await response.json();
     })();
   }
 
   return await cache.cached_metadata[asset_id];
+}
+
+function int_to_base58(x) {
+  const DIGITS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+  const MASK = [
+    0xff00000000000000,
+    0x00ff000000000000,
+    0x0000ff0000000000,
+    0x000000ff00000000,
+    0x00000000ff000000,
+    0x0000000000ff0000,
+    0x000000000000ff00,
+    0x00000000000000ff
+  ];
+
+  let y = '';
+
+  for (let n = x; n != 0; n = Math.floor(n / 58)) {
+    const d = DIGITS[n % 58];
+    y = `${d}${y}`;
+  }
+
+  for (let i = 0; i < 8; i++) {
+    if ((x & MASK[i]) == 0) {
+      y = `1${y}`;
+    } else {
+      break;
+    }
+  }
+
+  return y;
 }
 
 /*
@@ -945,6 +1163,40 @@ async function fetch_cached_metadata_by_asset_id(asset_id, options) {
  *
  *
  */
+
+function clamp_note(note) {
+  let result = note;
+  while (result < 0)
+    result += 12;
+  while (result >= 12)
+    result -= 12;
+  return result;
+}
+
+function clamp_notes(notes) {
+  let v = [];
+  for (let i = 0; i < notes.length; i++)
+    v.push(clamp_note(notes[i]));
+  return v;
+}
+
+function get_chord_color(chord_notes) {
+  const notes = clamp_notes(chord_notes);
+
+  const bass    = notes[0];
+  const minor   = clamp_note(bass + 3);
+  const major   = clamp_note(bass + 4);
+  const neutral = clamp_note(bass + 7);
+
+  if (notes.includes(minor))
+    return COLORS.minor;
+  else if (notes.includes(major))
+    return COLORS.major;
+  else if (notes.includes(neutral))
+    return COLORS.neutral;
+
+  return COLORS.weird;
+}
 
 function generate_name(seed) {
   let _upper = (s) => {
@@ -972,7 +1224,7 @@ function render_line(bpm, notes, bar, beat_size, beat_count, beats_per_bar, add)
   let index     = 0;
 
   for ( let i = 0;
-        offset < beat_count;
+        offset < beat_count - EPS;
         i += 2) {
     if (offset <= 0 && i > notes.length)
       break;
@@ -992,7 +1244,9 @@ function render_line(bpm, notes, bar, beat_size, beat_count, beats_per_bar, add)
       });
 
     prev_bar = current_bar;
-    index++;
+
+    if (duration > 0)
+      index++;
 
     const pause = notes[(i + 1) % notes.length] / beat_size;
     offset += duration + pause;
@@ -1004,14 +1258,14 @@ function render_rhythms(bpm, rhythms, beat_size, beat_count, beats_per_bar, add)
     return;
 
   for ( let offset = 0, bar = 0;
-        offset < beat_count;
+        offset < beat_count - EPS;
         offset += beats_per_bar, bar++)
     render_line(
       bpm, rhythms[bar % rhythms.length].notes, bar,
       beat_size, beat_count, beats_per_bar, add);
 }
 
-function render_sheet(song) {
+function render_sheet(song, extend_duration = true) {
   let sheet = {
     instruments: song.instruments,
 
@@ -1024,10 +1278,20 @@ function render_sheet(song) {
     lead: []
   };
 
-  const beat_count    = Math.floor(song.chords.length * song.bar_size / song.beat_size);
+  let   beat_count    = Math.floor(song.chords.length * song.bar_size / song.beat_size);
   const beats_per_bar = Math.floor(song.bar_size / song.beat_size);
 
   sheet.duration = beat_to_sec(song.bpm, beat_count);
+
+  if (extend_duration && song.bpm > 0 && beat_count > 0) {
+    while (sheet.duration < MIN_DURATION) {
+      beat_count     = beat_count * 2;
+      sheet.duration = beat_to_sec(song.bpm, beat_count);
+    }
+
+    //  Add first notes on last beat
+    beat_count += EPS * 2;
+  }
 
   render_rhythms(
     song.bpm,
@@ -1079,24 +1343,6 @@ function render_sheet(song) {
 
   render_rhythms(
     song.bpm,
-    song.rhythm.back,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ bar, time, duration }) => {
-      if (sheet.back.length > 0 && duration <= 0)
-        return;
-      const chord = song.chords[bar % song.chords.length];
-      for (let i = 2; i < chord.notes.length; i++)
-        sheet.back.push(
-          { time: time,
-            note: song.tonality.key + chord.notes[i],
-            duration: duration,
-            velocity: 1 });
-    });
-
-  render_rhythms(
-    song.bpm,
     song.rhythm.bass,
     song.beat_size,
     beat_count,
@@ -1112,6 +1358,24 @@ function render_sheet(song) {
           note: song.tonality.key + chord.notes[0],
           duration: duration,
           velocity: 1 });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.back,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ bar, time, duration }) => {
+      if (sheet.back.length > 0 && duration <= 0)
+        return;
+      const chord = song.chords[bar % song.chords.length];
+      for (let i = 2; i < 5 && i < chord.notes.length; i++)
+        sheet.back.push(
+          { time: time,
+            note: song.tonality.key + chord.notes[i],
+            duration: duration,
+            velocity: 1 });
     });
 
   render_rhythms(
@@ -1142,6 +1406,167 @@ function render_sheet(song) {
           note: note,
           duration: duration,
           velocity: 1 });
+    });
+
+  return sheet;
+}
+
+function render_sheet_extended(song) {
+  let sheet = {
+    instruments: song.instruments,
+
+    duration: 0,
+    kick: [],
+    snare: [],
+    hihat: [],
+    bass: [],
+    back: [],
+    lead: []
+  };
+
+  let   beat_count    = Math.floor(song.chords.length * song.bar_size / song.beat_size);
+  const beats_per_bar = Math.floor(song.bar_size / song.beat_size);
+
+  sheet.duration = beat_to_sec(song.bpm, beat_count);
+
+  if (song.bpm > 0 && beat_count > 0) {
+    while (sheet.duration < MIN_DURATION) {
+      beat_count     = beat_count * 2;
+      sheet.duration = beat_to_sec(song.bpm, beat_count);
+    }
+  }
+
+  beat_count      = beat_count * 2.5;
+  sheet.duration  = beat_to_sec(song.bpm, beat_count);
+
+  const intro = sheet.duration * (0.5 / 2.5);
+  const outro = sheet.duration * (2.0 / 2.5);
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.kick,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ time, duration }) => {
+      if (time < intro)
+        return;
+      if (sheet.kick.length > 0 && duration <= 0)
+        return;
+      sheet.kick.push(
+        { time: time,
+          note: 0,
+          duration: duration,
+          velocity: Math.min(1, (sheet.duration - time) / (sheet.duration - outro)) });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.snare,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ time, duration }) => {
+      if (time < intro)
+        return;
+      if (sheet.snare.length > 0 && duration <= 0)
+        return;
+      sheet.snare.push(
+        { time: time,
+          note: 0,
+          duration: duration,
+          velocity: Math.min(1, (sheet.duration - time) / (sheet.duration - outro)) });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.hihat,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ time, duration }) => {
+      if (time < intro)
+        return;
+      if (sheet.hihat.length > 0 && duration <= 0)
+        return;
+      sheet.hihat.push(
+        { time: time,
+          note: 0,
+          duration: duration,
+          velocity: Math.min(1, (sheet.duration - time) / (sheet.duration - outro)) });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.bass,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ bar, time, duration }) => {
+      if (time < intro || time > outro)
+        return;
+      const chord = song.chords[bar % song.chords.length];
+      if (chord.notes.length === 0)
+        return;
+      if (sheet.bass.length > 0 && duration <= 0)
+        return;
+      sheet.bass.push(
+        { time: time,
+          note: song.tonality.key + chord.notes[0],
+          duration: duration,
+          velocity: 1 });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.back,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ bar, time, duration }) => {
+      if (time > outro)
+        return;
+      if (sheet.back.length > 0 && duration <= 0)
+        return;
+      const chord = song.chords[bar % song.chords.length];
+      for (let i = 2; i < 5 && i < chord.notes.length; i++)
+        sheet.back.push(
+          { time: time,
+            note: song.tonality.key + chord.notes[i],
+            duration: duration,
+            velocity: Math.min(1, time / intro) });
+    });
+
+  render_rhythms(
+    song.bpm,
+    song.rhythm.lead,
+    song.beat_size,
+    beat_count,
+    beats_per_bar,
+    ({ bar, index, time, duration }) => {
+      if (time > outro)
+        return;
+      if (sheet.lead.length > 0 && duration <= 0)
+        return;
+      const chord = song.chords[bar % song.chords.length];
+      if (chord.notes.length < 2)
+        return;
+      let note;
+      if (index === 0 || chord.notes.length === 2 || song.arpeggio.length === 0)
+        note = song.tonality.key + chord.notes[1];
+      else {
+        const m0  = song.arpeggio[(index - 1) % song.arpeggio.length];
+        const m   = m0 < 0 ? (-m0 - 1) : m0;
+        const n   = 2 + (m % (chord.notes.length - 2));
+        note = song.tonality.key + chord.notes[n];
+        if (m0 < 0)
+          note -= 12;
+      }
+      sheet.lead.push(
+        { time: time,
+          note: note,
+          duration: duration,
+          velocity: Math.min(1, time / intro) });
     });
 
   return sheet;
@@ -1187,7 +1612,7 @@ function audio_new_sampler(Tone, name, options) {
   });
 }
 
-function audio_render(Tone, sheet, options) {
+function render_audio(Tone, sheet, options) {
   return new Promise((resolve, reject) => {
     audio_mutex = audio_mutex.then(async () => {
       try {
@@ -1209,14 +1634,11 @@ function audio_render(Tone, sheet, options) {
 
           const render_part = (part_sheet, on_note) => {
             let part = new Tone.Part((time, note) => {
-              if (time < sheet.duration + 0.01 && note.duration > 0)
+              if (note.duration > 0)
                 on_note(time, note);
               }, part_sheet);
 
-            part.loop      = true;
-            part.loopStart = 0;
-            part.loopEnd   = sheet.duration;
-
+            part.loop = false;
             part.start();
           };
 
@@ -1274,7 +1696,6 @@ function audio_render(Tone, sheet, options) {
  */
 async function get_song_name_by_asset_id(asset_id, options = {}) {
   const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
-
   if (metadata != null) {
     return metadata.name;
   }
@@ -1291,7 +1712,6 @@ async function get_song_name_by_asset_id(asset_id, options = {}) {
  */
 async function get_song_colors_by_asset_id(asset_id, options = {}) {
   const metadata = await fetch_cached_metadata_by_asset_id(asset_id, options);
-
   if (metadata != null) {
     return metadata.colors;
   }
@@ -1302,16 +1722,7 @@ async function get_song_colors_by_asset_id(asset_id, options = {}) {
 
   for (const chord_id of song_raw.chords) {
     const chord = await fetch_chord(chord_id, options);
-
-    const bass = chord.notes[0];
-    if (chord.notes.includes(bass + 3))
-      v.push(COLORS.minor);
-    else if (chord.notes.includes(bass + 4))
-      v.push(COLORS.major);
-    else if (chord.notes.includes(bass + 7))
-      v.push(COLORS.neutral);
-    else
-      v.push(COLORS.weird);
+    v.push(get_chord_color(chord.notes));
   }
 
   return v;
@@ -1330,72 +1741,209 @@ async function set_volume(volume) {
   if (audio_data.player) {
     audio_data.player.volume.value = audio_data.volume;
   }
+
+  if (audio_data.prev_player) {
+    audio_data.prev_player.volume.value = audio_data.volume;
+  }
 }
 
-/*  Play song by asset id.
+function stop_internal_() {
+  return new Promise((resolve, reject) => {
+    audio_mutex = audio_mutex.then(async () => {
+      try {
+        if (audio_data.player) {
+          audio_data.player.stop();
+          audio_data.stop();
+        }
+
+        if (audio_data.prev_player) {
+          audio_data.prev_player.stop();
+        }
+
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+function stop_once_() {
+  return new Promise((resolve, reject) => {
+    stop_mutex = stop_mutex.then(async () => {
+      try {
+        let can_play = !audio_data.stop_called;
+        audio_data.stop_called = true;
+        if (can_play) {
+          await stop_internal_();
+        }
+        resolve(can_play);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+/*  Stop playing.
  */
-async function play_song_by_asset_id(Tone, asset_id, ready, options = {}) {
+function stop() {
+  /*  FIXME
+   *  Call stop_once_???
+   */
+  audio_data.stop_called = true;
+  return stop_internal_();
+}
+
+/*  Play song from song data.
+ */
+async function play_song_data(Tone, song, ready, extend_duration = true, options = {}) {
+  audio_data.stop_called = false;
+
   await audio_init(Tone);
 
-  const song = await fetch_song_by_asset_id(asset_id, options);
+  if (audio_data.stop_called) {
+    //await ready();
+    return;
+  }
 
   if (audio_data.id === song.id) {
-    audio_data.player.stop();
-    audio_data.stop();
+    if (!await stop_once_()) {
+      return;
+    }
 
     await ready();
 
     audio_data.player.start();
 
   } else {
-    const sheet   = render_sheet(song);
-    const buffer  = await audio_render(Tone, sheet, options);
+    const sheet   = render_sheet(song, extend_duration);
+    const buffer  = await render_audio(Tone, sheet, options);
 
-    if (audio_data.player) {
-      audio_data.player.stop();
-      audio_data.stop();
+    if (!await stop_once_()) {
+      return;
     }
 
     await ready();
 
-    audio_data.player               = new Tone.Player().toDestination();
-    audio_data.player.volume.value  = audio_data.volume;
-    audio_data.player.buffer        = buffer;
-    audio_data.player.start();
-    audio_data.id       = song.id;
-    audio_data.duration = sheet.duration + 2;
+    /*  Start the playback.
+     */
+    await new Promise((resolve, reject) => {
+      audio_mutex = audio_mutex.then(async () => {
+        try {
+          audio_data.player               = new Tone.Player().toDestination();
+          audio_data.player.volume.value  = audio_data.volume;
+          audio_data.player.buffer        = buffer;
+          audio_data.player.start();
+
+          audio_data.id       = song.id;
+          audio_data.duration = Math.floor(sheet.duration * 1000) + 500;
+
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 
   await new Promise((resolve, reject) => {
+    /*  Resolve the promise when playback is ended or stopped.
+     */
+
     audio_data.stop = resolve;
 
-    const duration_msec = Math.floor(audio_data.duration * 1000);
-
-    setTimeout(resolve, duration_msec);
+    setTimeout(resolve, audio_data.duration);
   });
 }
 
-/*  Stop playing.
+/*  Play song by asset id.
  */
-async function stop() {
-  if (audio_data.player) {
-    audio_data.player.stop();
-    audio_data.stop();
+async function play_song_by_asset_id(Tone, asset_id, ready, options = {}) {
+  const song = await fetch_song_data_by_asset_id(asset_id, options);
+  await play_song_data(Tone, song, ready, options);
+}
+
+/*  Play audio buffer.
+ */
+async function play_audio_buffer(Tone, buffer, duration) {
+  audio_data.stop_called = false;
+
+  await audio_init(Tone);
+
+  if (audio_data.stop_called) {
+    return;
   }
+
+  const duration_msec = Math.floor(duration * 1000);
+
+  /*  NOTE
+   *  We don't stop current playback so radio songs can overlap.
+   */
+
+  let player;
+
+  /*  Start the playback.
+   */
+  await new Promise((resolve, reject) => {
+    audio_mutex = audio_mutex.then(async () => {
+      try {
+        player = new Tone.Player().toDestination();
+
+        audio_data.prev_player          = audio_data.player;
+        audio_data.player               = player;
+        audio_data.player.volume.value  = audio_data.volume;
+        audio_data.player.buffer        = buffer;
+        audio_data.player.start();
+
+        audio_data.id       = null;
+        audio_data.duration = duration_msec;
+
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+
+  await new Promise((resolve, reject) => {
+    /*  Resolve the promise when playback is ended or stopped.
+     */
+
+    audio_data.stop = resolve;
+
+    setTimeout(resolve, duration_msec);
+  });
+
+  //player.stop();
 }
 
 module.exports = {
-  COLORS:                       COLORS,
+  TYPES:  TYPES,
+  COLORS: COLORS,
+
   adjust_options:               adjust_options,
   fetch_json_request:           fetch_json_request,
   fetch_value:                  fetch_value,
   fetch_values:                 fetch_values,
+  fetch_some_values:            fetch_some_values,
   fetch_raw_song:               fetch_raw_song,
-  fetch_song_by_asset_id:       fetch_song_by_asset_id,
+  fetch_song_data_by_asset_id:  fetch_song_data_by_asset_id,
+  fetch_song_data:              fetch_song_data,
   render_sheet:                 render_sheet,
+  render_sheet_extended:        render_sheet_extended,
+  render_audio:                 render_audio,
+  play_audio_buffer:            play_audio_buffer,
+  generate_name:                generate_name,
+  int_to_base58:                int_to_base58,
+  clamp_note:                   clamp_note,
+  clamp_notes:                  clamp_notes,
+  get_chord_color:              get_chord_color,
+
   get_song_name_by_asset_id:    get_song_name_by_asset_id,
   get_song_colors_by_asset_id:  get_song_colors_by_asset_id,
   set_volume:                   set_volume,
   play_song_by_asset_id:        play_song_by_asset_id,
+  play_song_data:               play_song_data,
   stop:                         stop
 };

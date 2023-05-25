@@ -1,0 +1,7900 @@
+info  - Loaded env from /home/deleuze/Projects/Code/clef_internal/front/.env.local
+info  - SWC minify release candidate enabled. https://nextjs.link/swcmin
+info  - Linting and checking validity of types...
+
+./src/modules/shared/layouts/Main/index.tsx
+4:10  Warning: 'Wallet' is defined but never used. Allowed unused vars must match /_/u.  @typescript-eslint/no-unused-vars
+4:10  Warning: 'Wallet' is defined but never used. Allowed unused vars must match /_/u.  no-unused-vars
+
+./src/modules/shared/layouts/MainNotAdaptive/index.tsx
+4:10  Warning: 'Wallet' is defined but never used. Allowed unused vars must match /_/u.  @typescript-eslint/no-unused-vars
+4:10  Warning: 'Wallet' is defined but never used. Allowed unused vars must match /_/u.  no-unused-vars
+5:10  Warning: 'DebugPanel' is defined but never used. Allowed unused vars must match /_/u.  @typescript-eslint/no-unused-vars
+5:10  Warning: 'DebugPanel' is defined but never used. Allowed unused vars must match /_/u.  no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+info  - Creating an optimized production build...
+info  - Compiled successfully
+info  - Collecting page data...
+{
+  "asset_id": "TEST_6",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "6",
+  "type": "song",
+  "label": "Well-considered Pound",
+  "parents": [],
+  "generation": 1,
+  "bpm": 122,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "A minor",
+    "key": -3
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "3"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "4"
+      }
+    ]
+  },
+  "arpeggio": [
+    -5,
+    7,
+    -5,
+    -2,
+    1,
+    7,
+    0,
+    -1,
+    -4,
+    4,
+    6,
+    7,
+    -5,
+    -6,
+    3
+  ]
+}
+{
+  "asset_id": "TEST_11",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "11",
+  "type": "song",
+  "label": "Scarred Perspective",
+  "parents": [],
+  "generation": 1,
+  "bpm": 146,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "A minor",
+    "key": -3
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am7",
+      "notes": [
+        0,
+        0,
+        0,
+        7,
+        10
+      ],
+      "id": "7"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 16s",
+        "notes": [
+          1.5,
+          0.5
+        ],
+        "id": "9"
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    2,
+    -4,
+    -2,
+    6,
+    2,
+    -5,
+    2,
+    3
+  ]
+}
+{
+  "asset_id": "TEST_17",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "17",
+  "type": "song",
+  "label": "Incalculable Celebration",
+  "parents": [],
+  "generation": 1,
+  "bpm": 116,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "H minor",
+    "key": -1
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Hsus9",
+      "notes": [
+        2,
+        2,
+        2,
+        8,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "14"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em",
+      "notes": [
+        7,
+        7,
+        7,
+        10,
+        14
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Hsus9",
+      "notes": [
+        2,
+        2,
+        2,
+        8,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em",
+      "notes": [
+        7,
+        7,
+        7,
+        10,
+        14
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Hsus9",
+      "notes": [
+        2,
+        2,
+        2,
+        8,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Hsus9",
+      "notes": [
+        2,
+        2,
+        2,
+        8,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Hsus9",
+      "notes": [
+        2,
+        2,
+        2,
+        8,
+        15
+      ],
+      "id": "12"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-3-3-2-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3,
+          1
+        ],
+        "id": "15"
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    3,
+    -1,
+    0,
+    -1,
+    2
+  ]
+}
+{
+  "asset_id": "TEST_23",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "23",
+  "type": "song",
+  "label": "Faded Tennis",
+  "parents": [],
+  "generation": 1,
+  "bpm": 116,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "G minor",
+    "key": -5
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Gmaj",
+      "notes": [
+        -2,
+        -2,
+        -2,
+        2,
+        5
+      ],
+      "id": "19"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 5",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "20"
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    -7,
+    6,
+    1,
+    -6
+  ]
+}
+{
+  "asset_id": "TEST_6",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "6",
+  "type": "song",
+  "label": "Official Sandwich",
+  "parents": [],
+  "generation": 1,
+  "bpm": 134,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "A minor",
+    "key": -3
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Em7",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        17
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Esus9",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        20
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Esus9",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        20
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em7",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        17
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Esus9",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        20
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em7",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        17
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em7",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        17
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Esus9",
+      "notes": [
+        7,
+        7,
+        7,
+        14,
+        20
+      ],
+      "id": "3"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "4"
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    -3,
+    -1,
+    1,
+    4,
+    5,
+    -6,
+    -5,
+    1,
+    -1,
+    2,
+    -5,
+    -3,
+    2
+  ]
+}
+{
+  "asset_id": "TEST_11",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "11",
+  "type": "song",
+  "label": "Fixed Weakness",
+  "parents": [],
+  "generation": 1,
+  "bpm": 140,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "H minor",
+    "key": -1
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "7"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          3
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 2",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ flat",
+        "notes": [
+          30,
+          2
+        ],
+        "id": "8"
+      }
+    ]
+  },
+  "arpeggio": [
+    -4,
+    -5,
+    1,
+    0,
+    -7,
+    -2
+  ]
+}
+{
+  "asset_id": "TEST_17",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "17",
+  "type": "song",
+  "label": "Glib Math",
+  "parents": [],
+  "generation": 1,
+  "bpm": 116,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "F minor",
+    "key": 5
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "14"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "14"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "12"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "15"
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    -3,
+    1,
+    4,
+    3,
+    4,
+    -6,
+    -4,
+    5
+  ]
+}
+{
+  "asset_id": "TEST_23",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "23",
+  "type": "song",
+  "label": "Numerable Transition",
+  "parents": [],
+  "generation": 1,
+  "bpm": 128,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "E minor",
+    "key": 4
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "19"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          9,
+          1,
+          5
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          0,
+          8,
+          1,
+          13,
+          1,
+          9
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 7",
+        "notes": [
+          1,
+          3,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 3-3-2",
+        "notes": [
+          5,
+          1,
+          5,
+          1,
+          3,
+          1
+        ],
+        "id": "20"
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 4s",
+        "notes": [
+          7,
+          1
+        ],
+        "id": "21"
+      }
+    ]
+  },
+  "arpeggio": [
+    0,
+    -1,
+    -1,
+    -6,
+    5,
+    3
+  ]
+}
+{
+  "asset_id": "TEST_6",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "6",
+  "type": "song",
+  "label": "Magnetic King",
+  "parents": [],
+  "generation": 1,
+  "bpm": 146,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "G minor",
+    "key": -5
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am",
+      "notes": [
+        0,
+        0,
+        0,
+        3,
+        7
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Am",
+      "notes": [
+        0,
+        0,
+        0,
+        3,
+        7
+      ],
+      "id": "2"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "3"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "5",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat 16s",
+        "notes": [
+          0,
+          4,
+          1.5,
+          0.5,
+          1.5,
+          0.5
+        ],
+        "id": "4"
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    6,
+    3,
+    7
+  ]
+}
+{
+  "asset_id": "TEST_11",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "11",
+  "type": "song",
+  "label": "Palatable Wall",
+  "parents": [],
+  "generation": 1,
+  "bpm": 140,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "H minor",
+    "key": -1
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "7"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          1,
+          7
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "id": "10",
+        "type": "beat",
+        "label": "/beat/ 6",
+        "notes": [
+          0,
+          4,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ upbeat",
+        "notes": [
+          0,
+          4,
+          3,
+          1
+        ],
+        "id": "8"
+      }
+    ],
+    "back": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    4,
+    3,
+    2,
+    0
+  ]
+}
+{
+  "asset_id": "TEST_17",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "17",
+  "type": "song",
+  "label": "Unstoppable Poem",
+  "parents": [],
+  "generation": 1,
+  "bpm": 116,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "A minor",
+    "key": -3
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Fmaj",
+      "notes": [
+        8,
+        8,
+        8,
+        12,
+        15
+      ],
+      "id": "12"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Csus9",
+      "notes": [
+        3,
+        3,
+        3,
+        10,
+        17
+      ],
+      "id": "14"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Dm",
+      "notes": [
+        5,
+        5,
+        5,
+        8,
+        12
+      ],
+      "id": "13"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          5,
+          1,
+          3,
+          1,
+          3
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "16",
+        "type": "beat",
+        "label": "/beat/ 4",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ duck",
+        "notes": [
+          15,
+          17
+        ],
+        "id": "15"
+      }
+    ],
+    "lead": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ]
+  },
+  "arpeggio": [
+    6,
+    0,
+    1,
+    6,
+    3
+  ]
+}
+{
+  "asset_id": "TEST_23",
+  "asset_url": "https://wavesexplorer.com/",
+  "id": "23",
+  "type": "song",
+  "label": "Impractical South",
+  "parents": [],
+  "generation": 1,
+  "bpm": 122,
+  "bar_size": 32,
+  "beat_size": 8,
+  "tonality": {
+    "id": "0",
+    "label": "G minor",
+    "key": -5
+  },
+  "instruments": {
+    "kick": "kick-alpha",
+    "snare": "snare-alpha",
+    "hihat": "hihat-alpha",
+    "bass": "bass-alpha",
+    "back": "back-alpha",
+    "lead": "lead-alpha"
+  },
+  "chords": [
+    {
+      "type": "chord",
+      "label": "/chord/ Em",
+      "notes": [
+        7,
+        7,
+        7,
+        10,
+        14
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em",
+      "notes": [
+        7,
+        7,
+        7,
+        10,
+        14
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "18"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Em",
+      "notes": [
+        7,
+        7,
+        7,
+        10,
+        14
+      ],
+      "id": "19"
+    },
+    {
+      "type": "chord",
+      "label": "/chord/ Cmaj",
+      "notes": [
+        3,
+        3,
+        3,
+        7,
+        10
+      ],
+      "id": "18"
+    }
+  ],
+  "rhythm": {
+    "kick": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          1,
+          7
+        ]
+      }
+    ],
+    "snare": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          8,
+          1,
+          7
+        ]
+      }
+    ],
+    "hihat": [
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      },
+      {
+        "id": "22",
+        "type": "beat",
+        "label": "/beat/ 1",
+        "notes": [
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "bass": [
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      },
+      {
+        "id": "0",
+        "type": "rhythm",
+        "label": "flat",
+        "notes": [
+          30,
+          2
+        ]
+      }
+    ],
+    "back": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ 8s",
+        "notes": [
+          3,
+          1
+        ],
+        "id": "21"
+      }
+    ],
+    "lead": [
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      },
+      {
+        "type": "rhythm",
+        "label": "/rhythm/ double duck",
+        "notes": [
+          31,
+          33
+        ],
+        "id": "20"
+      }
+    ]
+  },
+  "arpeggio": [
+    -1,
+    5,
+    -4,
+    -1,
+    -7,
+    4,
+    7,
+    -4,
+    2,
+    -2,
+    -4,
+    -2,
+    -1,
+    3
+  ]
+}
+info  - Generating static pages (0/6)
+info  - Generating static pages (1/6)
+info  - Generating static pages (2/6)
+info  - Generating static pages (4/6)
+info  - Generating static pages (6/6)
+info  - Finalizing page optimization...
+
+Page                                       Size     First Load JS
+┌ ○ /                                      1.69 kB         283 kB
+├   └ css/47e1420fcfa1f97a.css             637 B
+├   /_app                                  0 B             282 kB
+├ ○ /404                                   186 B           282 kB
+├ ○ /claim-airdrop/[id]                    928 B           283 kB
+├   └ css/1a27e5f29f2023f9.css             532 B
+├ ○ /mix                                   920 B           283 kB
+├   └ css/edf19224691eace2.css             362 B
+└ ○ /song/[id]                             893 B           283 kB
+    └ css/8ce3866d8a48f655.css             482 B
++ First Load JS shared by all              282 kB
+  ├ chunks/framework-9b5d6ec4444c80fa.js   45.7 kB
+  ├ chunks/main-deb0f2829cc5b5f4.js        30.7 kB
+  ├ chunks/pages/_app-2fec82c3de24e4ec.js  203 kB
+  ├ chunks/webpack-3f9ee3c182ed17a3.js     1.77 kB
+  └ css/68550e617a3a8e2e.css               6.69 kB
+
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+

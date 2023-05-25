@@ -1,5 +1,8 @@
 /* eslint-disable */
 
+const { types } = require('./types.js');
+const sdk       = require('./sdk.js');
+
 function notate_chord(text) {
   let notes = [ 0, 0 ];
 
@@ -59,7 +62,7 @@ function diatonic_minor(key_note) {
 
 function pitch_to_midi(tonality, pitch) {
   const octave = Math.floor(pitch / tonality.length);
-  const note = tonality[pitch - octave * tonality.length];
+  const note   = tonality[pitch - octave * tonality.length];
   return 12 * octave + note;
 }
 
@@ -67,218 +70,124 @@ function beat_to_sec(bpm, beats) {
   return (beats * 60) / bpm;
 }
 
-function render_line(bpm, notes, bar, beat_size, beat_count, beats_per_bar, add) {
-  if (notes.length === 0)
-    return;
-
-  let prev_bar  = 0;
-  let offset    = 0;
-  let index     = 0;
-
-  for ( let i = 0;
-        offset < beat_count;
-        i += 2) {
-    if (offset <= 0 && i > notes.length)
-      break;
-
-    const current_bar = Math.floor(offset / beats_per_bar);
-    const duration    = notes[i % notes.length] / beat_size;
-
-    if (current_bar != prev_bar)
-      index = 0;
-
-    if (current_bar === bar)
-      add({
-        bar: current_bar,
-        index: index,
-        time: beat_to_sec(bpm, offset),
-        duration: beat_to_sec(bpm, duration)
-      });
-
-    prev_bar = current_bar;
-    index++;
-
-    const pause = notes[(i + 1) % notes.length] / beat_size;
-    offset += duration + pause;
+function make_song(entity) {
+  if (entity.type === types.song) {
+    return entity;
   }
-}
 
-function render_rhythms(bpm, rhythms, beat_size, beat_count, beats_per_bar, add) {
-  if (rhythms.length === 0 || beats_per_bar <= 0)
-    return;
-
-  for ( let offset = 0, bar = 0;
-        offset < beat_count;
-        offset += beats_per_bar, bar++)
-    render_line(
-      bpm, rhythms[bar % rhythms.length].notes, bar,
-      beat_size, beat_count, beats_per_bar, add);
-}
-
-function render_sheet(song) {
-  let sheet = {
-    instruments: song.instruments,
-
-    duration: 0,
-    kick: [],
-    snare: [],
-    hihat: [],
-    bass: [],
-    back: [],
-    lead: []
+  let dup_ = (x) => {
+    return [ x, x ];
   };
 
-  const beat_count    = Math.floor(song.chords.length * song.bar_size / song.beat_size);
-  const beats_per_bar = Math.floor(song.bar_size / song.beat_size);
+  let song = {
+    id:         entity.id,
+    bpm:        120,
+    bar_size:   16,
+    beat_size:  4,
+    tonality:   { key: 0 },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: dup_({ notes: [ 0, 12, 0, 4, 7 ] }),
+    arpeggio: [],
+    rhythm: {
+      kick:   [],
+      snare:  [],
+      hihat:  [],
+      bass:   [],
+      back:   [],
+      lead:   []
+    }
+  };
 
-  sheet.duration = beat_to_sec(song.bpm, beat_count);
+  if (entity.type === types.chord) {
+    song.rhythm.bass = dup_({ notes: [ 16, 0 ] });
+    song.rhythm.back = dup_({ notes: [ 16, 0 ] });
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.kick,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ time, duration }) => {
-      if (sheet.kick.length > 0 && duration <= 0)
-        return;
-      sheet.kick.push(
-        { time: time,
-          note: 0,
-          duration: duration,
-          velocity: 1 });
-    });
+    song.chords = dup_(entity);
+  }
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.snare,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ time, duration }) => {
-      if (sheet.snare.length > 0 && duration <= 0)
-        return;
-      sheet.snare.push(
-        { time: time,
-          note: 0,
-          duration: duration,
-          velocity: 1 });
-    });
+  if (entity.type === types.beat) {
+    song.bpm        = entity.bpm;
+    song.bar_size   = entity.bar_size;
+    song.beat_size  = entity.beat_size;
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.hihat,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ time, duration }) => {
-      if (sheet.hihat.length > 0 && duration <= 0)
-        return;
-      sheet.hihat.push(
-        { time: time,
-          note: 0,
-          duration: duration,
-          velocity: 1 });
-    });
+    song.instruments.kick   = entity.instruments.kick;
+    song.instruments.snare  = entity.instruments.snare;
+    song.instruments.hihat  = entity.instruments.hihat;
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.back,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ bar, time, duration }) => {
-      if (sheet.back.length > 0 && duration <= 0)
-        return;
-      const chord = song.chords[bar % song.chords.length];
-      for (let i = 2; i < chord.notes.length; i++)
-        sheet.back.push(
-          { time: time,
-            note: song.tonality.key + chord.notes[i],
-            duration: duration,
-            velocity: 1 });
-    });
+    song.rhythm.kick  = dup_(entity.rhythm.kick);
+    song.rhythm.snare = dup_(entity.rhythm.snare);
+    song.rhythm.hihat = dup_(entity.rhythm.hihat);
+  }
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.bass,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ bar, time, duration }) => {
-      const chord = song.chords[bar % song.chords.length];
-      if (chord.notes.length === 0)
-        return;
-      if (sheet.bass.length > 0 && duration <= 0)
-        return;
-      sheet.bass.push(
-        { time: time,
-          note: song.tonality.key + chord.notes[0],
-          duration: duration,
-          velocity: 1 });
-    });
+  if (entity.type === types.vibe) {
+    song.instruments.bass = entity.instruments.bass;
+    song.instruments.back = entity.instruments.back;
+    song.instruments.lead = entity.instruments.lead;
 
-  render_rhythms(
-    song.bpm,
-    song.rhythm.lead,
-    song.beat_size,
-    beat_count,
-    beats_per_bar,
-    ({ bar, index, time, duration }) => {
-      if (sheet.lead.length > 0 && duration <= 0)
-        return;
-      const chord = song.chords[bar % song.chords.length];
-      if (chord.notes.length < 2)
-        return;
-      let note;
-      if (index === 0 || chord.notes.length === 2 || song.arpeggio.length === 0)
-        note = song.tonality.key + chord.notes[1];
-      else {
-        const m0  = song.arpeggio[(index - 1) % song.arpeggio.length];
-        const m   = m0 < 0 ? (-m0 - 1) : m0;
-        const n   = 2 + (m % (chord.notes.length - 2));
-        note = song.tonality.key + chord.notes[n];
-        if (m0 < 0)
-          note -= 12;
-      }
-      sheet.lead.push(
-        { time: time,
-          note: note,
-          duration: duration,
-          velocity: 1 });
-    });
+    song.arpeggio = entity.arpeggio;
 
-  return sheet;
+    song.rhythm.bass = dup_(entity.rhythm.bass);
+    song.rhythm.back = dup_(entity.rhythm.back);
+    song.rhythm.lead = dup_(entity.rhythm.lead);
+  }
+
+  return song;
+}
+
+async function render_sheet(entity, extend_duration = true) {
+  let data = entity;
+  if (!('rhythm' in data))
+    data = await sdk.fetch_song_data_by_asset_id(entity.asset_id);
+  return sdk.render_sheet(make_song(data), extend_duration);
 }
 
 function get_song_label(song) {
   return song.label;
 }
 
-function get_song_parents(song) {
-  return song.parents;
+async function get_song_parents(song) {
+  if ('parents' in song) {
+    return song.parents;
+  }
+
+  const data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  return data.parents;
 }
 
-function get_song_bpm(song) {
-  return song.bpm;
+async function get_song_bpm(song) {
+  if ('bpm' in song) {
+    return song.bpm;
+  }
+
+  const data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  return data.bpm;
 }
 
-function get_song_meter(song) {
-  return [ Math.floor(song.bar_size / song.beat_size), 4 ];
+async function get_song_meter(song) {
+  if ('bar_size' in song && 'beat_size' in song) {
+    return [ Math.floor(song.bar_size / song.beat_size), 4 ];
+  }
+
+  const data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  return [ Math.floor(data.bar_size / data.beat_size), 4 ];
 }
 
-function clamp_note(note) {
-  let n = note;
-  while (n < 0)
-    n += 12;
-  while (n >= 12)
-    n -= 12;
-  return n;
-}
-
-function get_song_tonality(song) {
+async function get_song_tonality(song) {
   const names = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'H' ];
-  return names[clamp_note(song.tonality.key)];
+
+  if ('tonality' in song) {
+    return names[sdk.clamp_note(song.tonality.key)];
+  }
+
+  const data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  return names[sdk.clamp_note(data.tonality.key)];
 }
 
 const colors = {
@@ -289,33 +198,36 @@ const colors = {
 };
 
 function get_song_colors(song) {
-  let v = [];
+  let data;
 
-  for (const chord of song.chords) {
-    const bass = chord.notes[0];
-
-    if (chord.notes.includes(bass + 3))
-      v.push(colors.minor);
-    else if (chord.notes.includes(bass + 4))
-      v.push(colors.major);
-    else if (chord.notes.includes(bass + 7))
-      v.push(colors.neutral);
-    else
-      v.push(colors.weird);
+  if ('colors' in song) {
+    return song.colors;
   }
 
+  let v = [];
+  for (const chord of song.chords) {
+    v.push(sdk.get_chord_color(chord.notes));
+  }
   return v;
 }
 
-function get_song_chords(song) {
+async function get_song_chords(song) {
+  let data;
+
+  if ('tonality' in song && 'chords' in song) {
+    data = song;
+  } else {
+    data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  }
+
   let v = [];
 
-  const key = song.tonality.key;
+  const key = data.tonality.key;
 
-  for (const chord of song.chords) {
-    if (chord.notes.length == 0)
+  for (const chord of data.chords) {
+    if (chord.notes.length == 0) {
       v.push([]);
-    else {
+    } else {
       let notes = [ key + chord.notes[0] ];
 
       for (let i = 2; i < chord.notes.length; i++) {
@@ -333,36 +245,29 @@ function get_song_chords(song) {
   return v;
 }
 
-function clamp_chord(chord) {
-  let v = [];
-  for (const n of chord)
-    v.push(clamp_note(n));
-  return v;
-}
-
 function get_chord_name(chord) {
-  const clamped = clamp_chord(chord);
+  const clamped = sdk.clamp_notes(chord);
 
   const root_names = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'H' ];
 
   if (chord.length == 0)
     return 'X';
 
-  const root = clamp_note(chord[0]);
+  const root = sdk.clamp_note(chord[0]);
 
   let name = root_names[root];
 
   if (chord.length == 1)
     return `${name}x`;
 
-  let sus2  = clamp_note(root + 2);
-  let minor = clamp_note(root + 3);
-  let major = clamp_note(root + 4);
-  let sus4  = clamp_note(root + 5);
-  let dim   = clamp_note(root + 6);
-  let fifth = clamp_note(root + 7);
-  let sept  = clamp_note(root + 10);
-  let bsept = clamp_note(root + 11);
+  let sus2  = sdk.clamp_note(root + 2);
+  let minor = sdk.clamp_note(root + 3);
+  let major = sdk.clamp_note(root + 4);
+  let sus4  = sdk.clamp_note(root + 5);
+  let dim   = sdk.clamp_note(root + 6);
+  let fifth = sdk.clamp_note(root + 7);
+  let sept  = sdk.clamp_note(root + 10);
+  let bsept = sdk.clamp_note(root + 11);
 
   if (clamped.includes(minor) && clamped.includes(dim))
     return `${name}dim`;
@@ -394,19 +299,21 @@ function get_chord_name(chord) {
   return `${name}*`;
 }
 
-function get_song_chord_names(song) {
+async function get_song_chord_names(song) {
   let v = [];
-
-  const chords = get_song_chords(song);
-
+  const chords = await get_song_chords(song);
   for (const chord of chords)
     v.push(get_chord_name(chord));
-
   return v;
 }
 
-function get_song_generation(song) {
-  return song.generation;
+async function get_song_generation(song) {
+  if ('generation' in song) {
+    return song.generation;
+  }
+
+  const data = await sdk.fetch_song_data_by_asset_id(song.asset_id);
+  return data.generation;
 }
 
 function get_song_id(song) {
@@ -417,12 +324,20 @@ function get_song_asset_id(song) {
   return song.asset_id;
 }
 
-function get_song_asset_url(song) {
-  return song.asset_url;
+function get_song_asset_url(song) { 
+  return `https://wavesexplorer.com/assets/${song.asset_id}`;
 }
 
-function can_mint_hybrid(song) {
+async function can_mint_hybrid(song) {
   return true;
+}
+
+function get_element_label(element) {
+  if (element.type === types.chord) {
+    return get_chord_name(element.notes);
+  }
+
+  return element.label;
 }
 
 module.exports = {
@@ -446,5 +361,6 @@ module.exports = {
   get_song_generation:  get_song_generation,
   get_song_asset_id:    get_song_asset_id,
   get_song_asset_url:   get_song_asset_url,
-  can_mint_hybrid:      can_mint_hybrid
+  can_mint_hybrid:      can_mint_hybrid,
+  get_element_label:    get_element_label
 };

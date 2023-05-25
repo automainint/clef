@@ -1,2 +1,2 @@
+export { Base } from './layouts/Base';
 export { Main } from './layouts/Main';
-export { MainNotAdaptive } from './layouts/MainNotAdaptive';

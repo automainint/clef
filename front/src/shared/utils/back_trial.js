@@ -10,6 +10,29 @@ const { types }         = require('./types.js');
 const { generate_name } = require('./generate_name.js');
 const { new_resources } = require('./resources.js');
 
+async function get_mintable_songs() {
+  return [];
+}
+
+async function get_mint_quantity(asset_id) {
+  return 0;
+}
+
+async function get_mint_price(asset_id) {
+  return {
+    asset_name: 'WAVES',
+    amount:     0
+  };
+}
+
+async function get_mint_type(asset_id) {
+  return 'cover';
+}
+
+async function get_chart() {
+  return [];
+}
+
 function _new_stock() {
   return {
     prices: {
@@ -218,6 +241,7 @@ function song_blank() {
 
     id: id,
     type: types.song,
+    name_index: 0,
     label: generate_name(Math.floor(Math.random() * 65536 * 65536)),
     parents: [],
     generation: 1,
@@ -468,20 +492,26 @@ class clearance_handler {
   async get_price(type) {
     let account = find_account(this.id);
     if (!account)
-      return;
+      throw new Error('No account');
 
     if (type in stock.prices)
-      return stock.prices[type];
+      return {
+        asset_name: 'USD',
+        amount:     stock.prices[type]
+      };
 
-    return 0;
+    throw new Error('Invalid entity type');
   }
 
   async get_balance() {
     let account = find_account(this.id);
     if (!account)
-      return;
+      throw new Error('No account');
 
-    return account.balance;
+    return {
+      asset_name: 'USD',
+      amount:     account.balance
+    };
   }
 
   async get_free_mix_balance() {
@@ -721,7 +751,11 @@ let user_ = (async () => {
     };
   };
 
-  const rhythm_ = (notes) => {
+  const rhythm_ = (notes, scale = 1) => {
+    for (let i = 0; i < notes.length; i++) {
+      notes[i] /= scale;
+    }
+
     return {
       id:     _id(),
       type:   types.rhythm,
@@ -761,6 +795,25 @@ let user_ = (async () => {
     return v;
   };
 
+  const mult_4_ = (x) => {
+    let v = [];
+    for (let i = 0; i < 4; i++) {
+      v.push(x);
+    }
+    return v;
+  };
+
+  const concat_ = (x, y) => {
+    let v = [];
+    for (const z of x) {
+      v.push(z);
+    }
+    for (const z of y) {
+      v.push(z);
+    }
+    return v;
+  };
+
   const add_ = (x) => {
     x.id        = _id();
     x.asset_id  = `CLEF_TRIAL_${x.id}`;
@@ -772,6 +825,7 @@ let user_ = (async () => {
     type:       types.song,
     asset_url:  'https://wavesexplorer.com/',
     label:      'Faded Tennis',
+    name_index: 0,
     parents:    [],
     generation: 1,
     bpm:        170,
@@ -808,6 +862,7 @@ let user_ = (async () => {
     type:       types.song,
     asset_url:  'https://wavesexplorer.com/',
     label:      'Well-considered Pound',
+    name_index: 0,
     parents:    [],
     generation: 1,
     bpm:        120,
@@ -844,6 +899,7 @@ let user_ = (async () => {
     type:       types.song,
     asset_url:  'https://wavesexplorer.com/',
     label:      'Scarred Perspective',
+    name_index: 0,
     parents:    [],
     generation: 1,
     bpm:        110,
@@ -880,6 +936,7 @@ let user_ = (async () => {
     type:       types.song,
     asset_url:  'https://wavesexplorer.com/',
     label:      'Incalculable Celebration',
+    name_index: 0,
     parents:    [],
     generation: 1,
     bpm:        140,
@@ -912,7 +969,775 @@ let user_ = (async () => {
     }
   });
 
-  accounts.push(account);
+  /*  Covers
+   */
+
+  /*
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Take On Me',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        168,
+    bar_size:   32,
+    beat_size:  8,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    -1
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([  0,  7,  0,  7,  3,  0,  0,  5 ]),
+      chord_([  5,  5, 12,  5,  9,  9, 10, 12 ]),
+      chord_([ -2, 10,  5, 10, 10,  5,  2,  7 ]),
+      chord_([  3,  7, 14,  7,  5,  5,  7,  5 ]),
+
+      chord_([  0,  7,  0,  7,  3,  0,  0,  5 ]),
+      chord_([  5,  5, 12,  5,  9,  9, 10, 12 ]),
+      chord_([ -2, 10,  5, 10, 10,  5,  2,  7 ]),
+      chord_([  3,  7, 14,  7,  5,  5,  7,  5 ])
+    ],
+    arpeggio: [
+      1, 2, 3, 4, 5
+    ],
+    rhythm: {
+      kick:   mult_8_(steady),
+      snare:  mult_8_(middle),
+      hihat:  mult_8_(fast),
+      bass:   mult_8_(steady),
+      back:   mult_8_(rhythm_([ 2, 30 ])),
+      lead:   mult_8_(rhythm_([
+        3, 1,
+        3, 1,
+        3, 1,
+        7, 1,
+        7, 1,
+        7, 1,
+        7, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1
+      ]))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Animals',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        128,
+    bar_size:   16,
+    beat_size:  8,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    5
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([  0,  3,  0,  3,  3,  5 ]),
+      chord_([  3,  7,  3,  7, 10,  5 ]),
+      chord_([ -5,  5,  5,  7,  3,  2 ]),
+      chord_([  0,  0,  0,  3,  7 ]),
+      chord_([  0,  3,  0,  3,  3,  5,  5 ]),
+      chord_([  0,  0,  0,  3,  3,  3 ]),
+      chord_([  0,  3,  0,  3,  3,  5,  5 ]),
+      chord_([  0,  0,  0,  3,  7 ])
+    ],
+    arpeggio: [
+      2, 3, 4
+    ],
+    rhythm: {
+      kick:   mult_8_(steady),
+      snare:  mult_8_(middle),
+      hihat:  mult_8_(fast),
+      bass:   mult_8_(steady),
+      back:   mult_8_(rhythm_([ 2, 30 ])),
+      lead:   concat_(
+        mult_4_(rhythm_([
+          5, 3,
+          3, 1,
+          3, 1,
+          5, 3,
+          4, 2,
+          4, 2,
+          3, 1,
+          2, 2,
+          2, 2,
+          5, 11
+        ])),
+        mult_4_(rhythm_([
+          3, 1,
+          3, 1,
+          3, 1,
+          3, 1,
+          5, 7,
+          1, 1,
+          1, 1,
+          3, 1,
+          3, 1,
+          3, 1,
+          3, 1,
+          5, 11
+        ]))
+      )
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Blue',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        128,
+    bar_size:   8,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    7
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([  0,  3, -5,  0,  3 ]),
+      chord_([ -2,  5, -2,  2,  3 ]),
+      chord_([ -4,  0,  3,  7,  0 ]),
+      chord_([ -7,  8,  0,  7,  5 ]),
+
+      chord_([  0,  3, -5,  0,  3 ]),
+      chord_([ -2,  5, -2,  2,  3 ]),
+      chord_([ -4,  0,  3,  7,  0 ]),
+      chord_([ -7,  8,  0,  7,  5 ])
+    ],
+    arpeggio: [
+      0, 1, 2, 3
+    ],
+    rhythm: {
+      kick:   mult_8_(steady),
+      snare:  mult_8_(middle),
+      hihat:  mult_8_(fast),
+      bass:   mult_8_(steady),
+      back:   mult_8_(rhythm_([ 2, 30 ])),
+      lead:   mult_8_(rhythm_([
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        7, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1,
+        3, 1
+      ], 2))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'What Is Love',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        124,
+    bar_size:   16,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    7
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([  0,  7,  0,  7, 12,  8,  7, 10 ]),
+      chord_([ -9,  7, -9, -2,  5,  7, 10 ]),
+      chord_([ -5,  7, -5,  2,  7,  7,  5 ]),
+      chord_([ -2,  7, -2,  5, 10, 10, 12 ]),
+
+      chord_([  0,  7,  0,  7, 12,  8,  7, 10 ]),
+      chord_([ -9,  7, -9, -2,  5,  7, 10 ]),
+      chord_([ -5,  7, -5,  2,  7,  7,  5 ]),
+      chord_([ -2,  7, -2,  5, 10, 10, 12 ])
+    ],
+    arpeggio: [
+      3, 4, 5
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([ 6, 2 ], 2)),
+      snare:  mult_8_(rhythm_([ 0, 8, 8, 0 ], 2)),
+      hihat:  mult_8_(rhythm_([ 0, 4, 4, 0 ], 2)),
+      bass:   mult_8_(rhythm_([
+        4, 4,
+        4, 4,
+        4, 2,
+        4, 2,
+        3, 1
+      ], 2)),
+      back:   mult_8_(rhythm_([ 0, 16 ])),
+      lead:   mult_8_(rhythm_([
+        0, 16,
+        3, 1,
+        3, 1,
+        3, 1,
+        7, 1,
+
+        0, 4,
+        7, 9,
+        3, 1,
+        7, 1,
+
+        0, 4,
+        7, 9,
+        3, 1,
+        7, 1,
+
+        0, 16,
+        3, 1,
+        3, 1,
+        7, 1,
+
+        0, 12,
+        3, 1,
+        3, 1,
+        3, 1,
+        7, 1,
+
+        0, 4,
+        7, 9,
+        3, 1,
+        7, 1,
+
+        0, 4,
+        7, 9,
+        3, 1,
+        7, 1,
+
+        0, 16,
+        3, 1,
+        3, 1,
+        3, 1
+      ], 2))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Better Off Alone',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        137,
+    bar_size:   16,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    4
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([  0,  7,  0,  7,  7,  4,  7,  7 ]),
+      chord_([ -1,  6, -1,  6,  2, 14, 14, 11 ]),
+      chord_([  4,  7,  4, 11,  7,  4,  7,  7 ]),
+      chord_([  2,  6,  2,  9,  2, 12, 12, 11 ])
+    ],
+    arpeggio: [
+      2, 3, 4, 5
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([ 6, 2 ], 2)),
+      snare:  mult_8_(rhythm_([ 0, 8, 8, 0 ], 2)),
+      hihat:  mult_8_(rhythm_([ 0, 4, 4, 0 ], 2)),
+      bass:   mult_8_(rhythm_([
+        0, 4, 4, 0
+      ], 2)),
+      back:   mult_8_(rhythm_([ 0, 16 ])),
+      lead:   mult_8_(rhythm_([
+        7, 1,
+        3, 1,
+        7, 1,
+        7, 1,
+        7, 1,
+
+        //0, 4,
+        7, 1,
+        3, 1,
+        5, 1,
+        5, 1,
+        3, 1
+      ], 2))
+    }
+  });
+  */
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Can\'t Take My Eyes Off You',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        124,
+    bar_size:   16,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    9 // Gb minor (A major)
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([ -8, -1,  -8, -4, -1,  11, 11, 11         ]),
+      chord_([ -3, 11,  -1,  4, 11,   4,  6,  7,  9     ]),
+      chord_([  2, 11,  -1,  6, 11,  11,  9,  7,  6,  7 ]),
+      chord_([ -1,  9,  -3,  2,  9,   2,  4,  6,  7     ]),
+
+      chord_([  4,  9,  -3,  4,  9,   9,  7,  7,  7,  4 ]),
+      chord_([ -3,  7,  -5,  0,  7,   0                 ]),
+      chord_([  2,  7,  -5,  0,  7,   7,  6,  7,  6     ]),
+      chord_([ -5,  4,  -5, -1,  4,   2                 ])
+    ],
+    arpeggio: [
+      3, 4, 5, 6, 7
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([ 6, 2 ], 2)),
+      snare:  mult_8_(rhythm_([ 0, 8, 8, 0 ], 2)),
+      hihat:  mult_8_(rhythm_([ 0, 4, 4, 0 ], 2)),
+      bass:   mult_8_(rhythm_([
+        4, 0
+      ], 2)),
+      back:   mult_8_(rhythm_([ 14, 2 ])),
+      lead:   mult_8_(rhythm_([
+        8, 0,
+        7, 1,
+        7, 1,
+        7, 1,
+
+        12, 0,
+        8, 0,
+        4, 0,
+        4, 0,
+        3, 1,
+
+        3, 1,
+        8, 0,
+        8, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+
+        12, 0,
+        8, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+
+        3, 1,
+        8, 0,
+        7, 1,
+        3, 1,
+        4, 0,
+        4, 0,
+
+        12, 0,
+        20, 0,
+
+        7, 1,
+        4, 0,
+        8, 0,
+        4, 0,
+        8, 0,
+
+        12, 0,
+        20, 0
+      ], 2))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'The Final Countdown',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        118,
+    bar_size:   16,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    9 // Gb minor (A major)
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([ -3,  4,  -3,  4,  9,   2,  4, -3         ]),
+      chord_([ -7,  5,  -7,  0,  5,   4,  5,  4,  2     ]),
+      chord_([-10,  5, -10, -3,  2,   4,  5, -3         ]),
+      chord_([ -5,  2,  -5,  2,  7,   0,  2,  0, -1,  2 ]),
+
+      chord_([ -3,  0,  -3,  4,  9,   4,  2,  4, -3     ]),
+      chord_([ -7,  5,  -7,  0,  5,   4,  5,  4,  2     ]),
+      chord_([-10,  5, -10, -3,  2,   4,  5, -3         ]),
+      chord_([ -5,  2,  -5,  2,  7,   0,  2,  0, -1,  2 ]),
+    ],
+    arpeggio: [
+      3, 4, 5, 6, 7, 8
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([ 16,  0         ], 2)),
+      snare:  mult_8_(rhythm_([  0, 16, 16,  0 ], 2)),
+      hihat:  mult_8_(rhythm_([  0,  8,  8,  0 ], 2)),
+      bass:   mult_8_(rhythm_([ 16, 16         ], 2)),
+      back:   mult_8_(rhythm_([ 16, 16         ], 2)),
+      lead:   mult_8_(rhythm_([
+        0, 24,
+        3, 1,
+        3, 1,
+        16, 0,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        3, 5,
+        3, 5,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        16, 0,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        3, 5,
+        3, 5,
+        3, 5,
+        3, 5,
+
+        16, 8,
+        3, 1,
+        3, 1,
+        16, 0,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        3, 5,
+        3, 5,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        16, 0,
+        16, 0,
+
+        0, 24,
+        3, 1,
+        3, 1,
+        3, 5,
+        3, 5,
+        3, 5,
+        3, 5,
+      ], 4))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Save Your Tears',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        118,
+    bar_size:   16,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    0 // C major
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([ 0,  7,   0,  4,  7,   4,  7          ]),
+      chord_([-3,  4,  -3,  0,  4,   7              ]),
+      chord_([ 4,  9,  -1,  4,  7,   4,  4          ]),
+      chord_([-5,  7,  -5, -1,  2,   5,  4,  5,  4  ]),
+    ],
+    arpeggio: [
+      3, 4, 5, 6, 7, 8
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([  8,  0         ], 2)),
+      snare:  mult_8_(rhythm_([  0, 16, 16,  0 ], 2)),
+      hihat:  mult_8_(rhythm_([  0,  4,  4,  0 ], 2)),
+      bass:   mult_8_(rhythm_([  4,  0         ], 2)),
+      back:   mult_8_(rhythm_([ 16,  0         ], 2)),
+      lead:   mult_8_(rhythm_([
+        0, 20,
+        4, 0,
+        4, 0,
+        4, 0,
+
+        6, 14,
+        4, 8,
+
+        4, 0,
+        4, 0,
+        8, 16,
+
+        6, 2,
+        6, 2,
+        6, 2,
+        4, 0,
+        8, -4,
+      ], 2))
+    }
+  });
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'As It Was',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        174,
+    bar_size:   32,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    9 // Gb minor (A major)
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([ 2,  0,   2,  5,  9,   2,  4,  2,  2,  2,  2,  0,  2,  0     ]),
+      chord_([-5,  0,  -1,  2,  7,   2,  4,  2,  2,  2,  2,  0,  7,  7,  4 ]),
+      chord_([ 0,  0,   0,  4,  7,   2,  4,  2,  2,  2,  2,  0,  2,  0     ]),
+      chord_([ 5,  0,   0,  5,  9,   2,  4,  2,  2,  2,  2,  0,  7,  7,  4 ]),
+    ],
+    arpeggio: [
+      3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([ 16,  0, 16,  0, 12,  0,  8,  0, 12,  0 ], 2)),
+      snare:  mult_8_(rhythm_([  0,  8,  8,  0 ], 2)),
+      hihat:  mult_8_(rhythm_([  4,  0 ], 2)),
+      bass:   mult_8_(rhythm_([ 16,  0 ], 1)),
+      back:   mult_8_(rhythm_([ 32,  0 ], 1)),
+      lead:   mult_8_(rhythm_([
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+        4, 4,
+        4, 0,
+
+        0, 4,
+        4, 4,
+        4, 0,
+        4, 4,
+        4, 4,
+
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+        4, 4,
+        4, 0,
+
+        0, 4,
+        4, 4,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+      ], 2))
+    }
+  });  accounts.push(account);
+
+  add_({
+    type:       types.song,
+    asset_url:  'https://wavesexplorer.com/',
+    label:      'Y.M.C.A',
+    name_index: 0,
+    parents:    [],
+    generation: 1,
+    bpm:        127,
+    bar_size:   32,
+    beat_size:  4,
+    tonality: {
+      id:     _id(),
+      label:  '',
+      key:    6 // Gb major
+    },
+    instruments: {
+      kick:   'kick-alpha',
+      snare:  'snare-alpha',
+      hihat:  'hihat-alpha',
+      bass:   'bass-alpha',
+      back:   'back-alpha',
+      lead:   'lead-alpha'
+    },
+    chords: [
+      chord_([ 7, 12,   7, 11, 14,   9,  7, 12, 12,  9, 12, 12,  9, 12,  9, 12 ]),
+      chord_([ 0,  9,   0,  4,  7,   7,  9,  7,  4,  7,  4,  7,  4,  2 ]),
+      chord_([-3,  2,  -3,  0,  4,   0,  2,  0,                 12,  9 ]),
+      chord_([ 2, 12,   2,  5,  9,  12, 12,  9, 12,  9, 12, 12, 12,  9, 12,  9 ]),
+    ],
+    arpeggio: [
+      3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    ],
+    rhythm: {
+      kick:   mult_8_(rhythm_([  8,  0 ], 2)),
+      snare:  mult_8_(rhythm_([  0,  8,  8,  0 ], 2)),
+      hihat:  mult_8_(rhythm_([  0,  4,  2,  0,  2,  0 ], 2)),
+      bass:   mult_8_(rhythm_([  4,  0,  2,  0,  2,  0 ], 2)),
+      back:   mult_8_(rhythm_([ 16,  0 ], 1)),
+      lead:   mult_8_(rhythm_([
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+        4, 4,
+        4, 0,
+
+        0, 4,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+
+        16, 0,
+        8, 0,
+        4, 0,
+        4, 0,
+
+        0, 4,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 4,
+
+        16, 0,
+        8, 0,
+        4, 0,
+        4, 0,
+
+        0, 24,
+        4, 0,
+        4, 0,
+
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 8,
+        4, 0,
+        4, 0,
+
+        4, 0,
+        4, 0,
+        4, 0,
+        4, 8,
+        4, 0,
+        4, 0,
+      ], 2))
+    }
+  });  accounts.push(account);
+
+
   return account.id;
 })();
 
@@ -926,5 +1751,11 @@ module.exports = {
   authenticate:                 authenticate,
   get_resource_by_id:           get_resource_by_id,
   get_resource_by_asset_id:     get_resource_by_asset_id,
-  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id
+  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id,
+
+  get_mintable_songs:           get_mintable_songs,
+  get_mint_quantity:            get_mint_quantity,
+  get_mint_price:               get_mint_price,
+  get_mint_type:                get_mint_type,
+  get_chart:                    get_chart
 };

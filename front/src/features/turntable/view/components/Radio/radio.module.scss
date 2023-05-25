@@ -1,0 +1,170 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes blink {
+  from {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.2;
+  }
+}
+
+.root {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 44px;
+  background: $color-bg-card;
+  border-radius: 120px;
+}
+
+.disc {
+  width: 28px;
+  height: 28px;
+  margin: 8px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.startContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 8px;
+}
+
+.controlsContainer {
+  flex-grow: 1;
+  display: flex;
+  gap: 4px;
+}
+
+.mainControlsWrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  padding: 10px 4px;
+
+  &:hover {
+    .title {
+      display: none;
+    }
+
+    .mainControls {
+      display: flex;
+    }
+  }
+}
+
+.title {
+  width: 100%;
+  max-width: 144px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.03em;
+  color: $color-card;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.mainControls {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.leftControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.volumeButtonWrapper {
+  position: relative;
+}
+
+.volumeSlider {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.volumeSliderHidden {
+  display: none;
+}
+
+.additionalControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px;
+  padding-left: 0;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 2px;
+  background-color: transparent;
+  fill: transparent;
+  transition: opacity ease-out 0.2s, fill ease-out 0.2s, background-color ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+  &:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+}
+
+.buttonIndented {
+  padding-top: 1px;
+}
+
+.buttonEnlarged {
+  width: 20px;
+  height: 20px;
+}
+
+.buttonSelected {
+  background-color: $color-bg-icon-button;
+}
+
+.buttonFilled {
+  fill: $color-bg-icon;
+}
+
+.buttonBlinked {
+  animation: blink ease-in-out 2s infinite;
+}
+
+.like {
+  width: 16px;
+  height: 16px;
+}

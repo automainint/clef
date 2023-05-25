@@ -1,0 +1,68 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  position: relative;
+  width: 100%;
+  z-index: 50;
+}
+
+.drawerWrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 7px;
+  transition: width 0.2s ease-out;
+}
+
+.drawerOpen {
+  width: calc(100%);
+}
+
+.button {
+  position: absolute;
+  top: 25.5%;
+  left: -50px;
+  width: 50px;
+  height: 115px;
+  background-image: url('./images/arrow-left.svg'), $gradient-tab-button;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 0;
+  border-radius: 0;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: opacity ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.buttonOpen {
+  background-image: url('./images/arrow-right.svg'), $gradient-tab-button;
+}
+
+.contentWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.content {
+  width: 100%;
+  background: $gradient-border;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border: 3px solid transparent;
+  border-right: 0;
+  overflow: hidden;
+}

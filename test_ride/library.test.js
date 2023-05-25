@@ -138,10 +138,21 @@ describe('Library', async function () {
             { type: 'string', value: 'some chord' },
             { type: 'list', value: [
               { type: 'integer', value: 0 },
-              { type: 'integer', value: 12 },
+              { type: 'integer', value: 1 },
               { type: 'integer', value: 2 },
+              { type: 'integer', value: 3 },
+              { type: 'integer', value: 4 },
               { type: 'integer', value: 5 },
-              { type: 'integer', value: 7 }
+              { type: 'integer', value: 6 },
+              { type: 'integer', value: 7 },
+              { type: 'integer', value: 8 },
+              { type: 'integer', value: 9 },
+              { type: 'integer', value: 10 },
+              { type: 'integer', value: 11 },
+              { type: 'integer', value: 12 },
+              { type: 'integer', value: 13 },
+              { type: 'integer', value: 14 },
+              { type: 'integer', value: 15 }
             ] }
           ]
         } },
@@ -154,19 +165,41 @@ describe('Library', async function () {
 
     const n = changes.data[1].key.split('_')[0];
 
-    const name    = await accountDataByKey(`${n}_CL`,     library);
-    const notes_0 = await accountDataByKey(`${n}_C0`,     library);
-    const notes_1 = await accountDataByKey(`${n}_C1`,     library);
-    const notes_2 = await accountDataByKey(`${n}_C2`,     library);
-    const notes_3 = await accountDataByKey(`${n}_C3`,     library);
-    const notes_4 = await accountDataByKey(`${n}_C4`,     library);
+    const name     = await accountDataByKey(`${n}_CL`,  library);
+    const notes_00 = await accountDataByKey(`${n}_C00`, library);
+    const notes_01 = await accountDataByKey(`${n}_C01`, library);
+    const notes_02 = await accountDataByKey(`${n}_C02`, library);
+    const notes_03 = await accountDataByKey(`${n}_C03`, library);
+    const notes_04 = await accountDataByKey(`${n}_C04`, library);
+    const notes_05 = await accountDataByKey(`${n}_C05`, library);
+    const notes_06 = await accountDataByKey(`${n}_C06`, library);
+    const notes_07 = await accountDataByKey(`${n}_C07`, library);
+    const notes_08 = await accountDataByKey(`${n}_C08`, library);
+    const notes_09 = await accountDataByKey(`${n}_C09`, library);
+    const notes_10 = await accountDataByKey(`${n}_C10`, library);
+    const notes_11 = await accountDataByKey(`${n}_C11`, library);
+    const notes_12 = await accountDataByKey(`${n}_C12`, library);
+    const notes_13 = await accountDataByKey(`${n}_C13`, library);
+    const notes_14 = await accountDataByKey(`${n}_C14`, library);
+    const notes_15 = await accountDataByKey(`${n}_C15`, library);
 
     expect(name.value).to.equal('some chord');
-    expect(notes_0.value).to.equal(0);
-    expect(notes_1.value).to.equal(12);
-    expect(notes_2.value).to.equal(2);
-    expect(notes_3.value).to.equal(5);
-    expect(notes_4.value).to.equal(7);
+    expect(notes_00.value).to.equal(0);
+    expect(notes_01.value).to.equal(1);
+    expect(notes_02.value).to.equal(2);
+    expect(notes_03.value).to.equal(3);
+    expect(notes_04.value).to.equal(4);
+    expect(notes_05.value).to.equal(5);
+    expect(notes_06.value).to.equal(6);
+    expect(notes_07.value).to.equal(7);
+    expect(notes_08.value).to.equal(8);
+    expect(notes_09.value).to.equal(9);
+    expect(notes_10.value).to.equal(10);
+    expect(notes_11.value).to.equal(11);
+    expect(notes_12.value).to.equal(12);
+    expect(notes_13.value).to.equal(13);
+    expect(notes_14.value).to.equal(14);
+    expect(notes_15.value).to.equal(15);
   });
 
   it('can not mint chord if not in whitelist', async function () {
@@ -181,10 +214,21 @@ describe('Library', async function () {
             { type: 'string', value: 'some chord' },
             { type: 'list', value: [
               { type: 'integer', value: 0 },
-              { type: 'integer', value: 12 },
+              { type: 'integer', value: 1 },
               { type: 'integer', value: 2 },
+              { type: 'integer', value: 3 },
+              { type: 'integer', value: 4 },
               { type: 'integer', value: 5 },
-              { type: 'integer', value: 7 }
+              { type: 'integer', value: 6 },
+              { type: 'integer', value: 7 },
+              { type: 'integer', value: 8 },
+              { type: 'integer', value: 9 },
+              { type: 'integer', value: 10 },
+              { type: 'integer', value: 11 },
+              { type: 'integer', value: 12 },
+              { type: 'integer', value: 13 },
+              { type: 'integer', value: 14 },
+              { type: 'integer', value: 15 }
             ] }
           ]
         } },

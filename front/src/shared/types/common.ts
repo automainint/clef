@@ -4,6 +4,7 @@ import { ReactElement, ReactNode } from 'react';
 
 import { WalletContainers } from 'features/wallet';
 import { SongContainers } from 'features/song';
+import { TurntableContainers } from 'features/turntable';
 
 export type NextPageWithLayout<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,19 +21,25 @@ export type SetLoadingStatus<TError = string> = React.Dispatch<
   }>
 >;
 
-export type Currency = {
-  label: string;
-  value: number;
-};
-
 export type ContainerTypes = {
   ConnectButton: WalletContainers['ConnectButton'];
-  PlayButton: SongContainers['PlayButton'];
   ObserveDNAButton: SongContainers['ObserveDNAButton'];
   Disc: SongContainers['Disc'];
+  SongCards: SongContainers['Cards'];
+  LikeButton: SongContainers['LikeButton'];
+  PlayButton: TurntableContainers['PlayButton'];
 };
 
 export type NotificationStatus = {
   status: 'success' | 'error';
   text: string;
+};
+
+export type Theme = 'light' | 'dark';
+
+export type Status = 'PENDING' | 'IDLE';
+
+export type ValueWithStatus<T> = {
+  value: T;
+  status: Status;
 };

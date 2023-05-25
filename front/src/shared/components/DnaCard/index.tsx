@@ -2,48 +2,57 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import cn from 'classnames';
 import NextLink from 'next/link';
 
-import { InstrumentLine } from 'shared/types';
+import { InstrumentLine, ResourceType, Theme } from 'shared/types';
 import { mobileMaxWidthBP } from 'shared/constants';
 
 import { Chords } from '../Chords';
 import { Instruments } from '../Instruments';
 import { ArrowExternal, CircleCheck, Logo } from '../svg';
+import { messages } from './constants';
 import styles from './dnaCard.module.scss';
 
 type Props = {
-  disc: ReactNode;
-  rarity: ReactNode;
+  slotElement: ReactNode;
   title: string;
-  melodyKey: string;
-  tempo: string;
-  length: string;
-  meter: string;
-  generation: string;
+  desc: string;
   id: string;
   url: string;
-  chordNames: string[];
-  chords: number[][];
-  instruments: InstrumentLine[];
-  withMessage?: boolean;
+  melodyKey?: string;
+  family?: string;
+  tempo?: string;
+  length?: string;
+  meter?: string;
+  accentColor?: string;
+  generation?: string;
+  chordNames?: string[];
+  chords?: number[][];
+  instruments?: InstrumentLine[];
   buttons?: { key: string; button: ReactNode; size?: 'small' | 'middle' }[];
+  rarity?: ReactNode | null;
+  withMessageForType?: ResourceType | null;
+  theme?: Theme;
 };
 
 const DnaCard: FC<Props> = ({
-  disc,
-  rarity,
+  slotElement,
   title,
-  melodyKey,
-  tempo,
-  length,
-  meter,
-  generation,
+  desc,
   id,
   url,
-  chordNames,
-  chords,
-  instruments,
-  withMessage = false,
+  melodyKey = '',
+  family = '',
+  tempo = '',
+  length = '',
+  meter = '',
+  generation = '',
+  accentColor = '',
+  chordNames = [],
+  chords = [],
+  instruments = [],
   buttons = [],
+  rarity = null,
+  withMessageForType = null,
+  theme = 'light',
 }) => {
   const [assetID, setAssetID] = useState(id);
 
@@ -59,28 +68,38 @@ const DnaCard: FC<Props> = ({
   }, [id]);
 
   return (
-    <div className={styles.root}>
-      {withMessage && (
-        <div className={styles.message}>
+    <div
+      className={styles.root}
+      style={{
+        backgroundImage: accentColor ? `linear-gradient(180deg, #333333 0%, ${accentColor} 92.71%` : 'none',
+        backgroundColor: accentColor ? 'transparent' : undefined,
+      }}
+    >
+      {withMessageForType !== null && (
+        <div className={cn(styles.message, { [styles.messageThemeDark]: theme === 'dark' })}>
           <div className={styles.messageIcon}>
-            <CircleCheck />
+            <CircleCheck theme={theme} />
           </div>
           <div className={styles.messageText}>
-            <p className={styles.messageTitle}>Your new mix is ready</p>
-            <p className={styles.messageDesc}>The new mix is added to your library</p>
+            <p className={cn(styles.messageTitle, { [styles.messageTitleThemeDark]: theme === 'dark' })}>
+              {messages[withMessageForType]?.title}
+            </p>
+            <p className={styles.messageDesc}>{messages[withMessageForType]?.desc}</p>
           </div>
         </div>
       )}
-      <div className={styles.header}>
+      <div className={cn(styles.header, { [styles.headerThemeDark]: theme === 'dark' })}>
         <NextLink href="/">
           <a className={styles.logo}>
             <Logo />
           </a>
         </NextLink>
-        <div className={styles.disc}>{disc}</div>
+        <div className={styles.slotElement}>{slotElement}</div>
         <div className={styles.info}>
-          <p className={cn(styles.desc, styles.descMobileLarge)}>Track</p>
-          <p className={styles.title}>{title}</p>
+          <p className={cn(styles.desc, styles.descMobileLarge)}>{desc}</p>
+          <p className={styles.title} style={{ color: accentColor }}>
+            {title}
+          </p>
           {buttons.length > 0 && (
             <div className={styles.buttons}>
               {buttons.map(({ key, button, size }) => (
@@ -94,46 +113,73 @@ const DnaCard: FC<Props> = ({
       </div>
       <div className={styles.passport}>
         <div className={styles.details}>
-          <div className={styles.detailsItem}>
-            <p className={styles.desc}>Key</p>
-            <p className={styles.detailsValue}>{melodyKey}</p>
-          </div>
-          <div className={styles.detailsItem}>
-            <p className={styles.desc}>Tempo</p>
-            <p className={styles.detailsValue}>{tempo}</p>
-          </div>
-          <div className={styles.detailsItem}>
-            <p className={styles.desc}>Length</p>
-            <p className={styles.detailsValue}>{length}</p>
-          </div>
-          <div className={styles.detailsItem}>
-            <p className={styles.desc}>Meter</p>
-            <p className={styles.detailsValue}>{meter}</p>
-          </div>
-          <div className={styles.detailsItem}>
-            <p className={styles.desc}>Gen.</p>
-            <p className={styles.detailsValue}>{generation}</p>
-          </div>
+          {melodyKey !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={cn(styles.desc, { [styles.descThemeDark]: theme === 'dark' })}>Key</p>
+              <p className={cn(styles.detailsValue, { [styles.detailsValueThemeDark]: theme === 'dark' })}>
+                {melodyKey}
+              </p>
+            </div>
+          )}
+          {family !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={cn(styles.desc, { [styles.descThemeDark]: theme === 'dark' })}>Family</p>
+              <p className={cn(styles.detailsValue, { [styles.detailsValueThemeDark]: theme === 'dark' })}>{family}</p>
+            </div>
+          )}
+          {tempo !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={cn(styles.desc, { [styles.descThemeDark]: theme === 'dark' })}>Tempo</p>
+              <p className={cn(styles.detailsValue, { [styles.detailsValueThemeDark]: theme === 'dark' })}>{tempo}</p>
+            </div>
+          )}
+          {length !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={cn(styles.desc, { [styles.descThemeDark]: theme === 'dark' })}>Length</p>
+              <p className={cn(styles.detailsValue, { [styles.detailsValueThemeDark]: theme === 'dark' })}>{length}</p>
+            </div>
+          )}
+          {meter !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={cn(styles.desc, { [styles.descThemeDark]: theme === 'dark' })}>Meter</p>
+              <p className={cn(styles.detailsValue, { [styles.detailsValueThemeDark]: theme === 'dark' })}>{meter}</p>
+            </div>
+          )}
+          {generation !== '' && (
+            <div className={styles.detailsItem}>
+              <p className={styles.desc}>Gen.</p>
+              <p className={styles.detailsValue}>{generation}</p>
+            </div>
+          )}
           {rarity}
         </div>
         <div className={styles.idSection}>
-          <p className={styles.subtitle}>ID</p>
-          <a className={styles.idLink} href={url} target="_blank" rel="noopener noreferrer">
+          <p className={cn(styles.subtitle, { [styles.subtitleThemeDark]: theme === 'dark' })}>ID</p>
+          <a
+            className={cn(styles.idLink, { [styles.idLinkThemeDark]: theme === 'dark' })}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {assetID} <ArrowExternal />
           </a>
         </div>
-        <div className={styles.chordsSection}>
-          <p className={styles.subtitle}>Chord progression</p>
-          <div className={styles.chords}>
-            <Chords names={chordNames} chords={chords} />
+        {chordNames.length > 0 && chords.length > 0 && (
+          <div className={styles.chordsSection}>
+            <p className={styles.subtitle}>Chord progression</p>
+            <div className={styles.chords}>
+              <Chords names={chordNames} chords={chords} />
+            </div>
           </div>
-        </div>
-        <div className={styles.instrumentsSection}>
-          <p className={styles.subtitle}>Instruments</p>
-          <div className={styles.instruments}>
-            <Instruments instruments={instruments} />
+        )}
+        {instruments.length > 0 && (
+          <div className={styles.instrumentsSection}>
+            <p className={styles.subtitle}>Instruments</p>
+            <div className={styles.instruments}>
+              <Instruments instruments={instruments} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

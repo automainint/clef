@@ -1,8 +1,11 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { getCookie, removeCookie, setCookie } from 'typescript-cookie';
 
 import { Api } from 'api';
-import { User } from 'shared/types';
+import { Currency, isProvider, User } from 'shared/types';
 import { env } from 'shared/utils';
+
+import { providerCookie } from '../constants';
 
 class WalletStore {
   private api = new Api();
@@ -13,9 +16,11 @@ class WalletStore {
 
   explorerURL: string = '';
 
-  balance: number = 0;
+  balance: Currency | null = null;
 
-  freeMixBalance: number = 0;
+  freeMixBalance: Currency | null = null;
+
+  selectedAssetsPocket: 'songs' | 'elements' = 'songs';
 
   constructor() {
     makeObservable(this, {
@@ -24,6 +29,8 @@ class WalletStore {
       explorerURL: observable,
       balance: observable,
       freeMixBalance: observable,
+      selectedAssetsPocket: observable,
+      provider: computed,
       keeperAuth: action.bound,
       cloudAuth: action.bound,
       webAuth: action.bound,
@@ -32,12 +39,20 @@ class WalletStore {
       getExplorerURL: action.bound,
       getBalance: action.bound,
       getFreeMixBalance: action.bound,
+      setAssetsPocket: action.bound,
     });
+  }
+
+  get provider() {
+    if (typeof window === 'undefined') return null;
+    const provider = getCookie(providerCookie.key);
+    return isProvider(provider) ? provider : null;
   }
 
   keeperAuth = async () => {
     try {
       const data = await this.api.authApi.fetchUser({ env: env.keeper });
+      setCookie(providerCookie.key, env.keeper.provider, { expires: providerCookie.expiryDays });
       runInAction(() => {
         this.user = data;
       });
@@ -53,6 +68,7 @@ class WalletStore {
   cloudAuth = async () => {
     try {
       const data = await this.api.authApi.fetchUser({ env: env.cloud });
+      setCookie(providerCookie.key, env.cloud.provider, { expires: providerCookie.expiryDays });
       runInAction(() => {
         this.user = data;
       });
@@ -68,6 +84,7 @@ class WalletStore {
   webAuth = async () => {
     try {
       const data = await this.api.authApi.fetchUser({ env: env.web });
+      setCookie(providerCookie.key, env.web.provider, { expires: providerCookie.expiryDays });
       runInAction(() => {
         this.user = data;
       });
@@ -83,6 +100,7 @@ class WalletStore {
   disconnect = async (user: User) => {
     try {
       await this.api.userApi.logout(user);
+      removeCookie(providerCookie.key);
       runInAction(() => {
         this.user = null;
       });
@@ -154,6 +172,10 @@ class WalletStore {
       }
     }
   };
+
+  setAssetsPocket(assetsPocket: 'songs' | 'elements') {
+    this.selectedAssetsPocket = assetsPocket;
+  }
 }
 
 export { WalletStore };

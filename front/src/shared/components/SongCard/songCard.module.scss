@@ -1,0 +1,171 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+  max-width: 170px;
+  min-height: 230px;
+  padding: 10px;
+  padding-top: 0;
+  background-color: $color-bg-card;
+  border-radius: 10px;
+
+  &:hover {
+    background-image: $gradient-disc-card;
+  }
+}
+
+.selectable {
+  cursor: pointer;
+}
+
+.tall {
+  min-height: 255px;
+}
+
+.typeCover {
+  background-color: $color-bg-cover-light;
+
+  &:hover {
+    background: $color-bg-cover-light;
+  }
+}
+
+.typeMix {
+  background-color: $color-bg-mix-light;
+
+  &:hover {
+    background: $color-bg-mix-light;
+  }
+}
+
+.typeGenesis {
+  background-color: $color-bg-genesis-light;
+
+  &:hover {
+    background: $color-bg-genesis-light;
+  }
+}
+
+.selected {
+  background-image: $gradient-disc-card;
+
+  &:hover {
+    background-image: $gradient-disc-card;
+  }
+}
+
+.head {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 134px;
+}
+
+.disc {
+  max-width: 95px;
+  max-height: 95px;
+  border-radius: 50%;
+}
+
+.headOverlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  align-items: flex-start;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 10px;
+  padding-left: 4px;
+  z-index: 1;
+}
+
+.chip {
+  display: flex;
+  align-self: flex-end;
+  justify-content: center;
+  align-items: center;
+  width: 47px;
+  min-height: 17px;
+  border-radius: 90px;
+}
+
+.chipTypeCover {
+  background-color: $color-bg-cover;
+}
+
+.chipTypeMix {
+  background-color: $color-bg-mix;
+}
+
+.chipTypeGenesis {
+  background-color: $color-bg-genesis;
+}
+
+.chipText {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main-invert;
+  opacity: 0.7;
+}
+
+.playButton {
+  width: 100%;
+  max-width: 42px;
+}
+
+.title {
+  flex-grow: 1;
+  margin-top: 5px;
+  padding: 0 3px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-card;
+}
+
+.titleIndented {
+  margin-top: 10px;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-left: 3px;
+}
+
+.text {
+  margin-top: 7px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-card-additional;
+}
+
+.action {
+  margin-top: 7px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.passportButton {
+  width: 100%;
+  max-width: 93px;
+}

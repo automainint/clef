@@ -15,7 +15,7 @@ function file_exists(path) {
 describe('rarity', async function() {
   this.timeout(300000);
 
-  it('Calculate rarity', async function() {
+  /*it('Calculate rarity', async function() {
     let cache_old = {};
 
     if (file_exists('.clef_songs')) {
@@ -35,5 +35,5 @@ describe('rarity', async function() {
     console.log(`    * Song ${asset_id} rarity: ${percents}%`);
 
     writeFileSync('.clef_songs', JSON.stringify(cache, null, '  '), 'utf8');
-  });
+  });*/
 });

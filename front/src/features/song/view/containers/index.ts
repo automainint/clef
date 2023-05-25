@@ -1,6 +1,13 @@
 export { Passport } from './Passport';
-export { PlayButton } from './PlayButton';
 export { Disc } from './Disc';
 export { ObserveDNAButton } from './ObserveDNAButton';
 export { ShareButton } from './ShareButton';
 export { Rarity } from './Rarity';
+export { SelectToMint } from './SelectToMint';
+export { Mintplace } from './Mintplace';
+export { MintButton } from './MintButton';
+export { Cards } from './Cards';
+export { LikeButton } from './LikeButton';
+export { TopList } from './TopList';
+export { LikesList } from './LikesList';
+export { Chart } from './Chart';

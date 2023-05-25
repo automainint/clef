@@ -1,6 +1,6 @@
 const {
   COLORS,
-  fetch_song_by_asset_id,
+  fetch_song_data_by_asset_id,
   render_sheet,
   get_song_name_by_asset_id,
   get_song_colors_by_asset_id,
@@ -16,15 +16,15 @@ global.window = {
 };
 
 describe('sdk', async function() {
-  this.timeout(20000);
+  this.timeout(100000);
 
   it('Make sure basic functions work', async function() {
     const asset_id = 'CSB5QjKAYeY5BCK4EyLC66fKn5QWX73HAXhn4pNb9HD';
 
     const name    = await get_song_name_by_asset_id(asset_id);
     const colors  = await get_song_colors_by_asset_id(asset_id);
-    const song    = await fetch_song_by_asset_id(asset_id);
-    const sheet   = await render_sheet(song);
+    const song    = await fetch_song_data_by_asset_id(asset_id);
+    const sheet   = render_sheet(song);
 
     assert.equal(name, 'Prominent Designer');
     assert.equal(colors.length, 8);

@@ -6,8 +6,10 @@
   },
   "dependencies": {
     "async-mutex": "^0.3.2",
+    "browserify": "^17.0.0",
     "mocha": "^10.0.0",
     "node-fetch": "2.x",
+    "tone": "^14.7.77",
     "yargs": "^17.4.0"
   }
 }

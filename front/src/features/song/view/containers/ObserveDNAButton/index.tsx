@@ -1,18 +1,19 @@
 import { FC, useEffect, useState } from 'react';
 
 import { Button, Dna, Modal } from 'shared/components';
-import { Song } from 'shared/types';
+import { ContainerTypes, ResourceType } from 'shared/types';
 
 import { Passport } from '../Passport';
 
 type Props = {
   assetID: string;
-  song?: Song;
-  isNew?: boolean;
+  currentPlayingID: string;
+  PlayButton: ContainerTypes['PlayButton'];
+  withMessageForType?: ResourceType | null;
   onClose?: () => void;
 };
 
-const ObserveDNAButton: FC<Props> = ({ assetID, song = undefined, isNew = false, onClose }) => {
+const ObserveDNAButton: FC<Props> = ({ assetID, currentPlayingID, PlayButton, withMessageForType = null, onClose }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => {
@@ -26,9 +27,9 @@ const ObserveDNAButton: FC<Props> = ({ assetID, song = undefined, isNew = false,
   };
 
   useEffect(() => {
-    if (!isNew) return;
+    if (withMessageForType === null) return;
     setShowModal(true);
-  }, [isNew]);
+  }, [withMessageForType]);
 
   return (
     <>
@@ -36,7 +37,12 @@ const ObserveDNAButton: FC<Props> = ({ assetID, song = undefined, isNew = false,
         <Dna /> Observe DNA
       </Button>
       <Modal isOpen={showModal} onClose={handleModalClose} isManualClosing>
-        <Passport assetID={assetID} song={song} isNew={isNew} />
+        <Passport
+          assetID={assetID}
+          PlayButton={PlayButton}
+          withMessageForType={withMessageForType}
+          currentPlayingID={currentPlayingID}
+        />
       </Modal>
     </>
   );

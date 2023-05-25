@@ -69,10 +69,10 @@ const Wallet: FC<Props> = ({ address, explorerURL, currencies, onDisconnectClick
         )}
       </div>
       <div className={styles.currencies}>
-        {currencies.map(({ label, value }) => (
-          <div key={label + value} className={styles.currency}>
-            <p className={styles.label}>{label}</p>
-            <p className={styles.value}>{value.toFixed(2)}</p>
+        {currencies.map(({ asset_name: assetName, amount }) => (
+          <div key={assetName + amount} className={styles.currency}>
+            <p className={styles.label}>{assetName}</p>
+            <p className={styles.value}>{amount.toFixed(2)}</p>
           </div>
         ))}
       </div>

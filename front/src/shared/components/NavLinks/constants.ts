@@ -17,6 +17,10 @@ const links = [
     label: 'Release',
     href: routes.release,
   },
+  {
+    label: 'Chart',
+    href: routes.chart,
+  },
 ] as const;
 
 export { links };

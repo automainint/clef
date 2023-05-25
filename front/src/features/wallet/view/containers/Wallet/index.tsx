@@ -5,6 +5,7 @@ import { useStore } from 'store/createStore';
 import { ConnectCard, Preloader, Wallet as WalletComponent } from 'shared/components';
 import { usePreloader } from 'shared/hooks';
 import { isErrorWithMessage } from 'shared/types';
+import { env } from 'shared/utils';
 
 import { ConnectButtons } from '../../components';
 import styles from './wallet.module.scss';
@@ -13,6 +14,7 @@ type Props = {};
 
 const Wallet: FC<Props> = observer(() => {
   const {
+    provider,
     user,
     address,
     explorerURL,
@@ -27,9 +29,13 @@ const Wallet: FC<Props> = observer(() => {
     getFreeMixBalance,
     disconnect,
   } = useStore().wallet;
-  const { isPending, error, setLoadingStatus } = usePreloader('', true);
+  const { isPending, error, setLoadingStatus } = usePreloader('', false);
 
-  const defaultAuth = useCallback(async () => {
+  const currencies = [];
+  if (balance !== null) currencies.push(balance);
+  if (freeMixBalance !== null) currencies.push(freeMixBalance);
+
+  const handleKeeperClick = useCallback(async () => {
     setLoadingStatus({ isPending: true, error: '' });
     try {
       await keeperAuth();
@@ -46,9 +52,7 @@ const Wallet: FC<Props> = observer(() => {
     }
   }, [keeperAuth, setLoadingStatus]);
 
-  const handleKeeperClick = () => defaultAuth();
-
-  const handleExchangeMailClick = async () => {
+  const handleExchangeMailClick = useCallback(async () => {
     setLoadingStatus({ isPending: true, error: '' });
     try {
       await cloudAuth();
@@ -63,9 +67,9 @@ const Wallet: FC<Props> = observer(() => {
         console.log(`Unknown error: ${JSON.stringify(err)}`);
       }
     }
-  };
+  }, [cloudAuth, setLoadingStatus]);
 
-  const handleExchangeSeedClick = async () => {
+  const handleExchangeSeedClick = useCallback(async () => {
     setLoadingStatus({ isPending: true, error: '' });
     try {
       await webAuth();
@@ -80,7 +84,7 @@ const Wallet: FC<Props> = observer(() => {
         console.log(`Unknown error: ${JSON.stringify(err)}`);
       }
     }
-  };
+  }, [webAuth, setLoadingStatus]);
 
   const handleDisconnectClick = async () => {
     if (user === null) return;
@@ -99,10 +103,6 @@ const Wallet: FC<Props> = observer(() => {
       }
     }
   };
-
-  useEffect(() => {
-    defaultAuth();
-  }, [defaultAuth]);
 
   useEffect(() => {
     if (user === null) return;
@@ -126,6 +126,21 @@ const Wallet: FC<Props> = observer(() => {
     fetchData();
   }, [user, getAddress, getExplorerURL, getBalance, setLoadingStatus, getFreeMixBalance]);
 
+  useEffect(() => {
+    switch (provider) {
+      case env.keeper.provider:
+        handleKeeperClick();
+        break;
+      case env.cloud.provider:
+        handleExchangeMailClick();
+        break;
+      case env.web.provider:
+        handleExchangeSeedClick();
+        break;
+      default:
+    }
+  }, [provider, handleKeeperClick, handleExchangeMailClick, handleExchangeSeedClick]);
+
   return (
     <>
       {isPending ? (
@@ -146,10 +161,7 @@ const Wallet: FC<Props> = observer(() => {
             <WalletComponent
               address={address}
               explorerURL={explorerURL}
-              currencies={[
-                { label: 'USDT', value: balance },
-                { label: 'FMT', value: freeMixBalance },
-              ]}
+              currencies={currencies}
               onDisconnectClick={handleDisconnectClick}
             />
           )}

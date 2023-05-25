@@ -15,13 +15,13 @@ const NavLinks: FC<Props> = () => {
     <ul className={styles.root}>
       {links.map(({ label, href }) => (
         <li key={href} className={styles.item}>
-          {label !== 'Mix' ? (
+          {label === 'Compose' || label === 'Release' ? (
             <a className={cn(styles.link, styles.linkSoon)} style={{ cursor: 'default' }}>
               {label}
             </a>
           ) : (
             <NextLink href={href}>
-              <a className={cn(styles.link, { [styles.linkCurrent]: href === route })}>{label}</a>
+              <a className={cn(styles.link, { [styles.linkCurrent]: route.indexOf(href) !== -1 })}>{label}</a>
             </NextLink>
           )}
         </li>

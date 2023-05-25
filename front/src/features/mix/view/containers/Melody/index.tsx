@@ -13,13 +13,23 @@ type Props = {
   PlayButton: ContainerTypes['PlayButton'];
   ObserveDNAButton: ContainerTypes['ObserveDNAButton'];
   Disc: ContainerTypes['Disc'];
+  currentPlayingID: string;
   isDeckCard?: boolean;
   showNewPassport?: boolean;
   onClosePassport?: () => void;
 };
 
 const Melody: FC<Props> = observer(
-  ({ song, PlayButton, ObserveDNAButton, Disc, isDeckCard = false, showNewPassport = false, onClosePassport }) => {
+  ({
+    song,
+    PlayButton,
+    ObserveDNAButton,
+    Disc,
+    currentPlayingID,
+    isDeckCard = false,
+    showNewPassport = false,
+    onClosePassport,
+  }) => {
     const { hybrid, addToHybrid, removeFromHybrid } = useStore().mix;
 
     const isOnDeck =
@@ -40,14 +50,15 @@ const Melody: FC<Props> = observer(
             title={getSongLabel(song)}
             onRemoveClick={handleRemoveClick}
             buttons={[
-              { key: 'play', button: <PlayButton song={song} /> },
+              { key: 'play', button: <PlayButton playableResource={song} /> },
               {
                 key: 'passport',
                 button: (
                   <ObserveDNAButton
                     assetID={getSongAssetID(song)}
-                    song={song}
-                    isNew={showNewPassport}
+                    PlayButton={PlayButton}
+                    currentPlayingID={currentPlayingID}
+                    withMessageForType={showNewPassport ? 'hybrid' : null}
                     onClose={onClosePassport}
                   />
                 ),
@@ -55,23 +66,24 @@ const Melody: FC<Props> = observer(
               },
             ]}
           >
-            <Disc song={song} />
+            <Disc song={song} isPlaying={currentPlayingID === getSongID(song)} />
           </MelodyOnDeck>
         ) : (
           <MelodyCard
             title={getSongLabel(song)}
             isOnDeck={isOnDeck}
-            disc={<Disc song={song} />}
+            disc={<Disc song={song} isPlaying={currentPlayingID === getSongID(song)} />}
             onCheckChange={handleCheckChange}
             buttons={[
-              { key: 'play', button: <PlayButton song={song} /> },
+              { key: 'play', button: <PlayButton playableResource={song} /> },
               {
                 key: 'passport',
                 button: (
                   <ObserveDNAButton
                     assetID={getSongAssetID(song)}
-                    song={song}
-                    isNew={showNewPassport}
+                    PlayButton={PlayButton}
+                    currentPlayingID={currentPlayingID}
+                    withMessageForType={showNewPassport ? 'hybrid' : null}
                     onClose={onClosePassport}
                   />
                 ),

@@ -1,0 +1,113 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 290px;
+  min-height: 350px;
+  padding: 16px 22px 22px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: $color-bg-invert;
+  cursor: default;
+
+  p {
+    transition: opacity ease-out 0.2s;
+  }
+
+  &:hover {
+    p {
+      opacity: 1;
+    }
+  }
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+}
+
+.typeSongs {
+  background-image: url('./images/disc.svg'), url('./images/note.svg'), $gradient-songs;
+  background-repeat: no-repeat;
+  background-position: top 77px left 122px, top 28px left 30px, top 0 left 0;
+  transition: background-position ease-out 0.5s;
+
+  &:hover {
+    background-position: top 67px left 122px, top 38px left 30px, top 0 left 0;
+  }
+}
+
+.typeElements {
+  background-image: url('./images/path.svg'), url('./images/arrows.svg'), $gradient-elements;
+  background-repeat: no-repeat;
+  background-position: top 96px left 45px, top 40px left 145px, top 0 left 0;
+  transition: background-position ease-out 0.5s;
+
+  &:hover {
+    background-position: top 86px left 45px, top 50px left 145px, top 0 left 0;
+  }
+}
+
+.active {
+  cursor: pointer;
+
+  button {
+    opacity: 1;
+    transition: opacity ease-out 0.2s;
+  }
+
+  &:hover {
+    button {
+      opacity: 0.7;
+    }
+  }
+}
+
+.title {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 47.0575px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main-invert;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: max-content;
+  padding: 8px 20px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-main;
+  background-color: $color-bg;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity ease-out 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.text {
+  padding: 2px 8px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: $color-main-invert;
+  opacity: 0.6;
+}

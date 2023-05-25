@@ -15,6 +15,7 @@ const { generate_name } = require('./generate_name.js');
 function _new_stock() {
   return {
     prices: {
+      song:   0,
       chord:  10,
       rhythm: 10,
       beat:   10,
@@ -220,6 +221,7 @@ function song_blank() {
 
     id: id,
     type: types.song,
+    name_index: 0,
     label: generate_name(Math.floor(Math.random() * 65536 * 65536)),
     parents: [],
     generation: 1,
@@ -401,6 +403,40 @@ function get_song_rarity_by_asset_id(asset_id) {
   });
 }
 
+/*  Mintplace
+ */
+
+async function get_mintable_songs() {
+  /*  TODO
+   */
+
+  return [];
+}
+
+async function get_mint_quantity(asset_id) {
+  /*  TODO
+   */
+
+  return 10;
+}
+
+async function get_mint_price(asset_id) {
+  /*  TODO
+   */
+
+  return {
+    asset_name: 'WAVES',
+    amount:     10
+  };
+}
+
+async function get_mint_type(asset_id) {
+  /*  TODO
+   */
+
+  return 'cover';
+}
+
 class clearance_handler {
   constructor(id_) {
     this.id             = id_;
@@ -439,20 +475,24 @@ class clearance_handler {
   async get_price(type) {
     let account = find_account(this.id);
     if (!account)
-      return;
+      throw new Error('No account');
 
     if (type in stock.prices)
-      return stock.prices[type];
-
-    return 0;
+      return {
+        asset_name: 'USD',
+        amount:     stock.prices[type]
+      };;
   }
 
   async get_balance() {
     let account = find_account(this.id);
     if (!account)
-      return;
+      throw new Error('No account');
 
-    return account.balance;
+    return {
+      asset_name: 'USD',
+      amount:     account.balance
+    };
   }
 
   async get_free_mix_balance() {
@@ -681,6 +721,15 @@ class clearance_handler {
     return hybrid.id;
   }
 
+  async mint_song_clone(song) {
+    /*  TODO
+     */
+
+    throw new Error('Not implemented');
+
+    return '';
+  }
+
   async can_mint_hybrid() {
     let balance = await this.get_balance();
     let price   = await this.get_price(types.hybrid);
@@ -760,5 +809,10 @@ module.exports = {
   authenticate:                 authenticate,
   get_resource_by_id:           get_resource_by_id,
   get_resource_by_asset_id:     get_resource_by_asset_id,
-  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id
+  get_song_rarity_by_asset_id:  get_song_rarity_by_asset_id,
+
+  get_mintable_songs:           get_mintable_songs,
+  get_mint_quantity:            get_mint_quantity,
+  get_mint_price:               get_mint_price,
+  get_mint_type:                get_mint_type
 };

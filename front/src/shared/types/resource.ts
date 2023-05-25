@@ -41,19 +41,15 @@ export type Rhythms = Partial<{
 }>;
 
 export type Resource = Partial<{
+  type: string;
+  asset_id: string;
   id: string;
-  type: ResourceType;
   label: string;
-  parents: unknown[];
-  bpm: number;
-  bar_size: number;
-  beat_size: number;
-  tonality: number;
-  instruments: Instruments;
-  chords: Chord[];
-  melody: number[];
-  rhythms: Rhythms;
-  rhythm: Rhythms;
 }>;
 
-export type Song = Required<Resource>;
+export type ElementResource = Omit<Resource, 'type' | 'rhythm'> & {
+  type?: string;
+  notes?: number[];
+  arpeggio?: number[];
+  rhythm?: { [Property in keyof Required<Rhythms>]?: Rhythm };
+};

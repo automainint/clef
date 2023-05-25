@@ -1,7 +1,7 @@
 import { action, makeObservable, observable, runInAction } from 'mobx';
 
 import { Api } from 'api';
-import { HybridRaw, isHybrid, isSong, isSongs, Resources, Song, Songs, User } from 'shared/types';
+import { HybridRaw, isHybrid, isSong, isSongs, Currency, Resources, Song, Songs, User } from 'shared/types';
 import { getSongID } from 'shared/utils';
 
 class MixStore {
@@ -13,7 +13,7 @@ class MixStore {
 
   songs: Songs = [];
 
-  hybridPrice: number = 0;
+  hybridPrice: Currency | null = null;
 
   canMintHybrid: boolean = false;
 
@@ -59,7 +59,7 @@ class MixStore {
         data = await this.api.userApi.fetchResources(user, {
           filter: 'song',
           size: 10,
-          after: getSongID(this.songs[this.songs.length - 1]),
+          after: await getSongID(this.songs[this.songs.length - 1]),
         });
       }
       runInAction(() => {

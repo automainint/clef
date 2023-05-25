@@ -1,0 +1,13 @@
+.list {
+  display: grid;
+  row-gap: 18px;
+  min-height: 100%;
+}
+
+.preloader {
+  margin-top: 52px;
+
+  &Indented {
+    margin-top: 189px;
+  }
+}

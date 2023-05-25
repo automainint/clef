@@ -339,7 +339,7 @@ func set_free_mix_token(token: String, amount: Int) = {
 func mint_chord(index: Int, name: String, notes: List[Int]) = {
   if !check_whitelist(i.caller) then
     throw("Caller not in whitelist")
-  else if size(notes) != 5 then
+  else if size(notes) != 16 then
     throw("Wrong notes size")
   else {
 
@@ -353,11 +353,22 @@ func mint_chord(index: Int, name: String, notes: List[Int]) = {
     ( [ IntegerEntry("count", max([ index + 1, n ])),
 
         StringEntry(  key + "_CL", name),
-        IntegerEntry( key + "_C0", notes[0]),
-        IntegerEntry( key + "_C1", notes[1]),
-        IntegerEntry( key + "_C2", notes[2]),
-        IntegerEntry( key + "_C3", notes[3]),
-        IntegerEntry( key + "_C4", notes[4])
+        IntegerEntry( key + "_C00", notes[0]),
+        IntegerEntry( key + "_C01", notes[1]),
+        IntegerEntry( key + "_C02", notes[2]),
+        IntegerEntry( key + "_C03", notes[3]),
+        IntegerEntry( key + "_C04", notes[4]),
+        IntegerEntry( key + "_C05", notes[5]),
+        IntegerEntry( key + "_C06", notes[6]),
+        IntegerEntry( key + "_C07", notes[7]),
+        IntegerEntry( key + "_C08", notes[8]),
+        IntegerEntry( key + "_C09", notes[9]),
+        IntegerEntry( key + "_C10", notes[10]),
+        IntegerEntry( key + "_C11", notes[11]),
+        IntegerEntry( key + "_C12", notes[12]),
+        IntegerEntry( key + "_C13", notes[13]),
+        IntegerEntry( key + "_C14", notes[14]),
+        IntegerEntry( key + "_C15", notes[15])
       ],
       unit )
   }
@@ -664,5 +675,246 @@ func mint_hybrid_and_burn() = {
       ( make_hybrid_tx(i, song_0, song_1),
         unit )
     }
+  }
+}
+
+@Callable(i)
+func store_add_song(
+  asset_id:       String,
+  amount:         Int,
+  price_asset_id: String,
+  price_amount:   Int
+) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else {
+    let initial_amount = match getInteger("SA_" + asset_id) {
+      case x: Int => x
+      case _      => 0
+    }
+
+    ( [ IntegerEntry( "SA_" + asset_id, initial_amount + amount),
+        StringEntry(  "ST_" + asset_id, price_asset_id),
+        IntegerEntry( "SP_" + asset_id, price_amount)
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func store_mint_song(asset_id: String) = {
+  let amount        = getIntegerValue("SA_" + asset_id)
+  let key_original  = getStringValue(asset_id)
+  let name          = getStringValue(key_original + "_SL")
+
+  if i.payments.size() != 1 then
+    throw("Wrong payment size")
+  else if
+      getStringValue("ST_" + asset_id) != match i.payments[0].assetId {
+        case b: ByteVector  => b.toBase58String()
+        case _              => ""
+      }
+  then
+    throw("Wrong payment asset")
+  else if i.payments[0].amount != getIntegerValue("SP_" + asset_id) then
+    throw("Wrong payment amount")
+  else if amount <= 0 then
+    throw("No songs available")
+  else if name == "" then
+    throw("Invalid asset")
+  else {
+    let n = match getInteger("count") {
+      case j: Int => j
+      case _      => 0
+    }
+
+    let name_short  = name.take(16)
+    let description = mint_description
+    let collection  = mint_collection
+
+    strict id = match (invoke(nft_creation_address, "createNFT", [name_short, description, getStringValue("market_image_link"), collection], [])) {
+      case x: String  => x
+      case _          => throw("NFT creation failed")
+    }
+
+    let id_b    = id.fromBase58String()
+    let key     = to_key(n)
+
+    ( [ IntegerEntry("count", n + 1),
+        StringEntry(id, key),
+        StringEntry(key, id),
+
+        IntegerEntry( key + "_G",     getIntegerValue(key_original + "_G")),
+        StringEntry(  key + "_SL",    name),
+        IntegerEntry( key + "_SN",    0),
+        StringEntry(  key + "_SP0",   getStringValue( key_original + "_SP0")),
+        StringEntry(  key + "_SP1",   getStringValue( key_original + "_SP1")),
+
+        IntegerEntry( key + "_SB0",   getIntegerValue(key_original + "_SB0")),
+        IntegerEntry( key + "_SB1",   getIntegerValue(key_original + "_SB1")),
+        IntegerEntry( key + "_SB2",   getIntegerValue(key_original + "_SB2")),
+        IntegerEntry( key + "_ST",    getIntegerValue(key_original + "_ST")),
+
+        StringEntry(  key + "_SC0",   getStringValue( key_original + "_SC0")),
+        StringEntry(  key + "_SC1",   getStringValue( key_original + "_SC1")),
+        StringEntry(  key + "_SC2",   getStringValue( key_original + "_SC2")),
+        StringEntry(  key + "_SC3",   getStringValue( key_original + "_SC3")),
+        StringEntry(  key + "_SC4",   getStringValue( key_original + "_SC4")),
+        StringEntry(  key + "_SC5",   getStringValue( key_original + "_SC5")),
+        StringEntry(  key + "_SC6",   getStringValue( key_original + "_SC6")),
+        StringEntry(  key + "_SC7",   getStringValue( key_original + "_SC7")),
+        StringEntry(  key + "_SA",    getStringValue( key_original + "_SA")),
+
+        StringEntry(  key + "_SI0",   getStringValue( key_original + "_SI0")),
+        StringEntry(  key + "_SI1",   getStringValue( key_original + "_SI1")),
+        StringEntry(  key + "_SI2",   getStringValue( key_original + "_SI2")),
+        StringEntry(  key + "_SI3",   getStringValue( key_original + "_SI3")),
+        StringEntry(  key + "_SI4",   getStringValue( key_original + "_SI4")),
+        StringEntry(  key + "_SI5",   getStringValue( key_original + "_SI5")),
+
+        StringEntry(  key + "_SI50",  getStringValue( key_original + "_SI50")),
+        StringEntry(  key + "_SI51",  getStringValue( key_original + "_SI51")),
+        StringEntry(  key + "_SI52",  getStringValue( key_original + "_SI52")),
+        StringEntry(  key + "_SI53",  getStringValue( key_original + "_SI53")),
+        StringEntry(  key + "_SI54",  getStringValue( key_original + "_SI54")),
+        StringEntry(  key + "_SI55",  getStringValue( key_original + "_SI55")),
+        StringEntry(  key + "_SI56",  getStringValue( key_original + "_SI56")),
+        StringEntry(  key + "_SI57",  getStringValue( key_original + "_SI57")),
+
+        StringEntry(  key + "_SI00",  getStringValue( key_original + "_SI00")),
+        StringEntry(  key + "_SI01",  getStringValue( key_original + "_SI01")),
+        StringEntry(  key + "_SI02",  getStringValue( key_original + "_SI02")),
+        StringEntry(  key + "_SI03",  getStringValue( key_original + "_SI03")),
+        StringEntry(  key + "_SI04",  getStringValue( key_original + "_SI04")),
+        StringEntry(  key + "_SI05",  getStringValue( key_original + "_SI05")),
+        StringEntry(  key + "_SI06",  getStringValue( key_original + "_SI06")),
+        StringEntry(  key + "_SI07",  getStringValue( key_original + "_SI07")),
+
+        StringEntry(  key + "_SI10",  getStringValue( key_original + "_SI10")),
+        StringEntry(  key + "_SI11",  getStringValue( key_original + "_SI11")),
+        StringEntry(  key + "_SI12",  getStringValue( key_original + "_SI12")),
+        StringEntry(  key + "_SI13",  getStringValue( key_original + "_SI13")),
+        StringEntry(  key + "_SI14",  getStringValue( key_original + "_SI14")),
+        StringEntry(  key + "_SI15",  getStringValue( key_original + "_SI15")),
+        StringEntry(  key + "_SI16",  getStringValue( key_original + "_SI16")),
+        StringEntry(  key + "_SI17",  getStringValue( key_original + "_SI17")),
+
+        StringEntry(  key + "_SI20",  getStringValue( key_original + "_SI20")),
+        StringEntry(  key + "_SI21",  getStringValue( key_original + "_SI21")),
+        StringEntry(  key + "_SI22",  getStringValue( key_original + "_SI22")),
+        StringEntry(  key + "_SI23",  getStringValue( key_original + "_SI23")),
+        StringEntry(  key + "_SI24",  getStringValue( key_original + "_SI24")),
+        StringEntry(  key + "_SI25",  getStringValue( key_original + "_SI25")),
+        StringEntry(  key + "_SI26",  getStringValue( key_original + "_SI26")),
+        StringEntry(  key + "_SI27",  getStringValue( key_original + "_SI27")),
+
+        StringEntry(  key + "_SI30",  getStringValue( key_original + "_SI30")),
+        StringEntry(  key + "_SI31",  getStringValue( key_original + "_SI31")),
+        StringEntry(  key + "_SI32",  getStringValue( key_original + "_SI32")),
+        StringEntry(  key + "_SI33",  getStringValue( key_original + "_SI33")),
+        StringEntry(  key + "_SI34",  getStringValue( key_original + "_SI34")),
+        StringEntry(  key + "_SI35",  getStringValue( key_original + "_SI35")),
+        StringEntry(  key + "_SI36",  getStringValue( key_original + "_SI36")),
+        StringEntry(  key + "_SI37",  getStringValue( key_original + "_SI37")),
+
+        StringEntry(  key + "_SI40",  getStringValue( key_original + "_SI40")),
+        StringEntry(  key + "_SI41",  getStringValue( key_original + "_SI41")),
+        StringEntry(  key + "_SI42",  getStringValue( key_original + "_SI42")),
+        StringEntry(  key + "_SI43",  getStringValue( key_original + "_SI43")),
+        StringEntry(  key + "_SI44",  getStringValue( key_original + "_SI44")),
+        StringEntry(  key + "_SI45",  getStringValue( key_original + "_SI45")),
+        StringEntry(  key + "_SI46",  getStringValue( key_original + "_SI46")),
+        StringEntry(  key + "_SI47",  getStringValue( key_original + "_SI47")),
+
+        ScriptTransfer(Address(i.caller.bytes), 1, id_b),
+
+        IntegerEntry("SA_" + asset_id, amount - 1)
+      ],
+      unit )
+  }
+}
+
+@Callable(i)
+func chart_like_add(asset_id: String) = {
+  let song_id = match getString(asset_id) {
+    case s: String => s
+    case _         => throw("Invalid asset id")
+  }
+
+  strict song_name_index = match getInteger(song_id + "_SN") {
+    case n: Int => n
+    case _      => throw("Not a song")
+  }
+
+  let caller = i.caller.bytes.toBase58String()
+
+  let have_like = match getBoolean("CL_" + asset_id + "_" + caller) {
+    case b: Boolean => b
+    case _          => false
+  }
+
+  let amount = match getInteger("CN_" + asset_id) {
+    case n: Int => n
+    case _      => 0
+  }
+
+  if have_like then
+    throw("Already have a like")
+  else
+    ( [ BooleanEntry("CL_" + asset_id + "_" + caller, true),
+        IntegerEntry("CN_" + asset_id, amount + 1)
+      ],
+      unit )
+}
+
+@Callable(i)
+func chart_like_remove(asset_id: String) = {
+  let song_id = match getString(asset_id) {
+    case s: String => s
+    case _         => throw("Invalid asset id")
+  }
+
+  strict song_name_index = match getInteger(song_id + "_SN") {
+    case n: Int => n
+    case _      => throw("Not a song")
+  }
+
+  let caller = i.caller.bytes.toBase58String()
+
+  let have_like = match getBoolean("CL_" + asset_id + "_" + caller) {
+    case b: Boolean => b
+    case _          => false
+  }
+
+  let amount = match getInteger("CN_" + asset_id) {
+    case n: Int => n
+    case _      => 0
+  }
+
+  if !have_like then
+    throw("Do not have a like")
+  else if amount < 1 then
+    throw("Invalid likes amount")
+  else
+    ( [ BooleanEntry("CL_" + asset_id + "_" + caller, false),
+        IntegerEntry("CN_" + asset_id, amount - 1)
+      ],
+      unit )
+}
+
+@Callable(i)
+func chart_like_set(asset_id: String, new_amount: Int) = {
+  if !check_whitelist(i.caller) then
+    throw("Caller not in whitelist")
+  else if new_amount < 0 then
+    throw("Invalid likes amount")
+  else {
+    let amount = match getInteger("CN_" + asset_id) {
+      case n: Int => n
+      case _      => 0
+    }
+
+    ( [ IntegerEntry("CN_" + asset_id, new_amount) ],
+      unit )
   }
 }

@@ -1,0 +1,75 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  background: $color-bg-card;
+  border-radius: 90px;
+}
+
+.number {
+  min-width: 65px;
+  padding: 15px;
+  padding-right: 0;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20.1315px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-secondary;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.disc {
+  flex-shrink: 0;
+  width: 34px;
+  min-width: 34px;
+  max-width: 34px;
+  margin: 0 30px 0 0;
+  overflow: hidden;
+}
+
+.title {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 215px;
+  padding: 15px 5px 15px 25px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: $color-card;
+  overflow: hidden;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.pushButtons {
+  display: grid;
+  grid-template-columns: 42px 93px;
+  column-gap: 9px;
+  padding: 2px 5px;
+}
+
+.like {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 15px;
+  background-color: transparent;
+  fill: transparent;
+}

@@ -1,0 +1,9 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  padding: 60px 0;
+}

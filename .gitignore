@@ -1,4 +1,8 @@
 /node_modules
+/test_js/radio/bundle.js
+/scripts/covers.js
+/scripts/starter_songs.js
+/scripts/starter_elements.js
 package-lock.json
 .clef_daemon
 .clef_songs

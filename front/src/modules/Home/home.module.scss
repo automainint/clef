@@ -1,11 +1,6 @@
 @import 'shared/scss/variables.scss';
 
 .root {
-  display: grid;
-  grid-template-columns: 600px 300px;
-}
-
-.content {
   padding: 50px 0;
 }
 
@@ -33,11 +28,7 @@
 }
 
 .sideBar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  padding: 205px 36px 28px 28px;
-  overflow-x: hidden;
+  padding: 100px 36px 0 28px;
   overflow-y: auto;
 }
 

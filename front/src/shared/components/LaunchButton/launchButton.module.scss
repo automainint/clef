@@ -1,0 +1,55 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes rotate {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 16px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 23.8747px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-main-invert;
+  background: $gradient;
+  border-radius: 10px;
+  border: 0;
+  transition: opacity ease-out 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: auto;
+  }
+}
+
+.desc {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.03em;
+  color: $color-details;
+}
+
+.icon {
+  padding: 1.5px 0;
+}

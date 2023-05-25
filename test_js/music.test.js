@@ -18,23 +18,26 @@ const {
   get_song_generation,
   get_song_asset_id,
   get_song_asset_url,
-  can_mint_hybrid
+  can_mint_hybrid,
+  get_element_label
 } = require('../src_js/music.js');
+
+const { get_all_elements } = require('../src_js/resources.js');
 
 const assert = require('assert');
 
-describe('music', () => {
-  it('convert zero pitch to note', () => {
+describe('music', async function() {
+  it('convert zero pitch to note', async function() {
     const tonality = [ 0, 2, 3, 5, 7, 8, 10 ];
     assert.equal(pitch_to_midi(tonality, 0), 0);
   });
 
-  it('convert negative pitch to note', () => {
+  it('convert negative pitch to note', async function() {
     const tonality = [ 0, 2, 3, 5, 7, 8, 10 ];
     assert.equal(pitch_to_midi(tonality, -1), -2);
   });
 
-  it('la minor tonality', () => {
+  it('la minor tonality', async function() {
     const am = diatonic_minor(0);
     assert.equal(am.length, 7);
     assert.equal(am[0], 0);
@@ -46,25 +49,26 @@ describe('music', () => {
     assert.equal(am[6], 10);
   });
 
-  it('convert positive pitch to note', () => {
+  it('convert positive pitch to note', async function() {
     const tonality = [ 0, 2, 3, 5, 7, 8, 10 ];
     assert.equal(pitch_to_midi(tonality, 9), 15);
   });
 
-  it('convert 0 beat to sec', () => {
+  it('convert 0 beat to sec', async function() {
     assert.equal(beat_to_sec(120, 0), 0);
   });
 
-  it('convert 120 beat to sec', () => {
+  it('convert 120 beat to sec', async function() {
     assert.equal(beat_to_sec(120, 120), 60);
   });
 
-  it('convert 2 beat to sec', () => {
+  it('convert 2 beat to sec', async function() {
     assert.equal(beat_to_sec(120, 2), 1);
   });
 
-  it('render empty song', () => {
-    const sheet = render_sheet({
+  it('render empty song', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -86,7 +90,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, 0);
     assert.equal(sheet.kick.length, 0);
@@ -103,8 +107,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 1 kick note', () => {
-    const sheet = render_sheet({
+  it('render 1 kick note', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -126,7 +131,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.ok(sheet.duration > 0);
     assert.equal(sheet.kick.length, 1);
@@ -148,8 +153,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 1 snare note', () => {
-    const sheet = render_sheet({
+  it('render 1 snare note', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -171,7 +177,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.kick.length, 0);
@@ -193,9 +199,47 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
+  it('render beat', async function() {
+    const sheet = await render_sheet({
+      type:       'beat',
+      bpm:        135,
+      bar_size:   16,
+      beat_size:  4,
+      instruments: {
+        kick:   'kick-alpha',
+        snare:  'snare-alpha',
+        hihat:  'hihat-alpha'
+      },
+      rhythm: {
+        kick:   { notes: [] },
+        snare:  { notes: [ 2, 30 ] },
+        hihat:  { notes: [] },
+      }
+    }, false);
 
-  it('render 1 hihat note', () => {
-    const sheet = render_sheet({
+    assert.equal(sheet.duration, beat_to_sec(135, 8));
+    assert.equal(sheet.kick.length, 0);
+    assert.equal(sheet.snare.length, 1);
+    assert.equal(sheet.snare[0].time, beat_to_sec(135, 0));
+    assert.equal(sheet.snare[0].note, 0);
+    assert.equal(sheet.snare[0].duration, beat_to_sec(135, 0.5));
+    assert.ok(sheet.snare[0].velocity > 0);
+    assert.ok(sheet.snare[0].velocity <= 1);
+    assert.equal(sheet.hihat.length, 0);
+    assert.equal(sheet.bass.length, 0);
+    assert.equal(sheet.back.length, 0);
+    assert.equal(sheet.lead.length, 0);
+    assert.equal(typeof sheet.instruments.kick, 'string');
+    assert.equal(typeof sheet.instruments.snare, 'string');
+    assert.equal(typeof sheet.instruments.hihat, 'string');
+    assert.equal(typeof sheet.instruments.bass, 'string');
+    assert.equal(typeof sheet.instruments.back, 'string');
+    assert.equal(typeof sheet.instruments.lead, 'string');
+  });
+
+  it('render 1 hihat note', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -217,7 +261,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.kick.length, 0);
@@ -239,8 +283,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 2 snare notes', () => {
-    const sheet = render_sheet({
+  it('render 2 snare notes', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -262,7 +307,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.kick.length, 0);
@@ -289,8 +334,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 2 snare notes with pause', () => {
-    const sheet = render_sheet({
+  it('render 2 snare notes with pause', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -312,7 +358,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.kick.length, 0);
@@ -339,8 +385,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render overlapping rhythm', () => {
-    const sheet = render_sheet({
+  it('render overlapping rhythm', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -365,7 +412,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 8));
     assert.equal(sheet.snare.length, 2);
@@ -381,8 +428,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render short rhythm', () => {
-    const sheet = render_sheet({
+  it('render short rhythm', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -406,7 +454,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.snare.length, 2);
@@ -422,8 +470,50 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 1 back', () => {
-    const sheet = render_sheet({
+  it('render vibe', async function() {
+    const sheet = await render_sheet({
+      type:       'vibe',
+      instruments: {
+        bass:   'bass-alpha',
+        back:   'back-alpha',
+        lead:   'lead-alpha'
+      },
+      arpeggio: [],
+      rhythm: {
+        bass:   { notes: [] },
+        back:   { notes: [ 32, 0 ] },
+        lead:   { notes: [] }
+      }
+    }, false);
+
+    assert.equal(sheet.duration, beat_to_sec(120, 8));
+    assert.equal(sheet.back.length, 3);
+    assert.equal(sheet.back[0].note, 0);
+    assert.equal(sheet.back[0].time, beat_to_sec(120, 0));
+    assert.equal(sheet.back[0].duration, beat_to_sec(120, 8));
+    assert.ok(sheet.back[0].velocity > 0);
+    assert.ok(sheet.back[0].velocity <= 1);
+    assert.equal(sheet.back[1].note, 4);
+    assert.equal(sheet.back[1].time, beat_to_sec(120, 0));
+    assert.equal(sheet.back[1].duration, beat_to_sec(120, 8));
+    assert.ok(sheet.back[1].velocity > 0);
+    assert.ok(sheet.back[1].velocity <= 1);
+    assert.equal(sheet.back[2].note, 7);
+    assert.equal(sheet.back[2].time, beat_to_sec(120, 0));
+    assert.equal(sheet.back[2].duration, beat_to_sec(120, 8));
+    assert.ok(sheet.back[2].velocity > 0);
+    assert.ok(sheet.back[2].velocity <= 1);
+    assert.equal(typeof sheet.instruments.kick, 'string');
+    assert.equal(typeof sheet.instruments.snare, 'string');
+    assert.equal(typeof sheet.instruments.hihat, 'string');
+    assert.equal(typeof sheet.instruments.bass, 'string');
+    assert.equal(typeof sheet.instruments.back, 'string');
+    assert.equal(typeof sheet.instruments.lead, 'string');
+  });
+
+  it('render 1 back', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -448,7 +538,7 @@ describe('music', () => {
         back:   [ { notes: [ 16, 0 ] } ],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.back.length, 3);
@@ -475,8 +565,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 1 bass', () => {
-    const sheet = render_sheet({
+  it('render 1 bass', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -501,7 +592,7 @@ describe('music', () => {
         back:   [],
         lead:   []
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.bass.length, 1);
@@ -518,8 +609,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render 1 lead', () => {
-    const sheet = render_sheet({
+  it('render 1 lead', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -544,7 +636,7 @@ describe('music', () => {
         back:   [],
         lead:   [ { notes: [ 16, 0 ] } ]
       }
-    });
+    }, false);
 
     assert.equal(sheet.duration, beat_to_sec(135, 4));
     assert.equal(sheet.lead.length, 1);
@@ -562,8 +654,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render arpeggio', () => {
-    const sheet = render_sheet({
+  it('render arpeggio', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -588,7 +681,7 @@ describe('music', () => {
         back:   [],
         lead:   [ { notes: [ 4, 0, 4, 0, 8, 0 ] } ]
       }
-    });
+    }, false);
 
     assert.equal(sheet.lead.length, 3);
     assert.equal(sheet.lead[0].note, 0);
@@ -603,8 +696,9 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('render arpeggio negative', () => {
-    const sheet = render_sheet({
+  it('render arpeggio negative', async function() {
+    const sheet = await render_sheet({
+      type:       'song',
       bpm:        135,
       bar_size:   16,
       beat_size:  4,
@@ -629,7 +723,7 @@ describe('music', () => {
         back:   [],
         lead:   [ { notes: [ 4, 0, 4, 0, 8, 0 ] } ]
       }
-    });
+    }, false);
 
     assert.equal(sheet.lead.length, 3);
     assert.equal(sheet.lead[0].note, 0);
@@ -644,7 +738,17 @@ describe('music', () => {
     assert.equal(typeof sheet.instruments.lead, 'string');
   });
 
-  it('chord notation', () => {
+  it('render all elements', async function() {
+    const elements = get_all_elements();
+
+    for (const x of elements) {
+      assert.ok('id' in x);
+      get_element_label(x);
+      render_sheet(x);
+    }
+  });
+
+  it('chord notation', async function() {
     const foo = notate_chord('a  x   x');
     const bar = notate_chord('x   b  l');
 
@@ -661,7 +765,7 @@ describe('music', () => {
     assert.equal(bar.notes[4], 7);
   });
 
-  it('rhythm notation', () => {
+  it('rhythm notation', async function() {
     const foo = notate_rhythm('x - - - x - - - ');
     const bar = notate_rhythm('x - - x - - x - ');
 
@@ -678,42 +782,42 @@ describe('music', () => {
     assert.equal(bar.notes[5], 6);
   });
 
-  it('get song label', () => {
-    const song = { label: 'foo bar' };
+  it('get song label', async function () {
+    const song = { name_index: 0, label: 'foo bar' };
 
-    assert.equal(get_song_label(song), 'foo bar');
+    assert.equal(await get_song_label(song), 'foo bar');
   });
 
-  it('get song parents', () => {
+  it('get song parents', async function () {
     const song1 = { parents: [] };
     const song2 = { parents: [ 'foo', 'bar' ] };
 
-    assert.equal(get_song_parents(song1).length, 0);
-    assert.equal(get_song_parents(song2).length, 2);
-    assert.equal(get_song_parents(song2)[0], 'foo');
-    assert.equal(get_song_parents(song2)[1], 'bar');
+    assert.equal((await get_song_parents(song1)).length, 0);
+    assert.equal((await get_song_parents(song2)).length, 2);
+    assert.equal((await get_song_parents(song2))[0], 'foo');
+    assert.equal((await get_song_parents(song2))[1], 'bar');
   });
 
-  it('get song bpm', () => {
+  it('get song bpm', async function () {
     const song = { bpm: 123 };
 
-    assert.equal(get_song_bpm(song), 123);
+    assert.equal(await get_song_bpm(song), 123);
   });
 
-  it('get song meter', () => {
+  it('get song meter', async function () {
     const song = { bar_size: 12, beat_size: 4 };
 
-    assert.equal(get_song_meter(song)[0], 3);
-    assert.equal(get_song_meter(song)[1], 4);
+    assert.equal((await get_song_meter(song))[0], 3);
+    assert.equal((await get_song_meter(song))[1], 4);
   });
 
-  it('get song tonality', () => {
+  it('get song tonality', async function () {
     const song = { tonality: { key: 42 } };
 
-    assert.equal(get_song_tonality(song), 'Gb');
+    assert.equal(await get_song_tonality(song), 'Gb');
   });
 
-  it('get song colors', () => {
+  it('get song colors', async function () {
     const song = {
       chords: [
         { notes: [ 0, 0, 0, 3, 7 ] },
@@ -724,15 +828,17 @@ describe('music', () => {
       ]
     };
 
-    assert.equal(get_song_colors(song).length, 5);
-    assert.equal(get_song_colors(song)[0], colors.minor);
-    assert.equal(get_song_colors(song)[1], colors.major);
-    assert.equal(get_song_colors(song)[2], colors.weird);
-    assert.equal(get_song_colors(song)[3], colors.minor);
-    assert.equal(get_song_colors(song)[4], colors.neutral);
+    const v = await get_song_colors(song);
+
+    assert.equal(v.length, 5);
+    assert.equal(v[0], colors.minor);
+    assert.equal(v[1], colors.major);
+    assert.equal(v[2], colors.weird);
+    assert.equal(v[3], colors.minor);
+    assert.equal(v[4], colors.neutral);
   });
 
-  it('get song chords', () => {
+  it('get song chords', async function () {
     const song = {
       tonality: { key: 10 },
       chords: [
@@ -743,26 +849,28 @@ describe('music', () => {
       ]
     };
 
-    assert.equal(get_song_chords(song).length, 4);
-    assert.equal(get_song_chords(song)[0].length, 3);
-    assert.equal(get_song_chords(song)[0][0], 10);
-    assert.equal(get_song_chords(song)[0][1], 13);
-    assert.equal(get_song_chords(song)[0][2], 17);
-    assert.equal(get_song_chords(song)[1].length, 3);
-    assert.equal(get_song_chords(song)[1][0], 10);
-    assert.equal(get_song_chords(song)[1][1], 14);
-    assert.equal(get_song_chords(song)[1][2], 17);
-    assert.equal(get_song_chords(song)[2].length, 3);
-    assert.equal(get_song_chords(song)[2][0], 10);
-    assert.equal(get_song_chords(song)[2][1], 13);
-    assert.equal(get_song_chords(song)[2][2], 16);
-    assert.equal(get_song_chords(song)[3].length, 3);
-    assert.equal(get_song_chords(song)[3][0], 12);
-    assert.equal(get_song_chords(song)[3][1], 15);
-    assert.equal(get_song_chords(song)[3][2], 19);
+    const chords = await get_song_chords(song);
+
+    assert.equal(chords.length, 4);
+    assert.equal(chords[0].length, 3);
+    assert.equal(chords[0][0], 10);
+    assert.equal(chords[0][1], 13);
+    assert.equal(chords[0][2], 17);
+    assert.equal(chords[1].length, 3);
+    assert.equal(chords[1][0], 10);
+    assert.equal(chords[1][1], 14);
+    assert.equal(chords[1][2], 17);
+    assert.equal(chords[2].length, 3);
+    assert.equal(chords[2][0], 10);
+    assert.equal(chords[2][1], 13);
+    assert.equal(chords[2][2], 16);
+    assert.equal(chords[3].length, 3);
+    assert.equal(chords[3][0], 12);
+    assert.equal(chords[3][1], 15);
+    assert.equal(chords[3][2], 19);
   });
 
-  it('get song chord names', () => {
+  it('get song chord names', async function () {
     const song = {
       tonality: { key: 9 },
       chords: [
@@ -773,50 +881,52 @@ describe('music', () => {
       ]
     };
 
-    assert.equal(get_song_chord_names(song).length, 4);
-    assert.equal(get_song_chord_names(song)[0], 'Am');
-    assert.equal(get_song_chord_names(song)[1], 'Amaj');
-    assert.equal(get_song_chord_names(song)[2], 'Adim');
-    assert.equal(get_song_chord_names(song)[3], 'Hm');
+    const names = await get_song_chord_names(song);
+
+    assert.equal(names.length, 4);
+    assert.equal(names[0], 'Am');
+    assert.equal(names[1], 'Amaj');
+    assert.equal(names[2], 'Adim');
+    assert.equal(names[3], 'Hm');
   });
 
-  it('get song generation', () => {
+  it('get song generation', async function () {
     const song = {
       generation: 42,
     };
 
-    assert.equal(get_song_generation(song), 42);
+    assert.equal(await get_song_generation(song), 42);
   });
 
-  it('get song id', () => {
+  it('get song id', async function () {
     const song = {
       id: 'foobar'
     };
 
-    assert.equal(get_song_id(song), 'foobar');
+    assert.equal(await get_song_id(song), 'foobar');
   });
 
-  it('get song asset id', () => {
+  it('get song asset id', async function () {
     const song = {
       asset_id: 'foobar',
     };
 
-    assert.equal(get_song_asset_id(song), 'foobar');
+    assert.equal(await get_song_asset_id(song), 'foobar');
   });
 
-  it('get song asset url', () => {
+  it('get song asset url', async function () {
     const song = {
-      asset_url: 'https://wavesexplorer.com/foobar',
+      asset_id: 'foobar',
     };
 
-    assert.equal(get_song_asset_url(song), 'https://wavesexplorer.com/foobar');
+    assert.equal(await get_song_asset_url(song), 'https://wavesexplorer.com/assets/foobar');
   });
 
-  it('can mint hybrid', () => {
+  it('can mint hybrid', async function() {
     /*  TODO
      *  Mint hybrid conditions.
      */
     const song = {};
-    assert.ok(can_mint_hybrid(song));
+    assert.ok(await can_mint_hybrid(song));
   });
 });

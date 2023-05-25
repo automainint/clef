@@ -1,0 +1,74 @@
+@import 'shared/scss/variables.scss';
+
+@keyframes rotate {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-height: 42px;
+  padding: 6px 8px;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-card-button;
+  background-color: $color-bg;
+  border-radius: 9px;
+  border: 0;
+  transition: transform ease-out 0.2s;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: auto;
+  }
+
+  &:hover {
+    transform: scale(0.95);
+  }
+}
+
+.loading {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: auto;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $color-bg;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 24px;
+    background: no-repeat center url('images/preloader.svg');
+    animation: rotate 1s linear infinite;
+  }
+}
+
+.themeDark {
+  color: $color-card-button-light;
+  background-color: $color-main;
+
+  &::before {
+    background-color: $color-main;
+  }
+}

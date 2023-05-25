@@ -1,0 +1,70 @@
+@import 'shared/scss/variables.scss';
+
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tabs {
+  padding: 42px 65px 14px;
+
+  &TypeModule {
+    padding: 20px 0 82px;
+  }
+}
+
+.button {
+  margin-left: 45px;
+  border: 0;
+  background: none;
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29.4109px;
+  line-height: 102.02%;
+  letter-spacing: -0.05em;
+  color: $color-tab;
+  transition: color ease-out 0.2s;
+  cursor: pointer;
+
+  &:first-child {
+    margin-left: 0;
+    margin-right: -33px;
+  }
+
+  &:hover {
+    color: $color-main;
+  }
+
+  &TypeModule {
+    margin-left: 36px;
+    font-size: 20px;
+
+    &:first-child {
+      margin: 0;
+    }
+  }
+}
+
+.buttonDisabled {
+  color: $color-tab;
+  cursor: default;
+
+  &:hover {
+    color: $color-tab;
+  }
+}
+
+.buttonSelected {
+  color: $color-main;
+  cursor: default;
+
+  &:hover {
+    color: $color-main;
+  }
+}
+
+.content {
+  width: 100%;
+}

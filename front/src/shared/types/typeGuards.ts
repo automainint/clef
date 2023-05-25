@@ -1,12 +1,15 @@
 import { types } from 'shared/utils';
 
-import { Song } from './resource';
+import { Song, SongType } from './song';
 import { Songs } from './mix';
 import { Hybrid, MintResources, Resources } from './user';
+import { ElementType } from './element';
+import { Currency } from './currency';
+import { Provider } from './auth';
 
 export function isSong(data: unknown): data is Song {
-  const { id, type, label } = data as Song;
-  return id !== undefined && label !== undefined && type === types.song;
+  const { type, asset_id: assetId, id, label } = data as Song;
+  return type === types.song && assetId !== undefined && id !== undefined && label !== undefined;
 }
 
 export function isSongs(data: unknown): data is Songs {
@@ -31,4 +34,24 @@ export function isResourcesForMint(data: unknown): data is Resources {
 
 export function isErrorWithMessage(error: unknown): error is Error {
   return (error as Error).message !== undefined;
+}
+
+export function isElementType(type: unknown): type is ElementType {
+  return (type as ElementType) === 'chord' || (type as ElementType) === 'beat' || (type as ElementType) === 'vibe';
+}
+
+export function isSongType(type: unknown): type is SongType {
+  return (type as SongType) === 'cover' || (type as SongType) === 'genesis' || (type as SongType) === 'mix';
+}
+
+export function isCurrency(data: unknown): data is Currency {
+  const { asset_name: assetName, amount } = data as Currency;
+  return assetName !== undefined && typeof assetName === 'string' && amount !== undefined;
+}
+
+export function isProvider(data: unknown): data is Provider {
+  return (
+    typeof data === 'string' &&
+    ((data as Provider) === 'keeper' || (data as Provider) === 'cloud' || (data as Provider) === 'web')
+  );
 }
